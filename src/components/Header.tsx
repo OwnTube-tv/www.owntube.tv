@@ -19,9 +19,7 @@ const Header = () => {
           <Link
             to="/"
             className={`text-lg ${
-              isActive("/")
-                ? "text-owntube-orange font-semibold"
-                : "text-gray-600 hover:text-owntube-orange"
+              isActive("/") ? "text-owntube-orange font-semibold" : "text-gray-600 hover:text-owntube-orange"
             }`}
           >
             Apps
@@ -29,9 +27,7 @@ const Header = () => {
           <Link
             to="/consulting"
             className={`text-lg ${
-              isActive("/consulting")
-                ? "text-owntube-orange font-semibold"
-                : "text-gray-600 hover:text-owntube-orange"
+              isActive("/consulting") ? "text-owntube-orange font-semibold" : "text-gray-600 hover:text-owntube-orange"
             }`}
           >
             Consulting
@@ -39,9 +35,7 @@ const Header = () => {
           <Link
             to="/contact"
             className={`text-lg ${
-              isActive("/contact")
-                ? "text-owntube-orange font-semibold"
-                : "text-gray-600 hover:text-owntube-orange"
+              isActive("/contact") ? "text-owntube-orange font-semibold" : "text-gray-600 hover:text-owntube-orange"
             }`}
           >
             Contact
