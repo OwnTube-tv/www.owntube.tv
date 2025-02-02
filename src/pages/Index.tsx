@@ -6,7 +6,7 @@ const Index = () => {
       <div className="container mx-auto px-4 py-12">
         <section className="mb-20">
           <h1 className="text-4xl font-bold text-center mb-4">Your own tube, for Your own content</h1>
-          <p className="text-xl text-center text-gray-600 mb-12">Create custom video apps for all your platforms</p>
+          <p className="text-xl text-center text-gray-600 mb-12">Create custom video apps for all your platforms. No ads. No data collection. No&nbsp;lock-in. Free as in Freedom.</p>
 
           <div className="bg-owntube-light rounded-lg p-8 mb-16">
             <h2 className="text-3xl font-bold mb-6">Make Your Own Video App</h2>
@@ -48,9 +48,12 @@ const Index = () => {
                     rel="noopener noreferrer"
                     className="text-owntube-orange hover:underline"
                   >
-                    https://github.com/OwnTube-tv/web-client
+                    OwnTube-tv/web-client
                   </a>{" "}
-                  and deploy it via GitHub Pages as the fastest way to get yourself up and running. The OwnTube.tv web app is installable as a Progressive Web App [PWA] on iPhone/Android and it works great on modern desktop browsers as well. You can use this app with any recent PeerTube video site as backend for your content, or try out any of the featured sites which showcase various customization.
+                  and deploy it via GitHub Pages, as the fastest way to get yourself up and running. The OwnTube.tv web
+                  app is installable as a Progressive Web App (PWA) on iPhone/Android and it works great on modern
+                  desktop browsers too. You can use this app with any recent PeerTube video site as content backend, or
+                  try out any of the featured sites on the landing page to experience various customizations.
                 </p>
                 <a
                   href="https://owntube-tv.github.io/web-client/"
