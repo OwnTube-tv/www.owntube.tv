@@ -13,8 +13,8 @@ const Index = () => {
             <div className="flex flex-col md:flex-row items-center gap-8">
               <div className="flex-1">
                 <p className="text-lg mb-4">
-                  Get started with our open-source project and create your custom video streaming application today.
-                  Available for iOS, Android, Apple TV, and Android TV.
+                  Get started with our open-source project OwnTube.tv and create your own video streaming app today.
+                  Available on desktop/web, or natively on iPhone, Android, Apple TV, and Android TV.
                 </p>
                 <a
                   href="https://github.com/OwnTube-tv/"
