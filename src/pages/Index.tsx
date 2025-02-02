@@ -27,7 +27,11 @@ const Index = () => {
                 </a>
               </div>
               <div className="flex-1">
-                <img src="/placeholder.svg" alt="OwnTube Platform" className="rounded-lg shadow-lg" />
+                <img 
+                  src="/lovable-uploads/7c329071-cd88-4414-8673-dcd7a551df5e.png" 
+                  alt="OwnTube GitHub Profile" 
+                  className="rounded-lg shadow-lg w-full"
+                />
               </div>
             </div>
           </div>
