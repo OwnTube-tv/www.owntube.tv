@@ -35,6 +35,72 @@ const Index = () => {
               </div>
             </div>
           </div>
+
+          <div className="bg-owntube-light rounded-lg p-8 mb-16">
+            <h2 className="text-3xl font-bold mb-6">Reference App for Desktop/Web</h2>
+            <div className="flex flex-col gap-8">
+              <div className="text-lg mb-4">
+                <p className="mb-4">
+                  Create your Own fork of{" "}
+                  <a 
+                    href="https://github.com/OwnTube-tv/web-client" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-owntube-orange hover:underline"
+                  >
+                    https://github.com/OwnTube-tv/web-client
+                  </a>{" "}
+                  and deploy it via GitHub Pages as the fastest way to get yourself up and running. The OwnTube.tv web app is installable as a Progressive Web App [PWA] on iPhone/Android and it works great on modern desktop browsers as well. You can use this app with any recent PeerTube video site as backend for your content, or try out any of the featured sites which showcase various customization.
+                </p>
+                <a
+                  href="https://owntube-tv.github.io/web-client/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-2 bg-owntube-orange text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition-colors"
+                >
+                  <span>Try the Web App</span>
+                </a>
+              </div>
+              
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="rounded-lg overflow-hidden shadow-lg">
+                  <img 
+                    src="/lovable-uploads/790ed37d-4d1d-45d1-8e95-7bc2450d6cb6.png"
+                    alt="OwnTube Discovery Page" 
+                    className="w-full h-auto"
+                  />
+                  <div className="p-4 bg-white">
+                    <h3 className="font-semibold">Discovery Page</h3>
+                    <p className="text-sm text-gray-600">Find and explore video sites</p>
+                  </div>
+                </div>
+                
+                <div className="rounded-lg overflow-hidden shadow-lg">
+                  <img 
+                    src="/lovable-uploads/547fd070-2a4d-4f39-965f-40226fbd54d6.png"
+                    alt="TILvids Channel Example" 
+                    className="w-full h-auto"
+                  />
+                  <div className="p-4 bg-white">
+                    <h3 className="font-semibold">TILvids</h3>
+                    <p className="text-sm text-gray-600">Educational content delivery</p>
+                  </div>
+                </div>
+                
+                <div className="rounded-lg overflow-hidden shadow-lg">
+                  <img 
+                    src="/lovable-uploads/3309fee8-db74-4688-a19a-07b76af1cf48.png"
+                    alt="Blender Developers Channel" 
+                    className="w-full h-auto"
+                  />
+                  <div className="p-4 bg-white">
+                    <h3 className="font-semibold">Blender Developers</h3>
+                    <p className="text-sm text-gray-600">3D creation tutorials</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section>
