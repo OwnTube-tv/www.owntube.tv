@@ -13,10 +13,10 @@ const Contact = () => {
                   <span className="font-semibold">Legal Name:</span> OwnTube Nordic AB
                 </p>
                 <p>
-                  <span className="font-semibold">VAT Number:</span> SE123456789001
+                  <span className="font-semibold">VAT Number:</span> SE559517719601
                 </p>
                 <p>
-                  <span className="font-semibold">Address:</span> 123 Tech Street, 12345 Stockholm, Sweden
+                  <span className="font-semibold">Address:</span> Älgpassgatan 12 lgh 1102, 11545 Stockholm, SWEDEN
                 </p>
               </div>
             </div>
@@ -26,14 +26,14 @@ const Contact = () => {
               <div className="space-y-3">
                 <p>
                   <span className="font-semibold">Phone:</span>{" "}
-                  <a href="tel:+46123456789" className="text-owntube-orange hover:underline">
-                    +46 12 345 67 89
+                  <a href="tel:+46730567567" className="text-owntube-orange hover:underline">
+                    +46 730 567 567
                   </a>
                 </p>
                 <p>
                   <span className="font-semibold">Email:</span>{" "}
-                  <a href="mailto:contact@owntube.tv" className="text-owntube-orange hover:underline">
-                    contact@owntube.tv
+                  <a href="mailto:hello@owntube.tv" className="text-owntube-orange hover:underline">
+                    hello@owntube.tv
                   </a>
                 </p>
               </div>
