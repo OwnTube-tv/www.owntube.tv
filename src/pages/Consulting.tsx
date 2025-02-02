@@ -5,8 +5,8 @@ const Consulting = () => {
       description: "Technical leadership and hands-on development for video streaming applications.",
     },
     {
-      title: "Tech Lead",
-      description: "Strategic technical direction and team leadership for complex projects.",
+      title: "Tech Lead & Architect",
+      description: "Strategic technical direction, solution design, and team leadership for complex video streaming platforms.",
     },
     {
       title: "React Development",
@@ -15,10 +15,6 @@ const Consulting = () => {
     {
       title: "Infrastructure Architect",
       description: "Design and implementation of scalable video streaming infrastructure.",
-    },
-    {
-      title: "Solution Architect",
-      description: "End-to-end solution design for video streaming platforms.",
     },
     {
       title: "DevSecOps",
