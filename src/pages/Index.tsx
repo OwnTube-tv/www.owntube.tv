@@ -89,49 +89,49 @@ const Index = () => {
                 
                 <div className="rounded-lg overflow-hidden shadow-lg">
                   <img 
-                    src="/lovable-uploads/3309fee8-db74-4688-a19a-07b76af1cf48.png"
-                    alt="Blender Developers Channel" 
+                    src="/lovable-uploads/e56ece64-3622-4b14-9860-c95328c4dde6.png"
+                    alt="Blender Channel" 
                     className="w-full h-auto"
                   />
                   <div className="p-4 bg-white">
-                    <h3 className="font-semibold">Blender Developers</h3>
-                    <p className="text-sm text-gray-600">3D creation tutorials</p>
+                    <h3 className="font-semibold">Blender</h3>
+                    <p className="text-sm text-gray-600">3D creation software</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </section>
 
-        <section>
-          <h2 className="text-3xl font-bold mb-8">Reference Apps for Mobile and TV</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "PI Tube",
-                description: "Educational content delivery platform for mathematics and physics.",
-              },
-              {
-                title: "Blender Tube",
-                description: "3D animation and modeling tutorials for Blender enthusiasts.",
-              },
-              {
-                title: "XR Tube",
-                description: "Extended reality content streaming for immersive experiences.",
-              },
-            ].map((app) => (
-              <div
-                key={app.title}
-                className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
-              >
-                <img src="/placeholder.svg" alt={app.title} className="w-full h-48 object-cover" />
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">{app.title}</h3>
-                  <p className="text-gray-600">{app.description}</p>
+          <section>
+            <h2 className="text-3xl font-bold mb-8">Reference Apps for Mobile and TV</h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  title: "PI Tube",
+                  description: "Educational content delivery platform for mathematics and physics.",
+                },
+                {
+                  title: "Blender Tube",
+                  description: "3D animation and modeling tutorials for Blender enthusiasts.",
+                },
+                {
+                  title: "XR Tube",
+                  description: "Extended reality content streaming for immersive experiences.",
+                },
+              ].map((app) => (
+                <div
+                  key={app.title}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                >
+                  <img src="/placeholder.svg" alt={app.title} className="w-full h-48 object-cover" />
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold mb-2">{app.title}</h3>
+                    <p className="text-gray-600">{app.description}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </section>
         </section>
       </div>
     </div>
