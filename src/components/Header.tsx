@@ -11,7 +11,7 @@ const Header = () => {
           <img
             src="/lovable-uploads/a28acd56-9e34-4a9e-90f3-e42bcbca4c51.png"
             alt="OwnTube.tv Logo"
-            className="h-12 w-12"
+            className="h-12 w-12 rounded-lg"
           />
           <span className="text-2xl font-bold text-owntube-orange">OwnTube.tv</span>
         </Link>
