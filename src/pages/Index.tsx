@@ -66,37 +66,37 @@ const Index = () => {
               </div>
               
               <div className="grid md:grid-cols-3 gap-6">
-                <div className="rounded-lg overflow-hidden shadow-lg">
+                <div className="rounded-lg overflow-hidden shadow-lg flex flex-col">
                   <img 
                     src="/lovable-uploads/790ed37d-4d1d-45d1-8e95-7bc2450d6cb6.png"
                     alt="OwnTube Discovery Page" 
                     className="w-full h-auto"
                   />
-                  <div className="p-4 bg-white">
+                  <div className="p-4 bg-white mt-auto">
                     <h3 className="font-semibold">Discovery Page</h3>
                     <p className="text-sm text-gray-600">Find and explore video sites</p>
                   </div>
                 </div>
                 
-                <div className="rounded-lg overflow-hidden shadow-lg">
+                <div className="rounded-lg overflow-hidden shadow-lg flex flex-col">
                   <img 
                     src="/lovable-uploads/547fd070-2a4d-4f39-965f-40226fbd54d6.png"
                     alt="TILvids Channel Example" 
                     className="w-full h-auto"
                   />
-                  <div className="p-4 bg-white">
+                  <div className="p-4 bg-white mt-auto">
                     <h3 className="font-semibold">TILvids</h3>
                     <p className="text-sm text-gray-600">Educational content delivery</p>
                   </div>
                 </div>
                 
-                <div className="rounded-lg overflow-hidden shadow-lg">
+                <div className="rounded-lg overflow-hidden shadow-lg flex flex-col">
                   <img 
                     src="/lovable-uploads/e56ece64-3622-4b14-9860-c95328c4dde6.png"
                     alt="Blender Channel" 
                     className="w-full h-auto"
                   />
-                  <div className="p-4 bg-white">
+                  <div className="p-4 bg-white mt-auto">
                     <h3 className="font-semibold">Blender</h3>
                     <p className="text-sm text-gray-600">3D creation software</p>
                   </div>
