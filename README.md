@@ -1,13 +1,15 @@
-# Official website for OwnTube.tv
+# Official website for [OwnTube.tv](https://www.owntube.tv/)
+
+This repo is for maintaining the official company website.
 
 ## Project description
 
-## How can I edit this code?
 This project is made using Lovable.dev here— https://lovable.dev/projects/75221677-e5d4-4b39-9854-258b458eca5b —in
 conjunction with the standard GitHub issue/PR workflows. Updates are shipped to the GitHub Pages deployment at
 https://www.owntube.tv/ on pushes to `main` branch.
 
-If editing via git source control, just clone the repo as usual, install the NPM dependencies and open a PR as usual:
+If editing via git source control, just clone/fork the repo as usual, install the dependencies, test & commit changes,
+and submit the changes via a pull request.
 
 ```sh
 git clone git@github.com:OwnTube-tv/www.owntube.tv.git

@@ -10,7 +10,7 @@ const Footer = () => {
           </div>
           <div className="flex items-center space-x-4">
             <a
-              href="https://github.com/OwnTube-tv/"
+              href="https://github.com/OwnTube-tv/www.owntube.tv"
               target="_blank"
               rel="noopener noreferrer"
               className="text-white hover:text-owntube-orange transition-colors"
