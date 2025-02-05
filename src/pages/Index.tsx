@@ -110,7 +110,7 @@ const Index = () => {
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 {
-                  title: "PI Tube",
+                  title: "Privacy Tube",
                   description: "Educational content delivery platform for mathematics and physics.",
                 },
                 {
