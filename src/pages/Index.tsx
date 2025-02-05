@@ -111,15 +111,21 @@ const Index = () => {
               {[
                 {
                   title: "Privacy Tube",
-                  description: "Educational content delivery platform for mathematics and physics.",
+                  shortDescription: "Video publications by Privacy International Media",
+                  longDescription: "Privacy International Media (PI) has been working to promote the human right of privacy throughout the world since 1990; specifically on raising awareness of threats to privacy and reporting on surveillance methods and tactics. Visit the PI website for more info: https://www.privacyinternational.org",
+                  githubRepo: "https://github.com/OwnTube-tv/cust-app-pitube",
                 },
                 {
                   title: "Blender Tube",
-                  description: "3D animation and modeling tutorials for Blender enthusiasts.",
+                  shortDescription: "Videos on the Blender 3D creation software",
+                  longDescription: "Blender Foundation provides videos presenting the evolutions of their popular 3D creation software, along with tutorials and presentations by the community. Read more about the organization here: https://www.blender.org/about/foundation/",
+                  githubRepo: "https://github.com/OwnTube-tv/cust-app-blender",
                 },
                 {
                   title: "XR Tube",
-                  description: "Extended reality content streaming for immersive experiences.",
+                  shortDescription: "Information videos by Extinction Rebellion",
+                  longDescription: "A video library for Extinction Rebellion (XR) with accounts for every national group, hosted on renewable energy-powered infrastructure. Read more about the movement here: https://rebellion.global",
+                  githubRepo: "https://github.com/OwnTube-tv/cust-app-xrtube",
                 },
               ].map((app) => (
                 <div
@@ -128,8 +134,20 @@ const Index = () => {
                 >
                   <img src="/placeholder.svg" alt={app.title} className="w-full h-48 object-cover" />
                   <div className="p-6">
-                    <h3 className="text-xl font-bold mb-2">{app.title}</h3>
-                    <p className="text-gray-600">{app.description}</p>
+                    <div className="flex justify-between items-start mb-4">
+                      <h3 className="text-xl font-bold">{app.title}</h3>
+                      <a
+                        href={app.githubRepo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-600 hover:text-owntube-orange transition-colors"
+                        aria-label={`View ${app.title} source code on GitHub`}
+                      >
+                        <Github className="h-5 w-5" />
+                      </a>
+                    </div>
+                    <p className="text-gray-600 font-medium mb-4">{app.shortDescription}</p>
+                    <p className="text-gray-600 text-sm">{app.longDescription}</p>
                   </div>
                 </div>
               ))}
