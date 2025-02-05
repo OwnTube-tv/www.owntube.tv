@@ -112,19 +112,55 @@ const Index = () => {
                 {
                   title: "Privacy Tube",
                   shortDescription: "Video publications by Privacy International Media",
-                  longDescription: "Privacy International Media (PI) has been working to promote the human right of privacy throughout the world since 1990; specifically on raising awareness of threats to privacy and reporting on surveillance methods and tactics. Visit the PI website for more info: https://www.privacyinternational.org",
+                  longDescription: (
+                    <>
+                      Privacy International Media (PI) has been working to promote the human right of privacy throughout the world since 1990; specifically on raising awareness of threats to privacy and reporting on surveillance methods and tactics. Visit the PI website for more info:{" "}
+                      <a 
+                        href="https://www.privacyinternational.org"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-owntube-orange hover:underline"
+                      >
+                        https://www.privacyinternational.org
+                      </a>
+                    </>
+                  ),
                   githubRepo: "https://github.com/OwnTube-tv/cust-app-pitube",
                 },
                 {
                   title: "Blender Tube",
                   shortDescription: "Videos on the Blender 3D creation software",
-                  longDescription: "Blender Foundation provides videos presenting the evolutions of their popular 3D creation software, along with tutorials and presentations by the community. Read more about the organization here: https://www.blender.org/about/foundation/",
+                  longDescription: (
+                    <>
+                      Blender Foundation provides videos presenting the evolutions of their popular 3D creation software, along with tutorials and presentations by the community. Read more about the organization here:{" "}
+                      <a 
+                        href="https://www.blender.org/about/foundation/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-owntube-orange hover:underline"
+                      >
+                        https://www.blender.org/about/foundation/
+                      </a>
+                    </>
+                  ),
                   githubRepo: "https://github.com/OwnTube-tv/cust-app-blender",
                 },
                 {
                   title: "XR Tube",
                   shortDescription: "Information videos by Extinction Rebellion",
-                  longDescription: "A video library for Extinction Rebellion (XR) with accounts for every national group, hosted on renewable energy-powered infrastructure. Read more about the movement here: https://rebellion.global",
+                  longDescription: (
+                    <>
+                      A video library for Extinction Rebellion (XR) with accounts for every national group, hosted on renewable energy-powered infrastructure. Read more about the movement here:{" "}
+                      <a 
+                        href="https://rebellion.global"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-owntube-orange hover:underline"
+                      >
+                        https://rebellion.global
+                      </a>
+                    </>
+                  ),
                   githubRepo: "https://github.com/OwnTube-tv/cust-app-xrtube",
                 },
               ].map((app) => (
