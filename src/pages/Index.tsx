@@ -1,4 +1,4 @@
-import { Github } from "lucide-react";
+import { Github, Globe } from "lucide-react";
 
 const Index = () => {
   return (
@@ -6,7 +6,10 @@ const Index = () => {
       <div className="container mx-auto px-4 py-12">
         <section className="mb-20">
           <h1 className="text-4xl font-bold text-center mb-4">Your own tube, for Your own content</h1>
-          <p className="text-xl text-center text-gray-600 mb-12">Create custom video apps for all your platforms. No ads. No data collection. No&nbsp;lock-in. Free as in Freedom.</p>
+          <p className="text-xl text-center text-gray-600 mb-12">
+            Create custom video apps for all your platforms. No ads. No data collection. No&nbsp;lock-in. Free as in
+            Freedom.
+          </p>
 
           <div className="bg-owntube-light rounded-lg p-8 mb-16">
             <h2 className="text-3xl font-bold mb-6">Make Your Own Video App</h2>
@@ -27,9 +30,9 @@ const Index = () => {
                 </a>
               </div>
               <div className="flex-1">
-                <img 
-                  src="/lovable-uploads/7c329071-cd88-4414-8673-dcd7a551df5e.png" 
-                  alt="OwnTube GitHub Profile" 
+                <img
+                  src="/lovable-uploads/7c329071-cd88-4414-8673-dcd7a551df5e.png"
+                  alt="OwnTube GitHub Profile"
                   className="rounded-lg shadow-lg w-full"
                 />
               </div>
@@ -42,9 +45,9 @@ const Index = () => {
               <div className="text-lg mb-4">
                 <p className="mb-4">
                   Create your Own fork of{" "}
-                  <a 
-                    href="https://github.com/OwnTube-tv/web-client" 
-                    target="_blank" 
+                  <a
+                    href="https://github.com/OwnTube-tv/web-client"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-owntube-orange hover:underline"
                   >
@@ -64,12 +67,12 @@ const Index = () => {
                   <span>Try the Web App</span>
                 </a>
               </div>
-              
+
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="rounded-lg overflow-hidden shadow-lg flex flex-col">
-                  <img 
+                  <img
                     src="/lovable-uploads/790ed37d-4d1d-45d1-8e95-7bc2450d6cb6.png"
-                    alt="OwnTube Discovery Page" 
+                    alt="OwnTube Discovery Page"
                     className="w-full h-auto"
                   />
                   <div className="p-4 bg-white mt-auto">
@@ -77,11 +80,11 @@ const Index = () => {
                     <p className="text-sm text-gray-600">Find and explore video sites</p>
                   </div>
                 </div>
-                
+
                 <div className="rounded-lg overflow-hidden shadow-lg flex flex-col">
-                  <img 
+                  <img
                     src="/lovable-uploads/547fd070-2a4d-4f39-965f-40226fbd54d6.png"
-                    alt="TILvids Channel Example" 
+                    alt="TILvids Channel Example"
                     className="w-full h-auto"
                   />
                   <div className="p-4 bg-white mt-auto">
@@ -89,11 +92,11 @@ const Index = () => {
                     <p className="text-sm text-gray-600">Educational content delivery</p>
                   </div>
                 </div>
-                
+
                 <div className="rounded-lg overflow-hidden shadow-lg flex flex-col">
-                  <img 
+                  <img
                     src="/lovable-uploads/e56ece64-3622-4b14-9860-c95328c4dde6.png"
-                    alt="Blender Channel" 
+                    alt="Blender Channel"
                     className="w-full h-auto"
                   />
                   <div className="p-4 bg-white mt-auto">
@@ -114,8 +117,10 @@ const Index = () => {
                   shortDescription: "Video publications by Privacy International Media",
                   longDescription: (
                     <>
-                      Privacy International Media (PI) has been working to promote the human right of privacy throughout the world since 1990; specifically on raising awareness of threats to privacy and reporting on surveillance methods and tactics. Visit the PI website for more info:{" "}
-                      <a 
+                      Privacy International Media (PI) has been working to promote the human right of privacy throughout
+                      the world since 1990; specifically on raising awareness of threats to privacy and reporting on
+                      surveillance methods and tactics. Visit the PI website for more info:{" "}
+                      <a
                         href="https://www.privacyinternational.org"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -126,14 +131,21 @@ const Index = () => {
                     </>
                   ),
                   githubRepo: "https://github.com/OwnTube-tv/cust-app-pitube",
+                  imageSrc: "/app-branding/privacy.png",
+                  iconSrc: "/app-branding/icons/privacy.png",
+                  googleLink: "https://play.google.com/store/apps/details?id=com.owntubetv.pitube",
+                  testflightLink: "https://testflight.apple.com/join/KAAJgPss",
+                  webLink: "https://owntube-tv.github.io/cust-app-pitube/",
                 },
                 {
                   title: "Blender Tube",
                   shortDescription: "Videos on the Blender 3D creation software",
                   longDescription: (
                     <>
-                      Blender Foundation provides videos presenting the evolutions of their popular 3D creation software, along with tutorials and presentations by the community. Read more about the organization here:{" "}
-                      <a 
+                      Blender Foundation provides videos presenting the evolutions of their popular 3D creation
+                      software, along with tutorials and presentations by the community. Read more about the
+                      organization here:{" "}
+                      <a
                         href="https://www.blender.org/about/foundation/"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -144,14 +156,20 @@ const Index = () => {
                     </>
                   ),
                   githubRepo: "https://github.com/OwnTube-tv/cust-app-blender",
+                  imageSrc: "/app-branding/blender.png",
+                  iconSrc: "/app-branding/icons/blender.png",
+                  googleLink: "https://play.google.com/store/apps/details?id=com.owntubetv.blendertube",
+                  testflightLink: "https://testflight.apple.com/join/cEDD3KeK",
+                  webLink: "https://owntube-tv.github.io/cust-app-blender/",
                 },
                 {
                   title: "XR Tube",
                   shortDescription: "Information videos by Extinction Rebellion",
                   longDescription: (
                     <>
-                      A video library for Extinction Rebellion (XR) with accounts for every national group, hosted on renewable energy-powered infrastructure. Read more about the movement here:{" "}
-                      <a 
+                      A video library for Extinction Rebellion (XR) with accounts for every national group, hosted on
+                      renewable energy-powered infrastructure. Read more about the movement here:{" "}
+                      <a
                         href="https://rebellion.global"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -162,16 +180,28 @@ const Index = () => {
                     </>
                   ),
                   githubRepo: "https://github.com/OwnTube-tv/cust-app-xrtube",
+                  imageSrc: "/app-branding/xrtube.png",
+                  iconSrc: "/app-branding/icons/xrtube.png",
+                  googleLink: "https://play.google.com/store/apps/details?id=com.owntubetv.xrtube",
+                  testflightLink: "https://testflight.apple.com/join/EzReSmsz",
+                  webLink: "https://owntube-tv.github.io/cust-app-xrtube/",
                 },
               ].map((app) => (
                 <div
                   key={app.title}
-                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                  className="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                 >
-                  <img src="/placeholder.svg" alt={app.title} className="w-full h-48 object-cover" />
-                  <div className="p-6">
+                  <img src={app.imageSrc} alt={app.title} className="w-full h-48 object-cover" />
+                  <div className="p-6 flex flex-grow flex-col">
                     <div className="flex justify-between items-start mb-4">
-                      <h3 className="text-xl font-bold">{app.title}</h3>
+                      <div className="flex flex-row relative">
+                        <img
+                          src={app.iconSrc}
+                          alt={app.title}
+                          className="shadow-xl rounded-lg border-2 w-20 h-20 absolute -top-24 left-0 z-10"
+                        />
+                        <h3 className="text-xl font-bold">{app.title}</h3>
+                      </div>
                       <a
                         href={app.githubRepo}
                         target="_blank"
@@ -183,7 +213,36 @@ const Index = () => {
                       </a>
                     </div>
                     <p className="text-gray-600 font-medium mb-4">{app.shortDescription}</p>
-                    <p className="text-gray-600 text-sm">{app.longDescription}</p>
+                    <p className="text-gray-600 text-sm flex-1 flex flex-col flex-grow">{app.longDescription}</p>
+                    <hr className="mb-2 mt-2" />
+                    <div className="gap-2 flex-col flex">
+                      <a
+                        href={app.webLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="gap-1 flex flex-row text-owntube-orange hover:underline items-center"
+                        aria-label={`View ${app.title} source code on GitHub`}
+                      >
+                        View the web version <Globe className="h-5 w-5" />
+                      </a>
+                      <p className="text-gray-600">or try the beta on mobile platforms:</p>
+                      <a
+                        href={app.googleLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`View ${app.title} source code on GitHub`}
+                      >
+                        <img width={150} src={"/googleplay.png"} alt={"Try on Google Play"} />
+                      </a>
+                      <a
+                        href={app.testflightLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`View ${app.title} source code on GitHub`}
+                      >
+                        <img width={150} src={"/testflight.png"} alt={"Try on Google Play"} />
+                      </a>
+                    </div>
                   </div>
                 </div>
               ))}
