@@ -135,7 +135,7 @@ const Index = () => {
                   iconSrc: "/app-branding/icons/privacy.png",
                   googleLink: "https://play.google.com/store/apps/details?id=com.owntubetv.pitube",
                   testflightLink: "https://testflight.apple.com/join/KAAJgPss",
-                  webLink: "https://owntube-tv.github.io/cust-app-pitube/",
+                  webLink: "https://cust-app-pitube.owntube.tv/",
                 },
                 {
                   title: "Blender Tube",
@@ -160,7 +160,7 @@ const Index = () => {
                   iconSrc: "/app-branding/icons/blender.png",
                   googleLink: "https://play.google.com/store/apps/details?id=com.owntubetv.blendertube",
                   testflightLink: "https://testflight.apple.com/join/cEDD3KeK",
-                  webLink: "https://owntube-tv.github.io/cust-app-blender/",
+                  webLink: "https://cust-app-blender.owntube.tv/",
                 },
                 {
                   title: "XR Tube",
@@ -184,7 +184,7 @@ const Index = () => {
                   iconSrc: "/app-branding/icons/xrtube.png",
                   googleLink: "https://play.google.com/store/apps/details?id=com.owntubetv.xrtube",
                   testflightLink: "https://testflight.apple.com/join/EzReSmsz",
-                  webLink: "https://owntube-tv.github.io/cust-app-xrtube/",
+                  webLink: "https://cust-app-xrtube.owntube.tv/",
                 },
               ].map((app) => (
                 <div
