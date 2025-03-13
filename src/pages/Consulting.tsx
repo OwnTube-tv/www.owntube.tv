@@ -6,7 +6,8 @@ const Consulting = () => {
     },
     {
       title: "Tech Lead & Architect",
-      description: "Strategic technical direction, solution design, and team leadership for complex video streaming platforms.",
+      description:
+        "Strategic technical direction, solution design, and team leadership for complex video streaming platforms.",
     },
     {
       title: "React Development",

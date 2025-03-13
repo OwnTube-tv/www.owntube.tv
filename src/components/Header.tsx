@@ -49,7 +49,7 @@ const Header = () => {
           />
           <span className="text-2xl font-bold text-owntube-orange">OwnTube.tv</span>
         </Link>
-        
+
         {isMobile ? (
           <Sheet>
             <SheetTrigger asChild>
