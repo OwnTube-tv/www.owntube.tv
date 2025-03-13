@@ -2,28 +2,31 @@ const Consulting = () => {
   const roles = [
     {
       title: "Lead Developer",
-      description: "Technical leadership and hands-on development for video streaming applications.",
+      description:
+        "Technical leadership and hands-on development for video streaming applications and backend infrastructure.",
     },
     {
       title: "Tech Lead & Architect",
-      description:
-        "Strategic technical direction, solution design, and team leadership for complex video streaming platforms.",
+      description: "Strategic technical direction, solution design, and team leadership for video streaming projects.",
     },
     {
-      title: "React Development",
-      description: "Expert React development for web and mobile video applications.",
+      title: "Frontend Development",
+      description: "Expert React frontend development for video applications on web, mobile and TV.",
     },
     {
       title: "Infrastructure Architect",
-      description: "Design and implementation of scalable video streaming infrastructure.",
+      description:
+        "Design and implementation of scalable infrastructure for video delivery and containerized workloads.",
     },
     {
       title: "DevSecOps",
-      description: "Secure and efficient CI/CD pipelines for video streaming applications.",
+      description:
+        "Secure and efficient CI/CD pipelines for a multitude of use cases, from mobile apps to infrastructure deployments.",
     },
     {
       title: "Backend Development",
-      description: "Robust backend systems for video content management and delivery.",
+      description:
+        "Robust backend systems for edge deployments, strong authentication, data persistence, and content management.",
     },
   ];
 
@@ -39,8 +42,16 @@ const Consulting = () => {
             comprehensive consulting services to help you succeed.
           </p>
           <p className="text-lg mb-4">
-            Whether you're looking to self-host or leverage cloud solutions, our team can guide you through every step
-            of your video streaming journey.
+            Whether you're looking to self-host or leverage cloud solutions, our team can guide you through your video
+            streaming journey. We also offer a wide range of expertise in software development, automation practices,
+            container platforms, AI tools, authentication and authorization, and many other areas.
+          </p>
+          <p className="text-lg mb-4">
+            Feel free to get in touch at{" "}
+            <a href="mailto:hello@owntube.tv" className="text-owntube-orange hover:underline">
+              hello@owntube.tv
+            </a>
+            !
           </p>
         </div>
 
