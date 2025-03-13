@@ -110,7 +110,7 @@ const Index = () => {
 
           <section>
             <h2 className="text-3xl font-bold mb-8">Reference Apps for Mobile and TV</h2>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 gap-8">
               {[
                 {
                   title: "Privacy Tube",
@@ -185,6 +185,31 @@ const Index = () => {
                   googleLink: "https://play.google.com/store/apps/details?id=com.owntubetv.xrtube",
                   testflightLink: "https://testflight.apple.com/join/EzReSmsz",
                   webLink: "https://cust-app-xrtube.owntube.tv/",
+                },
+                {
+                  title: "𝕭𝖆𝖘𝖘𝖕𝖎𝖘𝖙𝖔𝖑 🌍",
+                  shortDescription: "Music published by The Outernational Music Syndicate",
+                  longDescription: (
+                    <>
+                      Basspistol established in 2010 as a pro-active reaction to everything that is broken in the
+                      music-industry; it is an endlessly evolving union for the Underground Artists of the third
+                      millennium. Visit the Basspistol website for more info:{" "}
+                      <a
+                        href="https://www.basspistol.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-owntube-orange hover:underline"
+                      >
+                        https://www.basspistol.com
+                      </a>
+                    </>
+                  ),
+                  githubRepo: "https://github.com/OwnTube-tv/cust-app-basspistol",
+                  imageSrc: "/app-branding/basspistol.png",
+                  iconSrc: "/app-branding/icons/basspistol.png",
+                  googleLink: "https://play.google.com/store/apps/details?id=com.owntubetv.basspistol",
+                  testflightLink: "https://testflight.apple.com/join/pqVV5Cu2",
+                  webLink: "https://cust-app-basspistol.owntube.tv/",
                 },
               ].map((app) => (
                 <div
