@@ -26,6 +26,25 @@ jobs:
         run: |
           sed -i '/<script src="https:\/\/cdn\.gpteng\.co\/gptengineer\.js" type="module"><\/script>/d' ./index.html
 
+      - name: Update build info
+        run: |
+          GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c1-7)
+          COMMIT_URL="https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
+          BUILD_TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          jq --arg actor "$GITHUB_ACTOR" \
+             --arg sha "$GITHUB_SHA_SHORT" \
+             --arg url "$COMMIT_URL" \
+             --arg time "$BUILD_TIMESTAMP" \
+             '.GITHUB_ACTOR = $actor | .GITHUB_SHA_SHORT = $sha | .COMMIT_URL = $url | .BUILD_TIMESTAMP = $time' \
+             src/build-info.json > tmp.json && mv tmp.json src/build-info.json
+
+          # Copy to public directory for direct access
+          cp -vf src/build-info.json public/build-info.json
+
+          echo "Updated build-info.json:"
+          cat src/build-info.json
+
       - name: Build project
         run: npm run build
 
