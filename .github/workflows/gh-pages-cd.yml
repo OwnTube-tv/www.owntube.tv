@@ -22,10 +22,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Remove unwanted script from index.html
-        run: |
-          sed -i '/<script src="https:\/\/cdn\.gpteng\.co\/gptengineer\.js" type="module"><\/script>/d' ./index.html
-
       - name: Build project
         run: npm run build
 
