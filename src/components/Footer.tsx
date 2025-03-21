@@ -15,9 +15,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 className="flex items-center hover:text-owntube-orange transition-colors"
               >
-                <Code className="h-3 w-3 mr-1" />
-                {buildInfo.GITHUB_SHA_SHORT} by {buildInfo.GITHUB_ACTOR}
-                <span className="ml-2">({buildInfo.BUILD_TIMESTAMP})</span>
+                {buildInfo.GITHUB_SHA_SHORT} by {buildInfo.GITHUB_ACTOR} ({buildInfo.BUILD_TIMESTAMP})
               </a>
             </p>
           </div>
