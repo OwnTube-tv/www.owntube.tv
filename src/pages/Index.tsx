@@ -7,7 +7,7 @@ const Index = () => {
         <section className="mb-20">
           <h1 className="text-4xl font-bold text-center mb-4">Your own tube, for Your own content</h1>
           <p className="text-xl text-center text-gray-600 mb-12">
-            Create custom video apps for all your platforms. No ads. No data collection. No&nbsp;lock-in. Free as in
+            Create custom video apps for web, mobile, and TV. No ads. No data collection. No&nbsp;lock-in. Free as in
             Freedom.
           </p>
 
