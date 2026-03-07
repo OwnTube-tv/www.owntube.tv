@@ -1,0 +1,57 @@
+---
+import "../index.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+}
+
+const { title, description, canonicalPath } = Astro.props;
+const canonicalUrl = canonicalPath ? `https://www.owntube.tv${canonicalPath}` : undefined;
+
+const buildInfo = await import("../build-info.json");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="https://github.com/OwnTube-tv" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="OwnTube.tv" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    <meta property="og:image" content="https://www.owntube.tv/og-image.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://www.owntube.tv/og-image.png" />
+
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <link rel="icon" type="image/x-icon" href="/favicon.png" />
+    <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id="0b37605e-4fbe-4738-848f-ecd085fd82bc"></script>
+
+    <slot name="head" />
+  </head>
+
+  <body class="bg-background text-foreground">
+    <div class="flex flex-col min-h-screen">
+      <Header currentPath={Astro.url.pathname} />
+      <main class="flex-grow">
+        <slot />
+      </main>
+      <Footer buildInfo={buildInfo.default ?? buildInfo} />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,111 @@
+---
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+
+const navLinks = [
+  { href: "/apps", label: "Apps", activePaths: ["/", "/apps"] },
+  { href: "/consulting", label: "Consulting", activePaths: ["/consulting"] },
+  { href: "/contact", label: "Contact", activePaths: ["/contact"] },
+];
+
+function isActive(activePaths: string[], currentPath: string): boolean {
+  const normalized = currentPath.replace(/\/$/, "") || "/";
+  return activePaths.includes(normalized);
+}
+---
+
+<header class="w-full bg-white shadow-sm">
+  <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+    <a href="/" class="flex items-center space-x-2">
+      <img
+        src="/lovable-uploads/a28acd56-9e34-4a9e-90f3-e42bcbca4c51.png"
+        alt="OwnTube.tv Logo"
+        class="h-12 w-12 rounded-lg"
+      />
+      <span class="text-2xl font-bold text-owntube-orange">OwnTube.tv</span>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex space-x-8">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            "text-lg",
+            isActive(link.activePaths, currentPath)
+              ? "text-owntube-orange font-semibold"
+              : "text-gray-600 hover:text-owntube-orange",
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Mobile hamburger -->
+    <button
+      id="mobile-menu-toggle"
+      class="md:hidden p-2 text-gray-600 hover:text-owntube-orange"
+      aria-label="Open menu"
+      aria-expanded="false"
+    >
+      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu overlay -->
+  <div id="mobile-menu" class="hidden fixed inset-0 z-50 bg-black/50 md:hidden">
+    <div class="absolute right-0 top-0 h-full w-64 bg-white shadow-lg p-6">
+      <button
+        id="mobile-menu-close"
+        class="absolute top-4 right-4 p-2 text-gray-600 hover:text-owntube-orange"
+        aria-label="Close menu"
+      >
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <nav class="flex flex-col space-y-8 mt-8">
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            class:list={[
+              "text-lg",
+              isActive(link.activePaths, currentPath)
+                ? "text-owntube-orange font-semibold"
+                : "text-gray-600 hover:text-owntube-orange",
+            ]}
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById("mobile-menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  const close = document.getElementById("mobile-menu-close");
+
+  toggle?.addEventListener("click", () => {
+    menu?.classList.remove("hidden");
+    toggle.setAttribute("aria-expanded", "true");
+  });
+
+  function closeMenu() {
+    menu?.classList.add("hidden");
+    toggle?.setAttribute("aria-expanded", "false");
+  }
+
+  close?.addEventListener("click", closeMenu);
+  menu?.addEventListener("click", (e) => {
+    if (e.target === menu) closeMenu();
+  });
+</script>
