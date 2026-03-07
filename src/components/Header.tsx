@@ -12,9 +12,9 @@ const Header = () => {
   const NavigationLinks = () => (
     <>
       <Link
-        to="/"
+        to="/apps"
         className={`text-lg ${
-          isActive("/") ? "text-owntube-orange font-semibold" : "text-gray-600 hover:text-owntube-orange"
+          isActive("/") || isActive("/apps") ? "text-owntube-orange font-semibold" : "text-gray-600 hover:text-owntube-orange"
         }`}
       >
         Apps

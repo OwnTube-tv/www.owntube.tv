@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // List of known routes
-const routes = ["/contact", "/consulting"];
+const routes = ["/apps", "/contact", "/consulting"];
 
 // Path to the build output
 const buildDir = path.resolve(__dirname, "dist/");
