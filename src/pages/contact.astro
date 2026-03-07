@@ -1,5 +1,43 @@
 ---
 import RootLayout from "../layouts/RootLayout.astro";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.owntube.tv/contact#page",
+      name: "Contact Us — OwnTube.tv",
+      url: "https://www.owntube.tv/contact",
+      description: "Contact OwnTube Nordic AB. Located in Stockholm, Sweden.",
+      isPartOf: { "@id": "https://www.owntube.tv/#website" },
+      about: { "@id": "https://www.owntube.tv/#organization" },
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.owntube.tv/#organization",
+      name: "OwnTube Nordic AB",
+      legalName: "OwnTube Nordic AB",
+      url: "https://www.owntube.tv",
+      email: "hello@owntube.tv",
+      telephone: "+46730567567",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Älgpassgatan 12 lgh 1102",
+        postalCode: "11545",
+        addressLocality: "Stockholm",
+        addressCountry: "SE",
+      },
+      vatID: "SE559517719601",
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        email: "hello@owntube.tv",
+        telephone: "+46730567567",
+      },
+    },
+  ],
+};
 ---
 
 <RootLayout
@@ -7,6 +45,8 @@ import RootLayout from "../layouts/RootLayout.astro";
   description="Contact OwnTube Nordic AB. Located in Stockholm, Sweden."
   canonicalPath="/contact"
 >
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+
   <div class="min-h-screen">
     <div class="container mx-auto px-4 py-12">
       <h1 class="text-4xl font-bold mb-8">Contact Us</h1>
