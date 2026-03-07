@@ -2,6 +2,8 @@
 import RootLayout from "../layouts/RootLayout.astro";
 import HomeContent from "../components/HomeContent.astro";
 
+const buildInfo = await import("../build-info.json");
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -47,6 +49,7 @@ const jsonLd = {
       description: "Your own tube, for Your own content. Create custom video apps for web, mobile, and TV.",
       publisher: { "@id": "https://www.owntube.tv/#organization" },
       inLanguage: "en",
+      version: `${buildInfo.GITHUB_SHA_SHORT} (${buildInfo.BUILD_TIMESTAMP})`,
     },
     {
       "@type": "WebPage",
