@@ -1,0 +1,172 @@
+---
+import { apps } from "../data/apps";
+---
+
+<div class="min-h-screen">
+  <div class="container mx-auto px-4 py-12">
+    <section class="mb-20">
+      <h1 class="text-4xl font-bold text-center mb-4">Your own tube, for Your own content</h1>
+      <p class="text-xl text-center text-gray-600 mb-12">
+        Create custom video apps for web, mobile, and TV. No ads. No data collection. No&nbsp;lock-in. Free as in
+        Freedom.
+      </p>
+
+      <div class="bg-owntube-light rounded-lg p-8 mb-16">
+        <h2 class="text-3xl font-bold mb-6">Make Your Own Video App</h2>
+        <div class="flex flex-col md:flex-row items-center gap-8">
+          <div class="flex-1">
+            <p class="text-lg mb-4">
+              Get started with our open-source project OwnTube.tv and create your own video streaming app today.
+              Available on desktop/web, or natively on iPhone, Android, Apple TV, and Android TV.
+            </p>
+            <a
+              href="https://github.com/OwnTube-tv/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center space-x-2 bg-owntube-orange text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition-colors"
+            >
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                ></path>
+              </svg>
+              <span>View on GitHub</span>
+            </a>
+          </div>
+          <div class="flex-1">
+            <img
+              src="/lovable-uploads/7c329071-cd88-4414-8673-dcd7a551df5e.png"
+              alt="OwnTube GitHub Profile"
+              class="rounded-lg shadow-lg w-full"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-owntube-light rounded-lg p-8 mb-16">
+        <h2 class="text-3xl font-bold mb-6">Reference App for Desktop/Web</h2>
+        <div class="flex flex-col gap-8">
+          <div class="text-lg mb-4">
+            <p class="mb-4">
+              Create your Own fork of <a
+                href="https://github.com/OwnTube-tv/web-client"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-owntube-orange hover:underline">OwnTube-tv/web-client</a
+              > and deploy it via GitHub Pages, as the fastest way to get yourself up and running. The OwnTube.tv web app
+              is installable as a Progressive Web App (PWA) on iPhone/Android and it works great on modern desktop browsers
+              too. You can use this app with any recent PeerTube video site as content backend, or try out any of the featured
+              sites on the landing page to experience various customizations.
+            </p>
+            <a
+              href="https://owntube-tv.github.io/web-client/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center space-x-2 bg-owntube-orange text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition-colors"
+            >
+              <span>Try the Web App</span>
+            </a>
+          </div>
+
+          <div class="grid md:grid-cols-3 gap-6">
+            <div class="rounded-lg overflow-hidden shadow-lg flex flex-col">
+              <img
+                src="/lovable-uploads/790ed37d-4d1d-45d1-8e95-7bc2450d6cb6.png"
+                alt="OwnTube Discovery Page"
+                class="w-full h-auto"
+              />
+              <div class="p-4 bg-white mt-auto">
+                <h3 class="font-semibold">Discovery Page</h3>
+                <p class="text-sm text-gray-600">Find and explore video sites</p>
+              </div>
+            </div>
+
+            <div class="rounded-lg overflow-hidden shadow-lg flex flex-col">
+              <img
+                src="/lovable-uploads/547fd070-2a4d-4f39-965f-40226fbd54d6.png"
+                alt="TILvids Channel Example"
+                class="w-full h-auto"
+              />
+              <div class="p-4 bg-white mt-auto">
+                <h3 class="font-semibold">TILvids</h3>
+                <p class="text-sm text-gray-600">Educational content delivery</p>
+              </div>
+            </div>
+
+            <div class="rounded-lg overflow-hidden shadow-lg flex flex-col">
+              <img
+                src="/lovable-uploads/e56ece64-3622-4b14-9860-c95328c4dde6.png"
+                alt="Blender Channel"
+                class="w-full h-auto"
+              />
+              <div class="p-4 bg-white mt-auto">
+                <h3 class="font-semibold">Blender</h3>
+                <p class="text-sm text-gray-600">3D creation software</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section>
+        <h2 class="text-3xl font-bold mb-8">Reference Apps for Mobile and TV</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+          {
+            apps.map((app) => (
+              <div class="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <img src={app.imageSrc} alt={app.title} class="w-full h-48 object-cover" />
+                <div class="p-6 flex flex-grow flex-col">
+                  <div class="flex justify-between items-start mb-4">
+                    <div class="flex flex-row relative">
+                      <img
+                        src={app.iconSrc}
+                        alt={app.title}
+                        class="shadow-xl rounded-lg border-2 w-20 h-20 absolute -top-24 left-0 z-10"
+                      />
+                      <h3 class="text-xl font-bold">{app.title}</h3>
+                    </div>
+                    <a
+                      href={app.githubRepo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-gray-600 hover:text-owntube-orange transition-colors"
+                      aria-label={`View ${app.title} source code on GitHub`}
+                    >
+                      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                      </svg>
+                    </a>
+                  </div>
+                  <p class="text-gray-600 font-medium mb-4">{app.shortDescription}</p>
+                  <p class="text-gray-600 text-sm flex-1 flex flex-col flex-grow" set:html={app.longDescription} />
+                  <hr class="mb-2 mt-2" />
+                  <div class="gap-2 flex-col flex">
+                    <a
+                      href={app.webLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="gap-1 flex flex-row text-owntube-orange hover:underline items-center"
+                    >
+                      View the web version
+                      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                      </svg>
+                    </a>
+                    <p class="text-gray-600">or try the beta on mobile platforms:</p>
+                    <a href={app.googleLink} target="_blank" rel="noopener noreferrer">
+                      <img width="150" src="/googleplay.png" alt="Try on Google Play" />
+                    </a>
+                    <a href={app.testflightLink} target="_blank" rel="noopener noreferrer">
+                      <img width="150" src="/testflight.png" alt="Try on TestFlight" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+    </section>
+  </div>
+</div>

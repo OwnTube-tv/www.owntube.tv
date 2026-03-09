@@ -1,0 +1,34 @@
+---
+import RootLayout from "../layouts/RootLayout.astro";
+import HomeContent from "../components/HomeContent.astro";
+import { apps } from "../data/apps";
+import { webClientJsonLd, appsToJsonLd } from "../data/jsonld";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.owntube.tv/#apps-page",
+      name: "Apps — OwnTube.tv",
+      url: "https://www.owntube.tv/apps",
+      description:
+        "Get started with the open-source OwnTube.tv project and create your own video streaming app. Available on desktop/web, iPhone, Android, Apple TV, and Android TV.",
+      isPartOf: { "@id": "https://www.owntube.tv/#website" },
+      about: { "@id": "https://www.owntube.tv/#organization" },
+    },
+    ...webClientJsonLd,
+    ...appsToJsonLd(apps),
+  ],
+};
+---
+
+<RootLayout
+  title="OwnTube.tv | Your own tube, for Your own content"
+  description="Create custom video apps for web, mobile, and TV. No ads. No data collection. No lock-in. Free as in Freedom. Open-source video streaming built on PeerTube."
+  canonicalPath="/apps"
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+
+  <HomeContent />
+</RootLayout>

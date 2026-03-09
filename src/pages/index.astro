@@ -1,0 +1,101 @@
+---
+import RootLayout from "../layouts/RootLayout.astro";
+import HomeContent from "../components/HomeContent.astro";
+import { apps } from "../data/apps";
+import { roles } from "../data/roles";
+import { webClientJsonLd, appsToJsonLd, consultingServiceJsonLd } from "../data/jsonld";
+
+const buildInfo = await import("../build-info.json");
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.owntube.tv/#organization",
+      name: "OwnTube Nordic AB",
+      legalName: "OwnTube Nordic AB",
+      url: "https://www.owntube.tv",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.owntube.tv/lovable-uploads/a28acd56-9e34-4a9e-90f3-e42bcbca4c51.png",
+        caption: "OwnTube.tv Logo",
+      },
+      image: "https://www.owntube.tv/og-image.png",
+      description:
+        "OwnTube.tv helps you create custom video apps for web, mobile, and TV. No ads. No data collection. No lock-in. Free as in Freedom. Open-source video streaming solutions built on PeerTube.",
+      email: "hello@owntube.tv",
+      telephone: "+46730567567",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Älgpassgatan 12 lgh 1102",
+        postalCode: "11545",
+        addressLocality: "Stockholm",
+        addressCountry: "SE",
+      },
+      vatID: "SE559517719601",
+      sameAs: ["https://github.com/OwnTube-tv"],
+      foundingDate: "2025",
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        email: "hello@owntube.tv",
+        telephone: "+46730567567",
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.owntube.tv/#website",
+      name: "OwnTube.tv",
+      alternateName: "OwnTube",
+      url: "https://www.owntube.tv",
+      description: "Your own tube, for Your own content. Create custom video apps for web, mobile, and TV.",
+      publisher: { "@id": "https://www.owntube.tv/#organization" },
+      inLanguage: "en",
+      version: `${buildInfo.GITHUB_SHA_SHORT} (${buildInfo.BUILD_TIMESTAMP})`,
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.owntube.tv/#apps-page",
+      name: "Apps — OwnTube.tv",
+      url: "https://www.owntube.tv/apps",
+      description:
+        "Get started with the open-source OwnTube.tv project and create your own video streaming app. Available on desktop/web, iPhone, Android, Apple TV, and Android TV.",
+      isPartOf: { "@id": "https://www.owntube.tv/#website" },
+      about: { "@id": "https://www.owntube.tv/#organization" },
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.owntube.tv/consulting#page",
+      name: "Expert Consulting — OwnTube.tv",
+      url: "https://www.owntube.tv/consulting",
+      description:
+        "OwnTube Nordic AB provides expert consulting in video-on-demand streaming, large-scale IT infrastructure, software development, DevSecOps, container platforms, AI tools, and authentication systems.",
+      isPartOf: { "@id": "https://www.owntube.tv/#website" },
+      about: { "@id": "https://www.owntube.tv/#consulting-service" },
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.owntube.tv/contact#page",
+      name: "Contact Us — OwnTube.tv",
+      url: "https://www.owntube.tv/contact",
+      description: "Contact OwnTube Nordic AB. Located in Stockholm, Sweden.",
+      isPartOf: { "@id": "https://www.owntube.tv/#website" },
+      about: { "@id": "https://www.owntube.tv/#organization" },
+    },
+    consultingServiceJsonLd(roles),
+    ...webClientJsonLd,
+    ...appsToJsonLd(apps),
+  ],
+};
+---
+
+<RootLayout
+  title="OwnTube.tv | Your own tube, for Your own content"
+  description="Create custom video apps for web, mobile, and TV. No ads. No data collection. No lock-in. Free as in Freedom. Open-source video streaming built on PeerTube."
+  canonicalPath="/"
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+
+  <HomeContent />
+</RootLayout>
