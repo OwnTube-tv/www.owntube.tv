@@ -1,6 +1,7 @@
 ---
 import RootLayout from "../layouts/RootLayout.astro";
 import { roles } from "../data/roles";
+import { consultingServiceJsonLd } from "../data/jsonld";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -15,76 +16,7 @@ const jsonLd = {
       isPartOf: { "@id": "https://www.owntube.tv/#website" },
       about: { "@id": "https://www.owntube.tv/#consulting-service" },
     },
-    {
-      "@type": "ProfessionalService",
-      "@id": "https://www.owntube.tv/#consulting-service",
-      name: "OwnTube Expert Consulting",
-      provider: { "@id": "https://www.owntube.tv/#organization" },
-      url: "https://www.owntube.tv/consulting",
-      description:
-        "Comprehensive consulting services in video-on-demand (VoD) streaming and large-scale IT infrastructure. Whether you're looking to self-host or leverage cloud solutions, our team can guide you through your video streaming journey.",
-      serviceType: "IT Consulting",
-      areaServed: "Worldwide",
-      hasOfferCatalog: {
-        "@type": "OfferCatalog",
-        name: "Consulting Roles",
-        itemListElement: [
-          {
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: "Lead Developer",
-              description:
-                "Technical leadership and hands-on development for video streaming applications and backend infrastructure.",
-            },
-          },
-          {
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: "Tech Lead & Architect",
-              description:
-                "Strategic technical direction, solution design, and team leadership for video streaming projects.",
-            },
-          },
-          {
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: "Frontend Development",
-              description: "Expert React frontend development for video applications on web, mobile and TV.",
-            },
-          },
-          {
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: "Infrastructure Architect",
-              description:
-                "Design and implementation of scalable infrastructure for video delivery and containerized workloads.",
-            },
-          },
-          {
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: "DevSecOps",
-              description:
-                "Secure and efficient CI/CD pipelines for a multitude of use cases, from mobile apps to infrastructure deployments.",
-            },
-          },
-          {
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: "Backend Development",
-              description:
-                "Robust backend systems for edge deployments, strong authentication, data persistence, and content management.",
-            },
-          },
-        ],
-      },
-    },
+    consultingServiceJsonLd(roles),
   ],
 };
 ---

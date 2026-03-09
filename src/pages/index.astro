@@ -1,6 +1,9 @@
 ---
 import RootLayout from "../layouts/RootLayout.astro";
 import HomeContent from "../components/HomeContent.astro";
+import { apps } from "../data/apps";
+import { roles } from "../data/roles";
+import { webClientJsonLd, appsToJsonLd, consultingServiceJsonLd } from "../data/jsonld";
 
 const buildInfo = await import("../build-info.json");
 
@@ -80,216 +83,9 @@ const jsonLd = {
       isPartOf: { "@id": "https://www.owntube.tv/#website" },
       about: { "@id": "https://www.owntube.tv/#organization" },
     },
-    {
-      "@type": "ProfessionalService",
-      "@id": "https://www.owntube.tv/#consulting-service",
-      name: "OwnTube Expert Consulting",
-      provider: { "@id": "https://www.owntube.tv/#organization" },
-      url: "https://www.owntube.tv/consulting",
-      description:
-        "Comprehensive consulting services in video-on-demand (VoD) streaming and large-scale IT infrastructure. Whether you're looking to self-host or leverage cloud solutions, our team can guide you through your video streaming journey.",
-      serviceType: "IT Consulting",
-      areaServed: "Worldwide",
-      hasOfferCatalog: {
-        "@type": "OfferCatalog",
-        name: "Consulting Roles",
-        itemListElement: [
-          {
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: "Lead Developer",
-              description:
-                "Technical leadership and hands-on development for video streaming applications and backend infrastructure.",
-            },
-          },
-          {
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: "Tech Lead & Architect",
-              description:
-                "Strategic technical direction, solution design, and team leadership for video streaming projects.",
-            },
-          },
-          {
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: "Frontend Development",
-              description: "Expert React frontend development for video applications on web, mobile and TV.",
-            },
-          },
-          {
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: "Infrastructure Architect",
-              description:
-                "Design and implementation of scalable infrastructure for video delivery and containerized workloads.",
-            },
-          },
-          {
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: "DevSecOps",
-              description:
-                "Secure and efficient CI/CD pipelines for a multitude of use cases, from mobile apps to infrastructure deployments.",
-            },
-          },
-          {
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: "Backend Development",
-              description:
-                "Robust backend systems for edge deployments, strong authentication, data persistence, and content management.",
-            },
-          },
-        ],
-      },
-    },
-    {
-      "@type": "SoftwareApplication",
-      "@id": "https://www.owntube.tv/#web-client",
-      name: "OwnTube.tv Web Client",
-      description:
-        "Open-source reference video streaming app for desktop and web. Installable as a Progressive Web App (PWA) on iPhone/Android. Works with any recent PeerTube video site as content backend.",
-      url: "https://owntube-tv.github.io/web-client/",
-      applicationCategory: "MultimediaApplication",
-      operatingSystem: "Web, iOS, Android",
-      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-      isAccessibleForFree: true,
-      author: { "@id": "https://www.owntube.tv/#organization" },
-      screenshot: "https://www.owntube.tv/lovable-uploads/790ed37d-4d1d-45d1-8e95-7bc2450d6cb6.png",
-    },
-    {
-      "@type": "SoftwareSourceCode",
-      "@id": "https://www.owntube.tv/#web-client-source",
-      name: "OwnTube.tv Web Client (Source Code)",
-      codeRepository: "https://github.com/OwnTube-tv/web-client",
-      programmingLanguage: ["TypeScript", "React Native"],
-      license: "https://github.com/OwnTube-tv/web-client/blob/main/LICENSE",
-      author: { "@id": "https://www.owntube.tv/#organization" },
-      targetProduct: { "@id": "https://www.owntube.tv/#web-client" },
-    },
-    {
-      "@type": "SoftwareApplication",
-      "@id": "https://www.owntube.tv/#privacy-tube",
-      name: "Privacy Tube",
-      description:
-        "Video publications by Privacy International Media. Privacy International (PI) has been working to promote the human right of privacy throughout the world since 1990, raising awareness of threats to privacy and reporting on surveillance methods and tactics.",
-      url: "https://cust-app-pitube.owntube.tv/",
-      applicationCategory: "MultimediaApplication",
-      operatingSystem: "Web, iOS, Android, Apple TV, Android TV",
-      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-      isAccessibleForFree: true,
-      installUrl: [
-        "https://cust-app-pitube.owntube.tv/",
-        "https://play.google.com/store/apps/details?id=com.owntubetv.pitube",
-        "https://testflight.apple.com/join/KAAJgPss",
-      ],
-      author: { "@id": "https://www.owntube.tv/#organization" },
-      image: "https://www.owntube.tv/app-branding/icons/privacy.png",
-      screenshot: "https://www.owntube.tv/app-branding/privacy.png",
-    },
-    {
-      "@type": "SoftwareSourceCode",
-      "@id": "https://www.owntube.tv/#privacy-tube-source",
-      name: "Privacy Tube (Source Code)",
-      codeRepository: "https://github.com/OwnTube-tv/cust-app-pitube",
-      programmingLanguage: ["TypeScript", "React Native"],
-      author: { "@id": "https://www.owntube.tv/#organization" },
-      targetProduct: { "@id": "https://www.owntube.tv/#privacy-tube" },
-    },
-    {
-      "@type": "SoftwareApplication",
-      "@id": "https://www.owntube.tv/#blender-tube",
-      name: "Blender Tube",
-      description:
-        "Videos on the Blender 3D creation software. Blender Foundation provides videos presenting the evolutions of their popular 3D creation software, along with tutorials and presentations by the community.",
-      url: "https://cust-app-blender.owntube.tv/",
-      applicationCategory: "MultimediaApplication",
-      operatingSystem: "Web, iOS, Android, Apple TV, Android TV",
-      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-      isAccessibleForFree: true,
-      installUrl: [
-        "https://cust-app-blender.owntube.tv/",
-        "https://play.google.com/store/apps/details?id=com.owntubetv.blendertube",
-        "https://testflight.apple.com/join/cEDD3KeK",
-      ],
-      author: { "@id": "https://www.owntube.tv/#organization" },
-      image: "https://www.owntube.tv/app-branding/icons/blender.png",
-      screenshot: "https://www.owntube.tv/app-branding/blender.png",
-    },
-    {
-      "@type": "SoftwareSourceCode",
-      "@id": "https://www.owntube.tv/#blender-tube-source",
-      name: "Blender Tube (Source Code)",
-      codeRepository: "https://github.com/OwnTube-tv/cust-app-blender",
-      programmingLanguage: ["TypeScript", "React Native"],
-      author: { "@id": "https://www.owntube.tv/#organization" },
-      targetProduct: { "@id": "https://www.owntube.tv/#blender-tube" },
-    },
-    {
-      "@type": "SoftwareApplication",
-      "@id": "https://www.owntube.tv/#xr-tube",
-      name: "XR Tube",
-      description:
-        "Information videos by Extinction Rebellion. A video library for Extinction Rebellion (XR) with accounts for every national group, hosted on renewable energy-powered infrastructure.",
-      url: "https://cust-app-xrtube.owntube.tv/",
-      applicationCategory: "MultimediaApplication",
-      operatingSystem: "Web, iOS, Android, Apple TV, Android TV",
-      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-      isAccessibleForFree: true,
-      installUrl: [
-        "https://cust-app-xrtube.owntube.tv/",
-        "https://play.google.com/store/apps/details?id=com.owntubetv.xrtube",
-        "https://testflight.apple.com/join/EzReSmsz",
-      ],
-      author: { "@id": "https://www.owntube.tv/#organization" },
-      image: "https://www.owntube.tv/app-branding/icons/xrtube.png",
-      screenshot: "https://www.owntube.tv/app-branding/xrtube.png",
-    },
-    {
-      "@type": "SoftwareSourceCode",
-      "@id": "https://www.owntube.tv/#xr-tube-source",
-      name: "XR Tube (Source Code)",
-      codeRepository: "https://github.com/OwnTube-tv/cust-app-xrtube",
-      programmingLanguage: ["TypeScript", "React Native"],
-      author: { "@id": "https://www.owntube.tv/#organization" },
-      targetProduct: { "@id": "https://www.owntube.tv/#xr-tube" },
-    },
-    {
-      "@type": "SoftwareApplication",
-      "@id": "https://www.owntube.tv/#basspistol",
-      name: "Basspistol",
-      description:
-        "Music published by The Outernational Music Syndicate. Basspistol established in 2010 as a pro-active reaction to everything that is broken in the music-industry; it is an endlessly evolving union for the Underground Artists of the third millennium.",
-      url: "https://cust-app-basspistol.owntube.tv/",
-      applicationCategory: "MultimediaApplication",
-      operatingSystem: "Web, iOS, Android, Apple TV, Android TV",
-      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-      isAccessibleForFree: true,
-      installUrl: [
-        "https://cust-app-basspistol.owntube.tv/",
-        "https://play.google.com/store/apps/details?id=com.owntubetv.basspistol",
-        "https://testflight.apple.com/join/pqVV5Cu2",
-      ],
-      author: { "@id": "https://www.owntube.tv/#organization" },
-      image: "https://www.owntube.tv/app-branding/icons/basspistol.png",
-      screenshot: "https://www.owntube.tv/app-branding/basspistol.png",
-    },
-    {
-      "@type": "SoftwareSourceCode",
-      "@id": "https://www.owntube.tv/#basspistol-source",
-      name: "Basspistol (Source Code)",
-      codeRepository: "https://github.com/OwnTube-tv/cust-app-basspistol",
-      programmingLanguage: ["TypeScript", "React Native"],
-      author: { "@id": "https://www.owntube.tv/#organization" },
-      targetProduct: { "@id": "https://www.owntube.tv/#basspistol" },
-    },
+    consultingServiceJsonLd(roles),
+    ...webClientJsonLd,
+    ...appsToJsonLd(apps),
   ],
 };
 ---
@@ -297,6 +93,7 @@ const jsonLd = {
 <RootLayout
   title="OwnTube.tv | Your own tube, for Your own content"
   description="Create custom video apps for web, mobile, and TV. No ads. No data collection. No lock-in. Free as in Freedom. Open-source video streaming built on PeerTube."
+  canonicalPath="/"
 >
   <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
 

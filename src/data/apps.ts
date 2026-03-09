@@ -10,6 +10,9 @@ export interface App {
   googleLink: string;
   testflightLink: string;
   webLink: string;
+  jsonLdId: string;
+  jsonLdName?: string;
+  jsonLdDescription: string;
 }
 
 export const apps: App[] = [
@@ -26,6 +29,9 @@ export const apps: App[] = [
     googleLink: "https://play.google.com/store/apps/details?id=com.owntubetv.pitube",
     testflightLink: "https://testflight.apple.com/join/KAAJgPss",
     webLink: "https://cust-app-pitube.owntube.tv/",
+    jsonLdId: "privacy-tube",
+    jsonLdDescription:
+      "Video publications by Privacy International Media. Privacy International (PI) has been working to promote the human right of privacy throughout the world since 1990, raising awareness of threats to privacy and reporting on surveillance methods and tactics.",
   },
   {
     title: "Blender Tube",
@@ -40,6 +46,9 @@ export const apps: App[] = [
     googleLink: "https://play.google.com/store/apps/details?id=com.owntubetv.blendertube",
     testflightLink: "https://testflight.apple.com/join/cEDD3KeK",
     webLink: "https://cust-app-blender.owntube.tv/",
+    jsonLdId: "blender-tube",
+    jsonLdDescription:
+      "Videos on the Blender 3D creation software. Blender Foundation provides videos presenting the evolutions of their popular 3D creation software, along with tutorials and presentations by the community.",
   },
   {
     title: "XR Tube",
@@ -54,6 +63,9 @@ export const apps: App[] = [
     googleLink: "https://play.google.com/store/apps/details?id=com.owntubetv.xrtube",
     testflightLink: "https://testflight.apple.com/join/EzReSmsz",
     webLink: "https://cust-app-xrtube.owntube.tv/",
+    jsonLdId: "xr-tube",
+    jsonLdDescription:
+      "Information videos by Extinction Rebellion. A video library for Extinction Rebellion (XR) with accounts for every national group, hosted on renewable energy-powered infrastructure.",
   },
   {
     title: "\u{1D505}\u{1D586}\u{1D598}\u{1D598}\u{1D595}\u{1D58E}\u{1D598}\u{1D599}\u{1D594}\u{1D591} \u{1F30D}",
@@ -68,5 +80,9 @@ export const apps: App[] = [
     googleLink: "https://play.google.com/store/apps/details?id=com.owntubetv.basspistol",
     testflightLink: "https://testflight.apple.com/join/pqVV5Cu2",
     webLink: "https://cust-app-basspistol.owntube.tv/",
+    jsonLdId: "basspistol",
+    jsonLdName: "Basspistol",
+    jsonLdDescription:
+      "Music published by The Outernational Music Syndicate. Basspistol established in 2010 as a pro-active reaction to everything that is broken in the music-industry; it is an endlessly evolving union for the Underground Artists of the third millennium.",
   },
 ];

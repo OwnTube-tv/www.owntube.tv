@@ -13,12 +13,12 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.6",
     "@astrojs/tailwind": "^6.0.2",
     "astro": "^5.18.0",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.6",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",
     "prettier": "^3.4.2",
