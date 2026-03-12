@@ -6,9 +6,9 @@ interface Props {
 const { currentPath } = Astro.props;
 
 const navLinks = [
-  { href: "/apps", label: "Apps", activePaths: ["/", "/apps"] },
-  { href: "/consulting", label: "Consulting", activePaths: ["/consulting"] },
-  { href: "/contact", label: "Contact", activePaths: ["/contact"] },
+  { href: "/apps/", label: "Apps", activePaths: ["/", "/apps"] },
+  { href: "/consulting/", label: "Consulting", activePaths: ["/consulting"] },
+  { href: "/contact/", label: "Contact", activePaths: ["/contact"] },
 ];
 
 function isActive(activePaths: string[], currentPath: string): boolean {
