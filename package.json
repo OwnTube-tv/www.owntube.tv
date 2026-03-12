@@ -17,6 +17,9 @@
     "astro": "^5.18.0",
     "tailwindcss-animate": "^1.0.7"
   },
+  "overrides": {
+    "lodash": "4.17.23"
+  },
   "devDependencies": {
     "@astrojs/check": "^0.9.6",
     "autoprefixer": "^10.4.20",
