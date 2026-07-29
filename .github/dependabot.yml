@@ -1,0 +1,33 @@
+version: 2
+
+updates:
+  # Astro and its dependency tree. Grouped so routine patch/minor bumps arrive
+  # as a single PR instead of one per transitive package, while majors stay
+  # separate — those need a migration and should be reviewed on their own.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    groups:
+      npm-minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    labels:
+      - "dependencies"
+
+  # Workflow actions (actions/checkout, actions/setup-node, ...).
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    labels:
+      - "dependencies"
+      - "github-actions"
