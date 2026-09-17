@@ -48,7 +48,7 @@ const buildInfo = await import("../build-info.json");
   <body class="bg-background text-foreground">
     <div class="flex flex-col min-h-screen">
       <Header currentPath={Astro.url.pathname} />
-      <main class="flex-grow">
+      <main class="grow">
         <slot />
       </main>
       <Footer buildInfo={buildInfo.default ?? buildInfo} />

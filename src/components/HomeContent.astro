@@ -23,7 +23,7 @@ import { apps } from "../data/apps";
               href="https://github.com/OwnTube-tv/"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center space-x-2 bg-owntube-orange text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition-colors"
+              class="inline-flex items-center space-x-2 bg-owntube-orange text-white px-6 py-3 rounded-lg hover:bg-owntube-orange/90 transition-colors"
             >
               <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                 <path
@@ -62,7 +62,7 @@ import { apps } from "../data/apps";
               href="https://owntube-tv.github.io/web-client/"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center space-x-2 bg-owntube-orange text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition-colors"
+              class="inline-flex items-center space-x-2 bg-owntube-orange text-white px-6 py-3 rounded-lg hover:bg-owntube-orange/90 transition-colors"
             >
               <span>Try the Web App</span>
             </a>
@@ -115,7 +115,7 @@ import { apps } from "../data/apps";
             apps.map((app) => (
               <div class="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                 <img src={app.imageSrc} alt={app.title} class="w-full h-48 object-cover" />
-                <div class="p-6 flex flex-grow flex-col">
+                <div class="p-6 flex grow flex-col">
                   <div class="flex justify-between items-start mb-4">
                     <div class="flex flex-row relative">
                       <img
@@ -138,7 +138,7 @@ import { apps } from "../data/apps";
                     </a>
                   </div>
                   <p class="text-gray-600 font-medium mb-4">{app.shortDescription}</p>
-                  <p class="text-gray-600 text-sm flex-1 flex flex-col flex-grow" set:html={app.longDescription} />
+                  <p class="text-gray-600 text-sm flex-1 flex flex-col grow" set:html={app.longDescription} />
                   <hr class="mb-2 mt-2" />
                   <div class="gap-2 flex-col flex">
                     <a
