@@ -14,6 +14,13 @@
 }
 
 @theme {
+  /*
+    Tailwind CSS v4.3 replaced the default sans stack with an explicit font list that no longer contains `system-ui`.
+    Keep the v3 stack, so that platforms where those fonts are missing (e.g. Linux) still get their system UI font.
+  */
+  --font-sans:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
   --color-owntube-orange: #ff5722;
   --color-owntube-dark: #1a1a1a;
   --color-owntube-light: #f5f5f5;
