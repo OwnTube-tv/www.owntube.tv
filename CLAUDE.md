@@ -38,6 +38,7 @@
 - **Zero JavaScript**: No client-side JS framework; only minimal inline scripts (mobile menu toggle)
 - **Homepage**: Both `/` and `/apps` render identical content via shared `HomeContent.astro` component
 - **JSON-LD**: Structured data defined in `index.astro` frontmatter, embedded in page head
+- **Analytics**: Umami script in `RootLayout.astro`; `data-domains="www.owntube.tv"` makes it a no-op on any other host, so `npm run dev`, `npm run preview` and locally served builds do not send pageviews to the production stats
 - **CI/CD**: GitHub Actions pipeline (`.github/workflows/gh-pages-cd.yml`) builds and deploys to GitHub Pages on push to `main`
 
 ## Maintenance
