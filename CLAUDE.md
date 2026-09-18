@@ -34,6 +34,8 @@
 - **Per-Page Metadata**: Each page sets its own title, description, og:url, and canonical via layout props
 - **Path Aliases**: `@/*` maps to `src/*` directory
 - **Tailwind**: Loaded through the `@tailwindcss/vite` plugin in `astro.config.ts` (no PostCSS config)
+- **Fonts**: `--font-sans` in `@theme` pins the `ui-sans-serif, system-ui, ...` stack; Tailwind CSS 4.3's default stack has no `system-ui` and would change the font on Linux
+- **Browser Support**: Tailwind CSS 4 output relies on `@layer`, `@property`, `oklch()`, `color-mix()` and range media queries, so the styled site needs Safari 16.4+, Chrome 111+ or Firefox 128+
 - **Whitespace**: `compressHTML: true` keeps spaces between inline elements on separate source lines; Astro 7's default `"jsx"` mode would drop them
 - **Zero JavaScript**: No client-side JS framework; only minimal inline scripts (mobile menu toggle)
 - **Homepage**: Both `/` and `/apps` render identical content via shared `HomeContent.astro` component
