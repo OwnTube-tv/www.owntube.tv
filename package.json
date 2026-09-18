@@ -10,7 +10,9 @@
     "build:dev": "astro build",
     "lint": "astro check",
     "format": "prettier --write .",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test": "web-test-runner",
+    "test:watch": "web-test-runner --watch"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
@@ -19,6 +21,11 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@open-wc/testing": "^5.0.0",
+    "@types/mocha": "^10.0.10",
+    "@web/dev-server-esbuild": "^2.0.0",
+    "@web/test-runner": "^1.0.0",
+    "@web/test-runner-playwright": "^1.0.0",
     "prettier": "^3.9.7",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3"
