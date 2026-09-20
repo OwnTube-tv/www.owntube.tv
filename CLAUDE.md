@@ -8,6 +8,8 @@
 - `npm run lint` - Run Astro type checker
 - `npm run format` - Format code with Prettier
 - `npm run preview` - Preview production build
+- `npm test` / `npm run test:watch` - Component tests in a real Chromium (Web Test Runner, @open-wc/testing, axe); needs `npx playwright install chromium` once
+- `npm run analyze` - Regenerate `custom-elements.json` from the elements' JSDoc
 
 ## Code Style
 
@@ -16,7 +18,7 @@
 - **Formatting**:
   - Double quotes, 2 space indentation, 120 char line limit
   - Semicolons required, trailing commas for ES5
-- **Components**: Astro components (`.astro` files) for all pages and layouts
+- **Components**: Astro components (`.astro` files) for all pages and layouts; interactive UI as Lit custom elements in `src/elements` (see [src/elements/README.md](src/elements/README.md))
 
 ## Project Structure
 
@@ -37,7 +39,9 @@
 - **Fonts**: `--font-sans` in `@theme` pins the `ui-sans-serif, system-ui, ...` stack; Tailwind CSS 4.3's default stack has no `system-ui` and would change the font on Linux
 - **Browser Support**: Tailwind CSS 4 output relies on `@layer`, `@property`, `oklch()`, `color-mix()` and range media queries, so the styled site needs Safari 16.4+, Chrome 111+ or Firefox 128+
 - **Whitespace**: `compressHTML: true` keeps spaces between inline elements on separate source lines; Astro 7's default `"jsx"` mode would drop them
-- **Zero JavaScript**: No client-side JS framework; only minimal inline scripts (mobile menu toggle)
+- **Client-side JavaScript**: No client-side framework; interactive UI is built as Lit custom elements in `src/elements` as progressive enhancement over static HTML. Content stays server-rendered in the light DOM and is projected through slots, so pages work before — and without — the elements upgrade. `RootLayout.astro` imports `src/elements/index.ts` once, which Astro bundles into a single module script per page
+- **Component API**: Attributes, properties, events, slots and `::part()` are the public contract; everything inside a shadow root is private. Document them with JSDoc on the element class and regenerate `custom-elements.json` with `npm run analyze`
+- **Component Tests**: `*.test.ts` next to each element, run in a real browser by the "Component Tests" workflow on pull requests and pushes to `main`; they assert the public contract, not the shadow markup
 - **Homepage**: Both `/` and `/apps` render identical content via shared `HomeContent.astro` component
 - **JSON-LD**: Structured data defined in `index.astro` frontmatter, embedded in page head
 - **Analytics**: Umami script in `RootLayout.astro`; `data-domains="www.owntube.tv"` makes it a no-op on any other host, so `npm run dev`, `npm run preview` and locally served builds do not send pageviews to the production stats
