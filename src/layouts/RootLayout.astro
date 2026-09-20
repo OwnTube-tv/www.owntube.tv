@@ -59,5 +59,9 @@ const buildInfo = await import("../build-info.json");
       </main>
       <Footer buildInfo={buildInfo.default ?? buildInfo} />
     </div>
+
+    <script>
+      import "../elements/index.ts";
+    </script>
   </body>
 </html>
