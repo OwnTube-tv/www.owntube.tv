@@ -40,7 +40,13 @@ const buildInfo = await import("../build-info.json");
 
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
     <link rel="icon" type="image/x-icon" href="/favicon.png" />
-    <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id="0b37605e-4fbe-4738-848f-ecd085fd82bc"></script>
+    <!-- Analytics (production host only) -->
+    <script
+      is:inline
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="0b37605e-4fbe-4738-848f-ecd085fd82bc"
+      data-domains="www.owntube.tv"></script>
 
     <slot name="head" />
   </head>
@@ -48,7 +54,7 @@ const buildInfo = await import("../build-info.json");
   <body class="bg-background text-foreground">
     <div class="flex flex-col min-h-screen">
       <Header currentPath={Astro.url.pathname} />
-      <main class="flex-grow">
+      <main class="grow">
         <slot />
       </main>
       <Footer buildInfo={buildInfo.default ?? buildInfo} />

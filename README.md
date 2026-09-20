@@ -7,7 +7,7 @@ This repo is for maintaining the official organization website.
 Updates are shipped to the GitHub Pages deployment at https://www.owntube.tv/ on pushes to `main` branch.
 
 If editing via git source control, just clone/fork the repo as usual, install the dependencies, test & commit changes,
-and submit the changes via a pull request.
+and submit the changes via a pull request. Node.js 22.12 or newer is required.
 
 ```sh
 git clone git@github.com:OwnTube-tv/www.owntube.tv.git
@@ -18,9 +18,9 @@ npm run dev
 
 ## What technologies are used for this project?
 
-- Astro (static site generator)
+- Astro 7 (static site generator)
 - TypeScript
-- Tailwind CSS
+- Tailwind CSS 4 (the generated CSS targets Safari 16.4+, Chrome 111+ and Firefox 128+)
 
 ## Contributing
 
