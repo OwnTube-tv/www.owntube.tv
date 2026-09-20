@@ -20,7 +20,7 @@ npm run dev
 
 - Astro 7 (static site generator)
 - TypeScript
-- Tailwind CSS 4
+- Tailwind CSS 4 (the generated CSS targets Safari 16.4+, Chrome 111+ and Firefox 128+)
 
 ## Contributing
 
