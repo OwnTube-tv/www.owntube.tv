@@ -32,6 +32,7 @@ let navIdCounter = 0;
  * @cssprop [--ot-space=0.25rem] - Spacing unit; the panel's padding is six of them.
  */
 export class OtMobileMenu extends LitElement {
+  /* Values mirror the Tailwind utilities this markup used to carry, read from tokens with those as fallbacks. */
   static override styles = css`
     *,
     *::before,
@@ -59,19 +60,17 @@ export class OtMobileMenu extends LitElement {
     }
 
     .panel {
-      /* absolute right-0 top-0 h-full w-64 bg-white shadow-lg p-6 */
       position: absolute;
       right: 0;
       top: 0;
       height: 100%;
-      width: 16rem; /* w-64 */
+      width: 16rem;
       background: var(--ot-color-background, #fff);
       box-shadow: var(--ot-shadow-lg, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1));
       padding: calc(var(--ot-space, 0.25rem) * 6);
     }
 
     .close {
-      /* absolute top-4 right-4 p-2 */
       position: absolute;
       top: calc(var(--ot-space, 0.25rem) * 4);
       right: calc(var(--ot-space, 0.25rem) * 4);
@@ -171,10 +170,7 @@ export class OtMobileMenu extends LitElement {
 
   #focusable(): HTMLElement[] {
     const close = this.renderRoot.querySelector<HTMLElement>(".close");
-
-    const slot = this.renderRoot.querySelector<HTMLSlotElement>("slot:not([name])");
-    const slotted = slot?.assignedElements({ flatten: true }) ?? [];
-    const links = slotted.flatMap((el) =>
+    const links = this.#assigned("slot:not([name])").flatMap((el) =>
       Array.from(el.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"))
     );
 
@@ -184,40 +180,56 @@ export class OtMobileMenu extends LitElement {
   override updated(changed: PropertyValues<this>) {
     if (!changed.has("open")) return;
 
-    const dialog = this.renderRoot.querySelector("dialog");
-    const slot = this.renderRoot.querySelector<HTMLSlotElement>('slot[name="trigger"]');
-    const trigger = slot?.assignedElements({ flatten: true })[0] as HTMLElement | undefined;
-    const closeButton = this.renderRoot.querySelector<HTMLElement>(".close");
+    this.#syncTrigger();
+    this.#syncDialog();
 
-    const nav = this.renderRoot
-      .querySelector<HTMLSlotElement>("slot:not([name])")
-      ?.assignedElements({ flatten: true })[0];
+    // Lit counts the constructor's `open = false` as a change, but nothing happened for the page to hear about.
+    if (changed.get("open") !== undefined) this.#dispatchChange();
+  }
 
+  /** `aria-controls` targets the slotted navigation, and names it when the consumer has not: an IDREF cannot cross
+   * the shadow boundary. */
+  #syncTrigger() {
+    const trigger = this.#trigger;
+    if (!trigger) return;
+
+    trigger.setAttribute("aria-haspopup", "dialog");
+    trigger.setAttribute("aria-expanded", String(this.open));
+
+    const nav = this.#assigned("slot:not([name])")[0];
     if (nav) {
       nav.id ||= `ot-mobile-menu-nav-${++navIdCounter}`;
-      trigger?.setAttribute("aria-controls", nav.id);
+      trigger.setAttribute("aria-controls", nav.id);
     }
+  }
 
-    if (dialog) {
-      if (this.open && !dialog.open) {
-        dialog.showModal();
-        closeButton?.focus();
-      } else if (!this.open && dialog.open) {
-        dialog.close();
-        trigger?.focus();
-      }
+  /** `open` is the single source of truth: the dialog follows it, and focus follows the dialog. */
+  #syncDialog() {
+    const dialog = this.renderRoot.querySelector("dialog");
+    if (!dialog) return;
+
+    if (this.open && !dialog.open) {
+      dialog.showModal();
+      this.renderRoot.querySelector<HTMLElement>(".close")?.focus();
+    } else if (!this.open && dialog.open) {
+      dialog.close();
+      this.#trigger?.focus();
     }
+  }
 
-    trigger?.setAttribute("aria-haspopup", "dialog");
-    trigger?.setAttribute("aria-expanded", String(this.open));
-
-    // Eventet bara vid en verklig ändring
-    const previous = changed.get("open");
-    if (previous === undefined) return;
-
-    // Spelled out rather than picking the name with a ternary, so the manifest analyzer can read them.
+  #dispatchChange() {
+    // Spelled out rather than picked with a ternary, so the manifest analyzer can read the names.
     const init = { bubbles: true, composed: true };
     this.dispatchEvent(this.open ? new CustomEvent("ot-menu-open", init) : new CustomEvent("ot-menu-close", init));
+  }
+
+  get #trigger(): HTMLElement | undefined {
+    return this.#assigned('slot[name="trigger"]')[0] as HTMLElement | undefined;
+  }
+
+  #assigned(slotSelector: string): Element[] {
+    const slot = this.renderRoot.querySelector<HTMLSlotElement>(slotSelector);
+    return slot?.assignedElements({ flatten: true }) ?? [];
   }
 
   #mql = window.matchMedia("(min-width: 48rem)");
@@ -237,7 +249,7 @@ export class OtMobileMenu extends LitElement {
   }
 }
 
-!customElements.get("ot-mobile-menu") && customElements.define("ot-mobile-menu", OtMobileMenu);
+if (!customElements.get("ot-mobile-menu")) customElements.define("ot-mobile-menu", OtMobileMenu);
 
 declare global {
   interface HTMLElementTagNameMap {
