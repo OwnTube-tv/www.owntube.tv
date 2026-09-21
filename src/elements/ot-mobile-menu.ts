@@ -12,6 +12,7 @@ export class OtMobileMenu extends LitElement {
     }
     :host {
       display: inline-block;
+      color: var(--ot-color-foreground, hsl(222.2 84% 4.9%));
     }
 
     dialog {
@@ -26,7 +27,7 @@ export class OtMobileMenu extends LitElement {
     }
 
     dialog::backdrop {
-      background: rgb(0 0 0 / 0.5);
+      background: var(--ot-color-backdrop, rgb(0 0 0 / 0.5));
     }
 
     .panel {
@@ -36,28 +37,26 @@ export class OtMobileMenu extends LitElement {
       top: 0;
       height: 100%;
       width: 16rem; /* w-64 */
-      background: #fff;
-      box-shadow:
-        0 10px 15px -3px rgb(0 0 0 / 0.1),
-        0 4px 6px -4px rgb(0 0 0 / 0.1);
-      padding: 1.5rem; /* p-6 */
+      background: var(--ot-color-background, #fff);
+      box-shadow: var(--ot-shadow-lg, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1));
+      padding: calc(var(--ot-space, 0.25rem) * 6);
     }
 
     .close {
       /* absolute top-4 right-4 p-2 */
       position: absolute;
-      top: 1rem;
-      right: 1rem;
-      padding: 0.5rem;
+      top: calc(var(--ot-space, 0.25rem) * 4);
+      right: calc(var(--ot-space, 0.25rem) * 4);
+      padding: calc(var(--ot-space, 0.25rem) * 2);
+      color: var(--ot-color-gray-600, oklch(44.6% 0.03 256.802));
       background: none;
       border: 0;
       cursor: pointer;
-      color: #4b5563; /* text-gray-600 */
     }
 
     .close:hover {
-      color: #f60;
-    } /* byts mot var(--ot-color-orange) i steg 4 */
+      color: var(--ot-color-orange, #ff5722);
+    }
 
     .icon {
       display: block;

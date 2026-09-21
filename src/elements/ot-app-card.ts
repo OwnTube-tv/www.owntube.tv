@@ -61,38 +61,34 @@ export class OtAppCard extends LitElement {
 
     /* The card surface itself. Values mirror the Tailwind utilities the markup used to carry. */
     :host {
+      color: var(--ot-color-foreground, hsl(222.2 84% 4.9%));
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      border-radius: 0.5rem; /* rounded-lg */
-      background: #fff; /* bg-white */
-      box-shadow:
-        0 10px 15px -3px rgb(0 0 0 / 0.1),
-        0 4px 6px -4px rgb(0 0 0 / 0.1); /* shadow-lg */
+      border-radius: var(--ot-radius-lg, 0.5rem);
+      background: var(--ot-color-background, #fff);
+      box-shadow: var(--ot-shadow-lg, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1));
       transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1); /* transition-shadow */
     }
 
     :host(:hover) {
-      box-shadow:
-        0 20px 25px -5px rgb(0 0 0 / 0.1),
-        0 8px 10px -6px rgb(0 0 0 / 0.1); /* hover:shadow-xl */
+      box-shadow: var(--ot-shadow-xl, 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1));
     }
 
     .body {
       display: flex;
       flex-direction: column;
       flex-grow: 1;
-      padding: 1.5rem; /* p-6 */
+      padding: calc(var(--ot-space, 0.25rem) * 6);
     }
 
     .badge {
       align-self: flex-start;
-      margin-bottom: 0.5rem;
-      padding: 0.125rem 0.5rem;
+      margin-bottom: calc(var(--ot-space, 0.25rem) * 2);
+      padding: calc(var(--ot-space, 0.25rem) * 0.5) calc(var(--ot-space, 0.25rem) * 2);
+      background: var(--ot-color-orange, #ff5722);
+      color: var(--ot-color-dark, #1a1a1a);
       border-radius: 9999px;
-      background: #ff5722; /* owntube-orange */
-      /* Dark text, not white: white on the brand orange is 3.16:1, below the 4.5:1 WCAG AA needs at this size. */
-      color: #1a1a1a; /* owntube-dark */
       font-size: 0.75rem;
       line-height: 1rem;
       font-weight: 600;

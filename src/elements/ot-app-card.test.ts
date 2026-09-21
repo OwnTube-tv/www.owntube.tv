@@ -1,5 +1,7 @@
 /// <reference types="mocha" />
 import { elementUpdated, expect, fixture, html } from "@open-wc/testing";
+import { emulateMedia } from "@web/test-runner-commands";
+import { DARK_TOKENS, tokenStyle } from "./test-helpers";
 import "./ot-app-card";
 import type { OtAppCard, VisitorPlatform } from "./ot-app-card";
 
@@ -111,5 +113,46 @@ describe("ot-app-card link clicks", () => {
     const card = await cardFixture();
     const events = await clickAndCapture(card, storeLinks(card)[0]);
     expect(events, "the event needs bubbles and composed to reach the document").to.have.lengthOf(1);
+  });
+});
+
+describe("ot-app-card theming", () => {
+  afterEach(async () => {
+    await emulateMedia({ colorScheme: "light" });
+  });
+
+  /** A wrapper stands in for the page: tokens set there are inherited across the shadow boundary. */
+  async function themedCard(tokens: Record<string, string>) {
+    const wrapper = await fixture<HTMLDivElement>(html`
+      <div style=${tokenStyle(tokens)}>
+        <ot-app-card name="Test Tube" web-link=${WEB} google-link=${GOOGLE} platform="other">
+          <h3>Test Tube</h3>
+          <p>Video publications by a test publisher.</p>
+          <!-- The page gives its links a colour of their own, the way Tailwind classes do on the site. -->
+          <div slot="links"><a href=${WEB} style="color: #ff5722">View the web version</a></div>
+        </ot-app-card>
+      </div>
+    `);
+    const card = wrapper.querySelector<OtAppCard>("ot-app-card")!;
+    await elementUpdated(card);
+    return card;
+  }
+
+  it("takes its surface colour from the page's tokens", async () => {
+    const card = await themedCard(DARK_TOKENS);
+    expect(getComputedStyle(card).backgroundColor).to.equal("rgb(2, 8, 23)");
+  });
+
+  it("falls back to its own values when the page defines no tokens", async () => {
+    const card = await themedCard({});
+    expect(getComputedStyle(card).backgroundColor).to.equal("rgb(255, 255, 255)");
+  });
+
+  it("keeps slotted content readable in a dark theme", async () => {
+    await emulateMedia({ colorScheme: "dark" });
+    const card = await themedCard(DARK_TOKENS);
+    // The card paints a dark surface behind light-DOM content it does not own, so it has to hand that content a
+    // matching text colour; otherwise the heading inherits the page's dark text and disappears.
+    await expect(card).to.be.accessible();
   });
 });

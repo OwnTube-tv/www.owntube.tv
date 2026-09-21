@@ -1,6 +1,7 @@
 /// <reference types="mocha" />
 import { elementUpdated, expect, fixture, html } from "@open-wc/testing";
-import { sendKeys } from "@web/test-runner-commands";
+import { emulateMedia, sendKeys } from "@web/test-runner-commands";
+import { DARK_TOKENS, tokenStyle } from "./test-helpers";
 import "./ot-mobile-menu";
 import type { OtMobileMenu } from "./ot-mobile-menu";
 
@@ -211,5 +212,47 @@ describe("ot-mobile-menu events", () => {
 
     recorder.stop();
     expect(recorder.seen).to.deep.equal(["ot-menu-open", "ot-menu-close"]);
+  });
+});
+
+describe("ot-mobile-menu theming", () => {
+  afterEach(async () => {
+    await emulateMedia({ colorScheme: "light" });
+  });
+
+  /** A wrapper stands in for the page: tokens set there are inherited across the shadow boundary. */
+  async function themedMenu(tokens: Record<string, string>) {
+    const wrapper = await fixture<HTMLDivElement>(html`
+      <div style=${tokenStyle(tokens)}>
+        <ot-mobile-menu>
+          <button slot="trigger" aria-label="Open menu"></button>
+          <!-- The page colours its own links, the way Tailwind classes do on the site. -->
+          <nav><a href="/apps/" style="color: #ff5722">Apps</a></nav>
+        </ot-mobile-menu>
+      </div>
+    `);
+    const menu = wrapper.querySelector<OtMobileMenu>("ot-mobile-menu")!;
+    await elementUpdated(menu);
+    return menu;
+  }
+
+  const panel = (menu: OtMobileMenu) => menu.shadowRoot!.querySelector(".panel")!;
+
+  it("takes the panel colour from the page's tokens", async () => {
+    const menu = await themedMenu(DARK_TOKENS);
+    expect(getComputedStyle(panel(menu)).backgroundColor).to.equal("rgb(2, 8, 23)");
+  });
+
+  it("falls back to its own values when the page defines no tokens", async () => {
+    const menu = await themedMenu({});
+    expect(getComputedStyle(panel(menu)).backgroundColor).to.equal("rgb(255, 255, 255)");
+  });
+
+  it("stays accessible with the menu open in a dark theme", async () => {
+    await emulateMedia({ colorScheme: "dark" });
+    const menu = await themedMenu(DARK_TOKENS);
+    menu.open = true;
+    await elementUpdated(menu);
+    await expect(menu).to.be.accessible();
   });
 });

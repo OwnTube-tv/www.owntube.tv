@@ -20,16 +20,62 @@
   */
   --font-sans:
     ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
 
-  --color-owntube-orange: #ff5722;
-  --color-owntube-dark: #1a1a1a;
-  --color-owntube-light: #f5f5f5;
+:root {
+  /* Färger */
+  --ot-color-orange: #ff5722;
+  --ot-color-dark: #1a1a1a;
+  --ot-color-light: #f5f5f5;
+  --ot-color-background: hsl(0 0% 100%);
+  --ot-color-foreground: hsl(222.2 84% 4.9%);
+  --ot-color-gray-600: oklch(44.6% 0.03 256.802);
+  --ot-color-backdrop: rgb(0 0 0 / 0.5);
 
+  /* Skuggor */
+  --ot-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --ot-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  /* Avstånd */
+  --ot-space: 0.25rem;
+
+  /* Radier */
+  --ot-radius-lg: var(--radius);
+}
+
+/*
+  A dark token set for the mobile menu, as a working proof that the token layer reaches into shadow DOM: the panel
+  covers the viewport, so nothing light shows behind it. The app cards are deliberately left out — dark cards on a
+  light page read as a bug, and a dark mode for the whole site is its own piece of work. The cards still accept the
+  tokens from a consumer that sets them, which the component tests cover.
+*/
+@media (prefers-color-scheme: dark) {
+  ot-mobile-menu {
+    --ot-color-background: hsl(222.2 84% 4.9%);
+    --ot-color-foreground: hsl(210 40% 98%);
+    --ot-color-gray-600: oklch(70.7% 0.022 261.325);
+    --ot-color-backdrop: rgb(0 0 0 / 0.7);
+  }
+}
+
+@theme inline {
+  --color-owntube-orange: var(--ot-color-orange);
+  --color-owntube-dark: var(--ot-color-dark);
+  --color-owntube-light: var(--ot-color-light);
+
+  --color-background: var(--ot-color-background);
+  --color-foreground: var(--ot-color-foreground);
+  --color-gray-600: var(--ot-color-gray-600);
+
+  --spacing: var(--ot-space);
+  --radius-lg: var(--ot-radius-lg);
+  --shadow-lg: var(--ot-shadow-lg);
+}
+
+@theme {
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
 
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
@@ -52,7 +98,6 @@
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
 
-  --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
@@ -186,6 +231,9 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --ot-color-background: hsl(222.2 84% 4.9%);
+    --ot-color-foreground: hsl(210 40% 98%);
   }
 }
 
