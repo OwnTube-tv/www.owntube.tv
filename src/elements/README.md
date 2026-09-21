@@ -49,6 +49,20 @@ Both bubble and are `composed`, so they cross the shadow boundary and can be lis
 | `dialog` | The full-screen dialog, whose backdrop is styled with `::backdrop`. |
 | `panel`  | The sliding panel on the right.                                     |
 
+### CSS custom properties
+
+| Property                | Default                | Used for                                         |
+| ----------------------- | ---------------------- | ------------------------------------------------ |
+| `--ot-color-background` | `#fff`                 | Panel background                                 |
+| `--ot-color-foreground` | `hsl(222.2 84% 4.9%)`  | Text colour, inherited by the slotted navigation |
+| `--ot-color-backdrop`   | `rgb(0 0 0 / 0.5)`     | The overlay behind the panel                     |
+| `--ot-color-gray-600`   | Tailwind's gray-600    | Close button                                     |
+| `--ot-color-orange`     | `#ff5722`              | Close button on hover                            |
+| `--ot-shadow-lg`        | Tailwind's `shadow-lg` | Panel shadow                                     |
+| `--ot-space`            | `0.25rem`              | Spacing unit; the panel's padding is six of them |
+
+The site sets these in `src/index.css` and switches four of them under `prefers-color-scheme: dark` — scoped to `ot-mobile-menu`, since the panel covers the viewport and nothing light shows behind it.
+
 ### Accessibility notes
 
 - Focus moves to the close button when the menu opens and returns to the trigger when it closes.
@@ -103,6 +117,18 @@ Card for one featured app. It owns the card surface and points out the store lin
 | ------- | ----------------------------------------------------- |
 | `body`  | The padded column below the artwork.                  |
 | `badge` | The "recommended for…" badge above the store buttons. |
+
+### CSS custom properties
+
+| Property                            | Default               | Used for                                                             |
+| ----------------------------------- | --------------------- | -------------------------------------------------------------------- |
+| `--ot-color-background`             | `#fff`                | The card surface                                                     |
+| `--ot-color-foreground`             | `hsl(222.2 84% 4.9%)` | Text colour, inherited by the slotted content                        |
+| `--ot-color-orange`                 | `#ff5722`             | Badge background                                                     |
+| `--ot-color-dark`                   | `#1a1a1a`             | Badge text — dark on the brand orange, because white on it is 3.16:1 |
+| `--ot-shadow-lg` / `--ot-shadow-xl` | Tailwind's shadows    | Card shadow, and its hover state                                     |
+| `--ot-radius-lg`                    | `0.5rem`              | Corner radius                                                        |
+| `--ot-space`                        | `0.25rem`             | Spacing unit; the body's padding is six of them                      |
 
 ### How the recommendation works
 

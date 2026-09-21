@@ -3,6 +3,34 @@ import type { PropertyValues } from "lit";
 
 let navIdCounter = 0;
 
+/**
+ * Navigation drawer for small screens.
+ *
+ * The links are rendered by Astro and stay in the light DOM, so they are in the page source for crawlers and keep
+ * working without JavaScript; the element only moves them into a modal panel. That panel is a native `<dialog>`
+ * opened with `showModal()`, which gives it the `dialog` role, `aria-modal`, the top layer, `::backdrop`, Escape
+ * handling and an inert page behind it.
+ *
+ * @tagname ot-mobile-menu
+ *
+ * @slot trigger - The button that opens the menu. The element keeps `aria-haspopup`, `aria-expanded` and
+ *   `aria-controls` in sync on it.
+ * @slot - The navigation shown in the panel, typically a `<nav>` with links.
+ *
+ * @fires ot-menu-open - The menu opened. Bubbles and is composed, so it can be heard on `document`.
+ * @fires ot-menu-close - The menu closed. Neither event fires while the element renders for the first time.
+ *
+ * @csspart dialog - The full-screen dialog; its backdrop is styled with `::backdrop`.
+ * @csspart panel - The panel on the right.
+ *
+ * @cssprop [--ot-color-background=#fff] - Panel background.
+ * @cssprop [--ot-color-foreground=hsl(222.2 84% 4.9%)] - Text colour, inherited by the slotted navigation.
+ * @cssprop [--ot-color-backdrop=rgb(0 0 0 / 0.5)] - The overlay behind the panel.
+ * @cssprop [--ot-color-gray-600] - Close button colour.
+ * @cssprop [--ot-color-orange=#ff5722] - Close button hover colour.
+ * @cssprop [--ot-shadow-lg] - Panel shadow.
+ * @cssprop [--ot-space=0.25rem] - Spacing unit; the panel's padding is six of them.
+ */
 export class OtMobileMenu extends LitElement {
   static override styles = css`
     *,
@@ -187,12 +215,9 @@ export class OtMobileMenu extends LitElement {
     const previous = changed.get("open");
     if (previous === undefined) return;
 
-    this.dispatchEvent(
-      new CustomEvent(this.open ? "ot-menu-open" : "ot-menu-close", {
-        bubbles: true,
-        composed: true,
-      })
-    );
+    // Spelled out rather than picking the name with a ternary, so the manifest analyzer can read them.
+    const init = { bubbles: true, composed: true };
+    this.dispatchEvent(this.open ? new CustomEvent("ot-menu-open", init) : new CustomEvent("ot-menu-close", init));
   }
 
   #mql = window.matchMedia("(min-width: 48rem)");

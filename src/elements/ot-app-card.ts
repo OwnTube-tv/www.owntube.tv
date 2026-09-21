@@ -41,6 +41,15 @@ function detectPlatform(): VisitorPlatform {
  *
  * @csspart body - The padded column below the artwork.
  * @csspart badge - The "recommended for…" badge above the store links.
+ *
+ * @cssprop [--ot-color-background=#fff] - The card surface.
+ * @cssprop [--ot-color-foreground=hsl(222.2 84% 4.9%)] - Text colour, inherited by the slotted content.
+ * @cssprop [--ot-color-orange=#ff5722] - Badge background.
+ * @cssprop [--ot-color-dark=#1a1a1a] - Badge text, dark on the brand orange for contrast.
+ * @cssprop [--ot-shadow-lg] - Card shadow.
+ * @cssprop [--ot-shadow-xl] - Card shadow on hover.
+ * @cssprop [--ot-radius-lg=0.5rem] - Corner radius.
+ * @cssprop [--ot-space=0.25rem] - Spacing unit; the body's padding is six of them.
  */
 export class OtAppCard extends LitElement {
   static override properties = {

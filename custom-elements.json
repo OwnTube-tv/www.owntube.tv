@@ -16,6 +16,46 @@
           "kind": "class",
           "description": "Card for one featured app.\n\nThe content — artwork, icon, name, description and the store links — is rendered by Astro and stays in the light\nDOM, so it is in the page source for crawlers and keeps working without JavaScript. The element enhances it: it\npoints out the store link that matches the visitor's platform and reports link clicks.\n\nEvery link stays rendered and reachable whatever the platform; the recommendation is an addition, never a filter.",
           "name": "OtAppCard",
+          "cssProperties": [
+            {
+              "description": "The card surface.",
+              "name": "--ot-color-background",
+              "default": "#fff"
+            },
+            {
+              "description": "Text colour, inherited by the slotted content.",
+              "name": "--ot-color-foreground",
+              "default": "hsl(222.2 84% 4.9%)"
+            },
+            {
+              "description": "Badge background.",
+              "name": "--ot-color-orange",
+              "default": "#ff5722"
+            },
+            {
+              "description": "Badge text, dark on the brand orange for contrast.",
+              "name": "--ot-color-dark",
+              "default": "#1a1a1a"
+            },
+            {
+              "description": "Card shadow.",
+              "name": "--ot-shadow-lg"
+            },
+            {
+              "description": "Card shadow on hover.",
+              "name": "--ot-shadow-xl"
+            },
+            {
+              "description": "Corner radius.",
+              "name": "--ot-radius-lg",
+              "default": "0.5rem"
+            },
+            {
+              "description": "Spacing unit; the body's padding is six of them.",
+              "name": "--ot-space",
+              "default": "0.25rem"
+            }
+          ],
           "cssParts": [
             {
               "description": "The padded column below the artwork.",
@@ -270,8 +310,63 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "",
+          "description": "Navigation drawer for small screens.\n\nThe links are rendered by Astro and stay in the light DOM, so they are in the page source for crawlers and keep\nworking without JavaScript; the element only moves them into a modal panel. That panel is a native `<dialog>`\nopened with `showModal()`, which gives it the `dialog` role, `aria-modal`, the top layer, `::backdrop`, Escape\nhandling and an inert page behind it.",
           "name": "OtMobileMenu",
+          "cssProperties": [
+            {
+              "description": "Panel background.",
+              "name": "--ot-color-background",
+              "default": "#fff"
+            },
+            {
+              "description": "Text colour, inherited by the slotted navigation.",
+              "name": "--ot-color-foreground",
+              "default": "hsl(222.2 84% 4.9%)"
+            },
+            {
+              "description": "The overlay behind the panel.",
+              "name": "--ot-color-backdrop",
+              "default": "rgb(0 0 0 / 0.5)"
+            },
+            {
+              "description": "Close button colour.",
+              "name": "--ot-color-gray-600"
+            },
+            {
+              "description": "Close button hover colour.",
+              "name": "--ot-color-orange",
+              "default": "#ff5722"
+            },
+            {
+              "description": "Panel shadow.",
+              "name": "--ot-shadow-lg"
+            },
+            {
+              "description": "Spacing unit; the panel's padding is six of them.",
+              "name": "--ot-space",
+              "default": "0.25rem"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The full-screen dialog; its backdrop is styled with `::backdrop`.",
+              "name": "dialog"
+            },
+            {
+              "description": "The panel on the right.",
+              "name": "panel"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The button that opens the menu. The element keeps `aria-haspopup`, `aria-expanded` and `aria-controls` in sync on it.",
+              "name": "trigger"
+            },
+            {
+              "description": "The navigation shown in the panel, typically a `<nav>` with links.",
+              "name": ""
+            }
+          ],
           "members": [
             {
               "kind": "field",
@@ -347,9 +442,12 @@
           ],
           "events": [
             {
-              "type": {
-                "text": "CustomEvent"
-              }
+              "description": "The menu opened. Bubbles and is composed, so it can be heard on `document`.",
+              "name": "ot-menu-open"
+            },
+            {
+              "description": "The menu closed. Neither event fires while the element renders for the first time.",
+              "name": "ot-menu-close"
             }
           ],
           "attributes": [
@@ -393,6 +491,57 @@
           "declaration": {
             "name": "OtMobileMenu",
             "module": "src/elements/ot-mobile-menu.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/test-helpers.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "DARK_TOKENS",
+          "type": {
+            "text": "Record<string, string>"
+          },
+          "default": "{ \"--ot-color-background\": \"hsl(222.2 84% 4.9%)\", \"--ot-color-foreground\": \"hsl(210 40% 98%)\", \"--ot-color-gray-600\": \"oklch(70.7% 0.022 261.325)\", \"--ot-color-backdrop\": \"rgb(0 0 0 / 0.7)\", }",
+          "description": "Mirrors the dark token set in src/index.css."
+        },
+        {
+          "kind": "function",
+          "name": "tokenStyle",
+          "return": {
+            "type": {
+              "text": "string"
+            }
+          },
+          "parameters": [
+            {
+              "name": "tokens",
+              "type": {
+                "text": "Record<string, string>"
+              }
+            }
+          ],
+          "description": "Turns a token map into an inline style, for use on a wrapper element around the component under test."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "DARK_TOKENS",
+          "declaration": {
+            "name": "DARK_TOKENS",
+            "module": "src/elements/test-helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "tokenStyle",
+          "declaration": {
+            "name": "tokenStyle",
+            "module": "src/elements/test-helpers.ts"
           }
         }
       ]
