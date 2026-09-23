@@ -1,0 +1,579 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/index.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/ot-app-card.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Card for one featured app.\n\nThe content — artwork, icon, name, description and the store links — is rendered by Astro and stays in the light\nDOM, so it is in the page source for crawlers and keeps working without JavaScript. The element enhances it: it\npoints out the store link that matches the visitor's platform and reports link clicks.\n\nEvery link stays rendered and reachable whatever the platform; the recommendation is an addition, never a filter.",
+          "name": "OtAppCard",
+          "cssProperties": [
+            {
+              "description": "The card surface.",
+              "name": "--ot-color-background",
+              "default": "#fff"
+            },
+            {
+              "description": "Text colour, inherited by the slotted content.",
+              "name": "--ot-color-foreground",
+              "default": "hsl(222.2 84% 4.9%)"
+            },
+            {
+              "description": "Badge background.",
+              "name": "--ot-color-orange",
+              "default": "#ff5722"
+            },
+            {
+              "description": "Badge text, dark on the brand orange for contrast.",
+              "name": "--ot-color-dark",
+              "default": "#1a1a1a"
+            },
+            {
+              "description": "Card shadow.",
+              "name": "--ot-shadow-lg"
+            },
+            {
+              "description": "Card shadow on hover.",
+              "name": "--ot-shadow-xl"
+            },
+            {
+              "description": "Corner radius.",
+              "name": "--ot-radius-lg",
+              "default": "0.5rem"
+            },
+            {
+              "description": "Spacing unit; the body's padding is six of them.",
+              "name": "--ot-space",
+              "default": "0.25rem"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The padded column below the artwork.",
+              "name": "body"
+            },
+            {
+              "description": "The \"recommended for…\" badge above the store links.",
+              "name": "badge"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Artwork shown at the top of the card, above the body.",
+              "name": "image"
+            },
+            {
+              "description": "Body of the card: icon, name, source link and descriptions.",
+              "name": ""
+            },
+            {
+              "description": "The store links, kept last in the body.",
+              "name": "links"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "name",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Name of the app, used for the link-click event and for accessible names.",
+              "default": "\"\"",
+              "attribute": "name"
+            },
+            {
+              "kind": "field",
+              "name": "webLink",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Link to the web version of the app.",
+              "default": "\"\"",
+              "attribute": "web-link"
+            },
+            {
+              "kind": "field",
+              "name": "googleLink",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Link to the app on Google Play.",
+              "default": "\"\"",
+              "attribute": "google-link"
+            },
+            {
+              "kind": "field",
+              "name": "testflightLink",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Link to the app on TestFlight.",
+              "default": "\"\"",
+              "attribute": "testflight-link"
+            },
+            {
+              "kind": "field",
+              "name": "githubRepo",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Link to the app's source repository.",
+              "default": "\"\"",
+              "attribute": "github-repo"
+            },
+            {
+              "kind": "field",
+              "name": "platform",
+              "privacy": "public",
+              "type": {
+                "text": "VisitorPlatform"
+              },
+              "description": "The visitor's platform. Detected from the user agent, and reflected to the attribute so it can be read — or\noverridden, which is what the tests do rather than pretending to be another device.",
+              "attribute": "platform",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "#recommendedHref",
+              "privacy": "private",
+              "type": {
+                "text": "string"
+              },
+              "description": "The store link this visitor is most likely to want, if any.",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "#markRecommendedLink",
+              "privacy": "private",
+              "description": "Links live in the light DOM, so the element marks them up rather than styling them from the shadow root."
+            },
+            {
+              "kind": "field",
+              "name": "#onLinkClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#links",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "HTMLAnchorElement[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "#platformOf",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "LinkPlatform"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "href",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "#absolute",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "href",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "Anchors report absolute hrefs, so the attributes have to be resolved the same way before comparing."
+            }
+          ],
+          "events": [
+            {
+              "description": "A link in the card was clicked. `detail` carries the app `name` and the `platform` the link points at, ready for analytics.",
+              "name": "ot-app-link-click"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "Name of the app, used for the link-click event and for accessible names.",
+              "default": "\"\"",
+              "fieldName": "name"
+            },
+            {
+              "name": "web-link",
+              "type": {
+                "text": "string"
+              },
+              "description": "Link to the web version of the app.",
+              "default": "\"\"",
+              "fieldName": "webLink"
+            },
+            {
+              "name": "google-link",
+              "type": {
+                "text": "string"
+              },
+              "description": "Link to the app on Google Play.",
+              "default": "\"\"",
+              "fieldName": "googleLink"
+            },
+            {
+              "name": "testflight-link",
+              "type": {
+                "text": "string"
+              },
+              "description": "Link to the app on TestFlight.",
+              "default": "\"\"",
+              "fieldName": "testflightLink"
+            },
+            {
+              "name": "github-repo",
+              "type": {
+                "text": "string"
+              },
+              "description": "Link to the app's source repository.",
+              "default": "\"\"",
+              "fieldName": "githubRepo"
+            },
+            {
+              "name": "platform",
+              "type": {
+                "text": "VisitorPlatform"
+              },
+              "description": "The visitor's platform. Detected from the user agent, and reflected to the attribute so it can be read — or\noverridden, which is what the tests do rather than pretending to be another device.",
+              "fieldName": "platform"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ot-app-card",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "OtAppCard",
+          "declaration": {
+            "name": "OtAppCard",
+            "module": "src/elements/ot-app-card.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "ot-app-card",
+          "declaration": {
+            "name": "OtAppCard",
+            "module": "src/elements/ot-app-card.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/ot-mobile-menu.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Navigation drawer for small screens.\n\nThe links are rendered by Astro and stay in the light DOM, so they are in the page source for crawlers and keep\nworking without JavaScript; the element only moves them into a modal panel. That panel is a native `<dialog>`\nopened with `showModal()`, which gives it the `dialog` role, `aria-modal`, the top layer, `::backdrop`, Escape\nhandling and an inert page behind it.",
+          "name": "OtMobileMenu",
+          "cssProperties": [
+            {
+              "description": "Panel background.",
+              "name": "--ot-color-background",
+              "default": "#fff"
+            },
+            {
+              "description": "Text colour, inherited by the slotted navigation.",
+              "name": "--ot-color-foreground",
+              "default": "hsl(222.2 84% 4.9%)"
+            },
+            {
+              "description": "The overlay behind the panel.",
+              "name": "--ot-color-backdrop",
+              "default": "rgb(0 0 0 / 0.5)"
+            },
+            {
+              "description": "Close button colour.",
+              "name": "--ot-color-gray-600"
+            },
+            {
+              "description": "Close button hover colour.",
+              "name": "--ot-color-orange",
+              "default": "#ff5722"
+            },
+            {
+              "description": "Panel shadow.",
+              "name": "--ot-shadow-lg"
+            },
+            {
+              "description": "Spacing unit; the panel's padding is six of them.",
+              "name": "--ot-space",
+              "default": "0.25rem"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The full-screen dialog; its backdrop is styled with `::backdrop`.",
+              "name": "dialog"
+            },
+            {
+              "description": "The panel on the right.",
+              "name": "panel"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The button that opens the menu. The element keeps `aria-haspopup`, `aria-expanded` and `aria-controls` in sync on it.",
+              "name": "trigger"
+            },
+            {
+              "description": "The navigation shown in the panel, typically a `<nav>` with links.",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "open",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "open",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"Menu\"",
+              "attribute": "label"
+            },
+            {
+              "kind": "field",
+              "name": "#onToggle",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#onClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#onDialogClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#onCancel",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#onDialogClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "#syncTrigger",
+              "privacy": "private",
+              "description": "`aria-controls` targets the slotted navigation, and names it when the consumer has not: an IDREF cannot cross\nthe shadow boundary."
+            },
+            {
+              "kind": "method",
+              "name": "#syncDialog",
+              "privacy": "private",
+              "description": "`open` is the single source of truth: the dialog follows it, and focus follows the dialog.\n\nNo focus trap of our own. `showModal()` makes everything outside the dialog inert, verified in Chromium,\nFirefox and WebKit: nothing behind it takes focus, by Tab or by a script calling `focus()`. Tabbing past the\nlast element reaches the browser's own UI and comes back, which is a reasonable way out for the user; a\nhand-written trap would only take that away."
+            },
+            {
+              "kind": "method",
+              "name": "#dispatchChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#trigger",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "#assigned",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Element[]"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "slotSelector",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "#mql",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#onBreakpoint",
+              "privacy": "private"
+            }
+          ],
+          "events": [
+            {
+              "description": "The menu opened. Bubbles and is composed, so it can be heard on `document`.",
+              "name": "ot-menu-open"
+            },
+            {
+              "description": "The menu closed. Neither event fires while the element renders for the first time.",
+              "name": "ot-menu-close"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "open"
+            },
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"Menu\"",
+              "fieldName": "label"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "ot-mobile-menu",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "OtMobileMenu",
+          "declaration": {
+            "name": "OtMobileMenu",
+            "module": "src/elements/ot-mobile-menu.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "ot-mobile-menu",
+          "declaration": {
+            "name": "OtMobileMenu",
+            "module": "src/elements/ot-mobile-menu.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/test-helpers.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "DARK_TOKENS",
+          "type": {
+            "text": "Record<string, string>"
+          },
+          "default": "{ \"--ot-color-background\": \"hsl(222.2 84% 4.9%)\", \"--ot-color-foreground\": \"hsl(210 40% 98%)\", \"--ot-color-gray-600\": \"oklch(70.7% 0.022 261.325)\", \"--ot-color-backdrop\": \"rgb(0 0 0 / 0.7)\", }",
+          "description": "Mirrors the dark token set in src/index.css."
+        },
+        {
+          "kind": "function",
+          "name": "tokenStyle",
+          "return": {
+            "type": {
+              "text": "string"
+            }
+          },
+          "parameters": [
+            {
+              "name": "tokens",
+              "type": {
+                "text": "Record<string, string>"
+              }
+            }
+          ],
+          "description": "Turns a token map into an inline style, for use on a wrapper element around the component under test."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "DARK_TOKENS",
+          "declaration": {
+            "name": "DARK_TOKENS",
+            "module": "src/elements/test-helpers.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "tokenStyle",
+          "declaration": {
+            "name": "tokenStyle",
+            "module": "src/elements/test-helpers.ts"
+          }
+        }
+      ]
+    }
+  ]
+}
