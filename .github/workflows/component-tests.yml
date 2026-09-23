@@ -33,3 +33,11 @@ jobs:
 
       - name: Run component tests
         run: npm test
+
+      # custom-elements.json is generated from the elements' JSDoc, so it silently goes stale when someone changes
+      # an element and forgets `npm run analyze`. Regenerating it here and failing on a diff keeps it honest.
+      - name: Check that the custom elements manifest is up to date
+        run: |
+          npm run analyze
+          git diff --exit-code custom-elements.json \
+            || { echo "::error file=custom-elements.json::Out of date — run 'npm run analyze' and commit the result."; exit 1; }
