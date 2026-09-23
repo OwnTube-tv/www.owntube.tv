@@ -415,19 +415,48 @@
               "privacy": "private"
             },
             {
-              "kind": "field",
-              "name": "#onKeydown",
-              "privacy": "private"
+              "kind": "method",
+              "name": "#syncTrigger",
+              "privacy": "private",
+              "description": "`aria-controls` targets the slotted navigation, and names it when the consumer has not: an IDREF cannot cross\nthe shadow boundary."
             },
             {
               "kind": "method",
-              "name": "#focusable",
+              "name": "#syncDialog",
+              "privacy": "private",
+              "description": "`open` is the single source of truth: the dialog follows it, and focus follows the dialog.\n\nNo focus trap of our own. `showModal()` makes everything outside the dialog inert, verified in Chromium,\nFirefox and WebKit: nothing behind it takes focus, by Tab or by a script calling `focus()`. Tabbing past the\nlast element reaches the browser's own UI and comes back, which is a reasonable way out for the user; a\nhand-written trap would only take that away."
+            },
+            {
+              "kind": "method",
+              "name": "#dispatchChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "#trigger",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "#assigned",
               "privacy": "private",
               "return": {
                 "type": {
-                  "text": "HTMLElement[]"
+                  "text": "Element[]"
                 }
-              }
+              },
+              "parameters": [
+                {
+                  "name": "slotSelector",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
             },
             {
               "kind": "field",

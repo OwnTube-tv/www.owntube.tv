@@ -114,7 +114,6 @@ export class OtMobileMenu extends LitElement {
         @click=${this.#onDialogClick}
         @cancel=${this.#onCancel}
         @close=${this.#onDialogClose}
-        @keydown=${this.#onKeydown}
       >
         <div class="panel" part="panel">
           <button class="close" aria-label="Close menu" @click=${this.#onClose} type="button">
@@ -149,34 +148,6 @@ export class OtMobileMenu extends LitElement {
     this.open = false;
   };
 
-  #onKeydown = (e: KeyboardEvent) => {
-    if (e.key !== "Tab") return;
-
-    const focusable = this.#focusable();
-    if (focusable.length === 0) return;
-
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    const current = this.shadowRoot?.activeElement ?? document.activeElement;
-
-    if (e.shiftKey && current === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && current === last) {
-      e.preventDefault();
-      first.focus();
-    }
-  };
-
-  #focusable(): HTMLElement[] {
-    const close = this.renderRoot.querySelector<HTMLElement>(".close");
-    const links = this.#assigned("slot:not([name])").flatMap((el) =>
-      Array.from(el.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"))
-    );
-
-    return [close, ...links].filter((el): el is HTMLElement => el !== null);
-  }
-
   override updated(changed: PropertyValues<this>) {
     if (!changed.has("open")) return;
 
@@ -203,7 +174,14 @@ export class OtMobileMenu extends LitElement {
     }
   }
 
-  /** `open` is the single source of truth: the dialog follows it, and focus follows the dialog. */
+  /**
+   * `open` is the single source of truth: the dialog follows it, and focus follows the dialog.
+   *
+   * No focus trap of our own. `showModal()` makes everything outside the dialog inert, verified in Chromium,
+   * Firefox and WebKit: nothing behind it takes focus, by Tab or by a script calling `focus()`. Tabbing past the
+   * last element reaches the browser's own UI and comes back, which is a reasonable way out for the user; a
+   * hand-written trap would only take that away.
+   */
   #syncDialog() {
     const dialog = this.renderRoot.querySelector("dialog");
     if (!dialog) return;

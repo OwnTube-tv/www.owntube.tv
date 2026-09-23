@@ -123,24 +123,22 @@ describe("ot-mobile-menu focus", () => {
     expect(document.activeElement).to.equal(trigger(el));
   });
 
-  it("wraps focus from the last link back to the close button", async () => {
+  it("keeps the page behind the dialog out of reach", async () => {
     const el = await menuFixture();
+    // Something focusable outside the element, standing in for the rest of the page.
+    const behind = await fixture<HTMLAnchorElement>(html`<a href="/contact/">Behind the dialog</a>`);
     await openMenu(el);
 
-    for (let i = 0; i < links(el).length; i++) await sendKeys({ press: "Tab" });
-    expect(document.activeElement, "focus should be on the last link").to.equal(links(el).at(-1));
+    // Tab past the last link. Where focus goes next is up to the browser — Chromium hands it to its own UI and
+    // back, Firefox and WebKit differ — but it must never land on page content behind a modal dialog.
+    for (let i = 0; i < links(el).length + 3; i++) {
+      await sendKeys({ press: "Tab" });
+      expect(document.activeElement, "focus escaped the dialog").to.not.equal(behind);
+    }
 
-    await sendKeys({ press: "Tab" });
-    // A modal dialog makes the page behind it inert, but it does not trap Tab: without the element's own handling
-    // focus would leave for the browser UI and land on document.body.
-    expect(focused(el)).to.equal(closeButton(el));
-  });
-
-  it("wraps focus backwards from the close button to the last link", async () => {
-    const el = await menuFixture();
-    await openMenu(el);
-    await sendKeys({ press: "Shift+Tab" });
-    expect(document.activeElement).to.equal(links(el).at(-1));
+    // Not even a script can pull focus out while the dialog is modal.
+    behind.focus();
+    expect(document.activeElement).to.not.equal(behind);
   });
 
   it("closes on Escape and returns focus to the trigger", async () => {
