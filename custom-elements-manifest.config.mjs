@@ -4,7 +4,9 @@
  */
 export default {
   globs: ["src/elements/**/*.ts"],
-  exclude: ["src/elements/**/*.test.ts"],
+  // The manifest describes the elements' public API. The tests are not part of it, and neither is the scaffolding
+  // they share — `test-helpers.ts` was otherwise documented alongside the elements as if consumers could use it.
+  exclude: ["src/elements/**/*.test.ts", "src/elements/test-helpers.ts"],
   outdir: ".",
   litelement: true,
 };

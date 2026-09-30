@@ -502,57 +502,6 @@
           }
         }
       ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/elements/test-helpers.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "DARK_TOKENS",
-          "type": {
-            "text": "Record<string, string>"
-          },
-          "default": "{ \"--ot-color-background\": \"hsl(222.2 84% 4.9%)\", \"--ot-color-foreground\": \"hsl(210 40% 98%)\", \"--ot-color-gray-600\": \"oklch(70.7% 0.022 261.325)\", \"--ot-color-backdrop\": \"rgb(0 0 0 / 0.7)\", }",
-          "description": "Mirrors the dark token set in src/index.css."
-        },
-        {
-          "kind": "function",
-          "name": "tokenStyle",
-          "return": {
-            "type": {
-              "text": "string"
-            }
-          },
-          "parameters": [
-            {
-              "name": "tokens",
-              "type": {
-                "text": "Record<string, string>"
-              }
-            }
-          ],
-          "description": "Turns a token map into an inline style, for use on a wrapper element around the component under test."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "DARK_TOKENS",
-          "declaration": {
-            "name": "DARK_TOKENS",
-            "module": "src/elements/test-helpers.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "tokenStyle",
-          "declaration": {
-            "name": "tokenStyle",
-            "module": "src/elements/test-helpers.ts"
-          }
-        }
-      ]
     }
   ]
 }
