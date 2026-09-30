@@ -12,8 +12,8 @@ export default {
   files: "src/elements/**/*.test.ts",
   nodeResolve: true,
   // sendKeysPlugin lets tests press real keys (Tab, Shift+Tab, Escape) instead of dispatching synthetic events,
-  // which is the only way to verify focus order and the focus trap. emulateMediaPlugin switches the browser's
-  // colour scheme so the themed states can be checked with axe.
+  // which is the only way to see where focus actually goes — including that nothing behind the modal dialog can
+  // take it. emulateMediaPlugin switches the browser's colour scheme so the themed states can be checked with axe.
   plugins: [esbuildPlugin({ ts: true, target: "auto" }), sendKeysPlugin(), emulateMediaPlugin()],
   browsers: [playwrightLauncher({ product: "chromium" })],
 };

@@ -1,6 +1,6 @@
 # Custom elements
 
-The site's interactive UI is built as [Lit](https://lit.dev) custom elements, one file per element with an `ot-` prefix. `index.ts` imports them all and is loaded once from `RootLayout.astro`, so every page ships a single module script (6.7 kB gzipped, Lit included).
+The site's interactive UI is built as [Lit](https://lit.dev) custom elements, one file per element with an `ot-` prefix. `index.ts` imports them all and is loaded once from `RootLayout.astro`, so the whole site ships one module script — the same file on every page: 22 kB of JavaScript, 8.1 kB over the wire with gzip and 7.2 kB with brotli, Lit included. That is about a fifth of the Google Play badge image sitting next to it on the same page.
 
 Run `npm run analyze` to regenerate [`custom-elements.json`](../../custom-elements.json), the machine-readable version of everything below.
 
@@ -48,7 +48,7 @@ Both bubble and are `composed`, so they cross the shadow boundary and can be lis
 | Part     | Element                                                             |
 | -------- | ------------------------------------------------------------------- |
 | `dialog` | The full-screen dialog, whose backdrop is styled with `::backdrop`. |
-| `panel`  | The sliding panel on the right.                                     |
+| `panel`  | The panel on the right.                                             |
 
 ### CSS custom properties
 
@@ -82,6 +82,7 @@ The site sets these in `src/index.css` and switches four of them under `prefers-
 - `aria-controls` points at the slotted navigation, and the element generates an id when the consumer has not set one: an IDREF cannot cross the shadow boundary, so it has to target light-DOM content.
 - Both `cancel` and `close` are handled, because a browser may close a modal dialog on Escape without a cancelable `cancel` event.
 - Crossing the `md` breakpoint closes the menu. An open modal inside a `display: none` host would show nothing while leaving the page inert.
+- The panel appears and disappears without a transition, so there is nothing for `prefers-reduced-motion` to switch off.
 
 ### Usage
 
