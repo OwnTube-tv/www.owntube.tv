@@ -52,17 +52,28 @@ Both bubble and are `composed`, so they cross the shadow boundary and can be lis
 
 ### CSS custom properties
 
-| Property                | Default                | Used for                                         |
-| ----------------------- | ---------------------- | ------------------------------------------------ |
-| `--ot-color-background` | `#fff`                 | Panel background                                 |
-| `--ot-color-foreground` | `hsl(222.2 84% 4.9%)`  | Text colour, inherited by the slotted navigation |
-| `--ot-color-backdrop`   | `rgb(0 0 0 / 0.5)`     | The overlay behind the panel                     |
-| `--ot-color-gray-600`   | Tailwind's gray-600    | Close button                                     |
-| `--ot-color-orange`     | `#ff5722`              | Close button on hover                            |
-| `--ot-shadow-lg`        | Tailwind's `shadow-lg` | Panel shadow                                     |
-| `--ot-space`            | `0.25rem`              | Spacing unit; the panel's padding is six of them |
+| Property                | Default                | Used for                                               |
+| ----------------------- | ---------------------- | ------------------------------------------------------ |
+| `--ot-color-background` | `#fff`                 | Panel background                                       |
+| `--ot-color-foreground` | `hsl(222.2 84% 4.9%)`  | Panel text colour, inherited by the slotted navigation |
+| `--ot-color-backdrop`   | `rgb(0 0 0 / 0.5)`     | The overlay behind the panel                           |
+| `--ot-color-gray-600`   | Tailwind's gray-600    | Close button                                           |
+| `--ot-color-orange`     | `#ff5722`              | Close button on hover                                  |
+| `--ot-shadow-lg`        | Tailwind's `shadow-lg` | Panel shadow                                           |
+| `--ot-space`            | `0.25rem`              | Spacing unit; the panel's padding is six of them       |
 
-The site sets these in `src/index.css` and switches four of them under `prefers-color-scheme: dark` — scoped to `ot-mobile-menu`, since the panel covers the viewport and nothing light shows behind it.
+The site sets these in `src/index.css` and switches four of them under `prefers-color-scheme: dark`, since the panel covers the viewport and nothing light shows behind it.
+
+**Where you set them matters.** The dark set goes on `ot-mobile-menu::part(dialog)`, not on `ot-mobile-menu`. Custom properties inherit, and the element's own subtree includes the trigger: a token set on the element reaches the hamburger too, which sits on the header's white background and would drop to 2.6:1 against it. Set on the dialog, the tokens inherit down to the panel, to the close button and to the navigation slotted inside it — slotted content inherits from where it is rendered, not from where it is written — and stop before the trigger, which is why the element deliberately carries no colours on `:host`.
+
+```css
+@media (prefers-color-scheme: dark) {
+  ot-mobile-menu::part(dialog) {
+    --ot-color-background: hsl(222.2 84% 4.9%);
+    --ot-color-foreground: hsl(210 40% 98%);
+  }
+}
+```
 
 ### Accessibility notes
 

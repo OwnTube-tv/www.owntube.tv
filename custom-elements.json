@@ -297,7 +297,7 @@
               "default": "#fff"
             },
             {
-              "description": "Text colour, inherited by the slotted navigation.",
+              "description": "Panel text colour, inherited by the slotted navigation.",
               "name": "--ot-color-foreground",
               "default": "hsl(222.2 84% 4.9%)"
             },
@@ -327,7 +327,7 @@
           ],
           "cssParts": [
             {
-              "description": "The full-screen dialog; its backdrop is styled with `::backdrop`.",
+              "description": "The full-screen dialog; its backdrop is styled with `::backdrop`. Also the place to set the tokens below for the panel alone: they inherit down to the panel and the navigation slotted into it, without reaching the trigger, which stays on the page's own background.",
               "name": "dialog"
             },
             {

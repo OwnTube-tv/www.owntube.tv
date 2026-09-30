@@ -49,13 +49,17 @@
 }
 
 /*
-  A dark token set for the mobile menu, as a working proof that the token layer reaches into shadow DOM: the panel
-  covers the viewport, so nothing light shows behind it. The app cards are deliberately left out — dark cards on a
-  light page read as a bug, and a dark mode for the whole site is its own piece of work. The cards still accept the
-  tokens from a consumer that sets them, which the component tests cover.
+  A dark token set for the mobile menu's panel, as a working proof that the token layer reaches into shadow DOM: the
+  panel covers the viewport, so nothing light shows behind it. The app cards are deliberately left out — dark cards
+  on a light page read as a bug, and a dark mode for the whole site is its own piece of work. The cards still accept
+  the tokens from a consumer that sets them, which the component tests cover.
+
+  The tokens go on `::part(dialog)`, not on the element. On the element they would also inherit into the hamburger,
+  which is slotted light DOM sitting on the header's white background: it would turn pale grey at 2.6:1 against it.
+  Set on the dialog, they inherit down to the panel and to the navigation slotted inside it, and stop there.
 */
 @media (prefers-color-scheme: dark) {
-  ot-mobile-menu {
+  ot-mobile-menu::part(dialog) {
     --ot-color-background: hsl(222.2 84% 4.9%);
     --ot-color-foreground: hsl(210 40% 98%);
     --ot-color-gray-600: oklch(70.7% 0.022 261.325);

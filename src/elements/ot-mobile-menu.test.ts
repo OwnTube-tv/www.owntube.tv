@@ -246,6 +246,49 @@ describe("ot-mobile-menu theming", () => {
     expect(getComputedStyle(panel(menu)).backgroundColor).to.equal("rgb(255, 255, 255)");
   });
 
+  /**
+   * The site themes the panel through `::part(dialog)`. Tokens set on the element itself would inherit into the
+   * trigger as well, and the trigger sits on the page's own background — pale grey on white in the dark theme.
+   * The fixture carries the same stylesheet, so this breaks if the element starts colouring its host again.
+   */
+  it("themes the panel through ::part(dialog) and leaves the trigger to the page", async () => {
+    const wrapper = await fixture<HTMLDivElement>(html`
+      <div>
+        <style>
+          ot-mobile-menu::part(dialog) {
+            --ot-color-foreground: hsl(210 40% 98%);
+            --ot-color-gray-600: oklch(70.7% 0.022 261.325);
+          }
+        </style>
+        <ot-mobile-menu>
+          <!-- The page colours the trigger from the same token, the way the Tailwind class does on the site. -->
+          <button
+            slot="trigger"
+            aria-label="Open menu"
+            style="color: var(--ot-color-gray-600, oklch(44.6% 0.03 256.802))"
+          ></button>
+          <nav><a href="/apps/">Apps</a></nav>
+        </ot-mobile-menu>
+      </div>
+    `);
+    const menu = wrapper.querySelector<OtMobileMenu>("ot-mobile-menu")!;
+    await elementUpdated(menu);
+
+    const trigger = menu.querySelector("button")!;
+    const close = menu.shadowRoot!.querySelector(".close")!;
+    const nav = menu.querySelector("nav")!;
+
+    expect(getComputedStyle(trigger).color, "the panel's tokens do not reach the trigger").to.equal(
+      "oklch(0.446 0.03 256.802)"
+    );
+    expect(getComputedStyle(close).color, "the close button follows the panel's tokens").to.equal(
+      "oklch(0.707 0.022 261.325)"
+    );
+    expect(getComputedStyle(nav).color, "the slotted navigation follows the panel's tokens").to.equal(
+      "rgb(248, 250, 252)"
+    );
+  });
+
   it("stays accessible with the menu open in a dark theme", async () => {
     await emulateMedia({ colorScheme: "dark" });
     const menu = await themedMenu(DARK_TOKENS);

@@ -20,11 +20,13 @@ let navIdCounter = 0;
  * @fires ot-menu-open - The menu opened. Bubbles and is composed, so it can be heard on `document`.
  * @fires ot-menu-close - The menu closed. Neither event fires while the element renders for the first time.
  *
- * @csspart dialog - The full-screen dialog; its backdrop is styled with `::backdrop`.
+ * @csspart dialog - The full-screen dialog; its backdrop is styled with `::backdrop`. Also the place to set the
+ *   tokens below for the panel alone: they inherit down to the panel and the navigation slotted into it, without
+ *   reaching the trigger, which stays on the page's own background.
  * @csspart panel - The panel on the right.
  *
  * @cssprop [--ot-color-background=#fff] - Panel background.
- * @cssprop [--ot-color-foreground=hsl(222.2 84% 4.9%)] - Text colour, inherited by the slotted navigation.
+ * @cssprop [--ot-color-foreground=hsl(222.2 84% 4.9%)] - Panel text colour, inherited by the slotted navigation.
  * @cssprop [--ot-color-backdrop=rgb(0 0 0 / 0.5)] - The overlay behind the panel.
  * @cssprop [--ot-color-gray-600] - Close button colour.
  * @cssprop [--ot-color-orange=#ff5722] - Close button hover colour.
@@ -39,9 +41,13 @@ export class OtMobileMenu extends LitElement {
     *::after {
       box-sizing: border-box;
     }
+    /*
+      The host holds the trigger, which sits on the page's own background, so it deliberately carries no colours of
+      its own: a token set on the host would inherit into the trigger too. The panel's colours are set on the panel,
+      and the page themes them through ::part(dialog).
+    */
     :host {
       display: inline-block;
-      color: var(--ot-color-foreground, hsl(222.2 84% 4.9%));
     }
 
     dialog {
@@ -65,6 +71,7 @@ export class OtMobileMenu extends LitElement {
       top: 0;
       height: 100%;
       width: 16rem;
+      color: var(--ot-color-foreground, hsl(222.2 84% 4.9%));
       background: var(--ot-color-background, #fff);
       box-shadow: var(--ot-shadow-lg, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1));
       padding: calc(var(--ot-space, 0.25rem) * 6);
