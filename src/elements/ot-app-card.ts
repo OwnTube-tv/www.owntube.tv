@@ -25,8 +25,9 @@ function detectPlatform(): VisitorPlatform {
  * Card for one featured app.
  *
  * The content — artwork, icon, name, description and the store links — is rendered by Astro and stays in the light
- * DOM, so it is in the page source for crawlers and keeps working without JavaScript. The element enhances it: it
- * points out the store link that matches the visitor's platform and reports link clicks.
+ * DOM, so it is in the page source for crawlers and keeps working without JavaScript. The card surface stays there
+ * too, on the host and the wrappers around the slotted content, so the card looks finished before any script runs.
+ * The element enhances it: it points out the store link that matches the visitor's platform and reports link clicks.
  *
  * Every link stays rendered and reachable whatever the platform; the recommendation is an addition, never a filter.
  *
@@ -39,17 +40,12 @@ function detectPlatform(): VisitorPlatform {
  * @fires ot-app-link-click - A link in the card was clicked. `detail` carries the app `name` and the `platform` the
  *   link points at, ready for analytics.
  *
- * @csspart body - The padded column below the artwork.
  * @csspart badge - The "recommended for…" badge above the store links.
  *
- * @cssprop [--ot-color-background=#fff] - The card surface.
  * @cssprop [--ot-color-foreground=hsl(222.2 84% 4.9%)] - Text colour, inherited by the slotted content.
  * @cssprop [--ot-color-orange=#ff5722] - Badge background.
  * @cssprop [--ot-color-dark=#1a1a1a] - Badge text, dark on the brand orange for contrast.
- * @cssprop [--ot-shadow-lg] - Card shadow.
- * @cssprop [--ot-shadow-xl] - Card shadow on hover.
- * @cssprop [--ot-radius-lg=0.5rem] - Corner radius.
- * @cssprop [--ot-space=0.25rem] - Spacing unit; the body's padding is six of them.
+ * @cssprop [--ot-space=0.25rem] - Spacing unit; the badge's inset is six of them, matching the page's padding.
  */
 export class OtAppCard extends LitElement {
   static override properties = {
@@ -68,32 +64,23 @@ export class OtAppCard extends LitElement {
       box-sizing: border-box;
     }
 
-    /* The card surface itself. Values mirror the Tailwind utilities the markup used to carry. */
+    /*
+      The card surface — background, radius, shadow and padding — stays in the light DOM, on the host and on the
+      wrappers around the slotted content. It therefore paints together with the server-rendered HTML instead of
+      appearing when the element upgrades, which is what a visitor on a slow connection sees, and all a visitor
+      without JavaScript ever gets. The element only adds what needs scripting.
+
+      Display is part of that: the element sets none, so the page's own layout — "flex flex-col" on the site — is in
+      force from the first paint instead of changing under the visitor when the element upgrades.
+    */
     :host {
       color: var(--ot-color-foreground, hsl(222.2 84% 4.9%));
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      border-radius: var(--ot-radius-lg, 0.5rem);
-      background: var(--ot-color-background, #fff);
-      box-shadow: var(--ot-shadow-lg, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1));
-      transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1); /* transition-shadow */
-    }
-
-    :host(:hover) {
-      box-shadow: var(--ot-shadow-xl, 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1));
-    }
-
-    .body {
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      padding: calc(var(--ot-space, 0.25rem) * 6);
     }
 
     .badge {
       align-self: flex-start;
-      margin-bottom: calc(var(--ot-space, 0.25rem) * 2);
+      /* The badge sits between two padded light-DOM wrappers, so it carries the same inset itself. */
+      margin: 0 calc(var(--ot-space, 0.25rem) * 6) calc(var(--ot-space, 0.25rem) * 2);
       padding: calc(var(--ot-space, 0.25rem) * 0.5) calc(var(--ot-space, 0.25rem) * 2);
       background: var(--ot-color-orange, #ff5722);
       color: var(--ot-color-dark, #1a1a1a);
@@ -139,11 +126,9 @@ export class OtAppCard extends LitElement {
     const label = PLATFORM_LABELS[this.platform];
     return html`
       <slot name="image"></slot>
-      <div class="body" part="body" @click=${this.#onLinkClick}>
-        <slot></slot>
-        ${label ? html`<p class="badge" part="badge">${label}</p>` : null}
-        <slot name="links" @slotchange=${this.#markRecommendedLink}></slot>
-      </div>
+      <slot @click=${this.#onLinkClick}></slot>
+      ${label ? html`<p class="badge" part="badge">${label}</p>` : null}
+      <slot name="links" @click=${this.#onLinkClick} @slotchange=${this.#markRecommendedLink}></slot>
     `;
   }
 

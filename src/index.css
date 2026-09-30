@@ -63,6 +63,16 @@
   }
 }
 
+/*
+  The menu's markup lives in the light DOM, so the hamburger and the navigation are both in the HTML before the
+  element upgrades — and until it does, the links render as a stack inside the header and then jump into the dialog
+  the moment the script arrives. `:not(:defined)` stops matching as soon as `customElements.define()` runs, so the
+  header keeps its final height from the very first paint instead of shifting.
+*/
+ot-mobile-menu:not(:defined) {
+  display: none;
+}
+
 @theme inline {
   --color-owntube-orange: var(--ot-color-orange);
   --color-owntube-dark: var(--ot-color-dark);
@@ -75,6 +85,7 @@
   --spacing: var(--ot-space);
   --radius-lg: var(--ot-radius-lg);
   --shadow-lg: var(--ot-shadow-lg);
+  --shadow-xl: var(--ot-shadow-xl);
 }
 
 @theme {

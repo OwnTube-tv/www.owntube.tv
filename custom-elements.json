@@ -14,14 +14,9 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "Card for one featured app.\n\nThe content — artwork, icon, name, description and the store links — is rendered by Astro and stays in the light\nDOM, so it is in the page source for crawlers and keeps working without JavaScript. The element enhances it: it\npoints out the store link that matches the visitor's platform and reports link clicks.\n\nEvery link stays rendered and reachable whatever the platform; the recommendation is an addition, never a filter.",
+          "description": "Card for one featured app.\n\nThe content — artwork, icon, name, description and the store links — is rendered by Astro and stays in the light\nDOM, so it is in the page source for crawlers and keeps working without JavaScript. The card surface stays there\ntoo, on the host and the wrappers around the slotted content, so the card looks finished before any script runs.\nThe element enhances it: it points out the store link that matches the visitor's platform and reports link clicks.\n\nEvery link stays rendered and reachable whatever the platform; the recommendation is an addition, never a filter.",
           "name": "OtAppCard",
           "cssProperties": [
-            {
-              "description": "The card surface.",
-              "name": "--ot-color-background",
-              "default": "#fff"
-            },
             {
               "description": "Text colour, inherited by the slotted content.",
               "name": "--ot-color-foreground",
@@ -38,29 +33,12 @@
               "default": "#1a1a1a"
             },
             {
-              "description": "Card shadow.",
-              "name": "--ot-shadow-lg"
-            },
-            {
-              "description": "Card shadow on hover.",
-              "name": "--ot-shadow-xl"
-            },
-            {
-              "description": "Corner radius.",
-              "name": "--ot-radius-lg",
-              "default": "0.5rem"
-            },
-            {
-              "description": "Spacing unit; the body's padding is six of them.",
+              "description": "Spacing unit; the badge's inset is six of them, matching the page's padding.",
               "name": "--ot-space",
               "default": "0.25rem"
             }
           ],
           "cssParts": [
-            {
-              "description": "The padded column below the artwork.",
-              "name": "body"
-            },
             {
               "description": "The \"recommended for…\" badge above the store links.",
               "name": "badge"

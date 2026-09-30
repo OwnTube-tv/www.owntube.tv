@@ -121,11 +121,21 @@ describe("ot-app-card theming", () => {
     await emulateMedia({ colorScheme: "light" });
   });
 
-  /** A wrapper stands in for the page: tokens set there are inherited across the shadow boundary. */
+  /**
+   * A wrapper stands in for the page: tokens set there are inherited across the shadow boundary. The card surface
+   * belongs to the page — on the site it is a handful of Tailwind classes on the host — so the fixture paints it
+   * from the same token, exactly as `HomeContent.astro` does.
+   */
   async function themedCard(tokens: Record<string, string>) {
     const wrapper = await fixture<HTMLDivElement>(html`
       <div style=${tokenStyle(tokens)}>
-        <ot-app-card name="Test Tube" web-link=${WEB} google-link=${GOOGLE} platform="other">
+        <ot-app-card
+          style="display: block; background: var(--ot-color-background, #fff)"
+          name="Test Tube"
+          web-link=${WEB}
+          google-link=${GOOGLE}
+          platform="android"
+        >
           <h3>Test Tube</h3>
           <p>Video publications by a test publisher.</p>
           <!-- The page gives its links a colour of their own, the way Tailwind classes do on the site. -->
@@ -138,21 +148,26 @@ describe("ot-app-card theming", () => {
     return card;
   }
 
-  it("takes its surface colour from the page's tokens", async () => {
+  it("hands the slotted content a text colour from the page's tokens", async () => {
     const card = await themedCard(DARK_TOKENS);
-    expect(getComputedStyle(card).backgroundColor).to.equal("rgb(2, 8, 23)");
+    expect(getComputedStyle(card).color).to.equal("rgb(248, 250, 252)");
   });
 
   it("falls back to its own values when the page defines no tokens", async () => {
     const card = await themedCard({});
-    expect(getComputedStyle(card).backgroundColor).to.equal("rgb(255, 255, 255)");
+    expect(getComputedStyle(card).color).to.equal("rgb(2, 8, 23)");
+  });
+
+  it("paints the badge from the page's brand tokens", async () => {
+    const card = await themedCard({ "--ot-color-orange": "rgb(0, 0, 255)" });
+    expect(getComputedStyle(badge(card)!).backgroundColor).to.equal("rgb(0, 0, 255)");
   });
 
   it("keeps slotted content readable in a dark theme", async () => {
     await emulateMedia({ colorScheme: "dark" });
     const card = await themedCard(DARK_TOKENS);
-    // The card paints a dark surface behind light-DOM content it does not own, so it has to hand that content a
-    // matching text colour; otherwise the heading inherits the page's dark text and disappears.
+    // The page paints a dark surface behind light-DOM content the element does not own, so the element has to hand
+    // that content a matching text colour; otherwise the heading inherits the page's dark text and disappears.
     await expect(card).to.be.accessible();
   });
 });

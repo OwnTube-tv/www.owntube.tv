@@ -14,6 +14,7 @@ Two consequences worth knowing before changing them:
 
 - **Document CSS does not reach into a shadow root.** Tailwind's utilities and its preflight stop at the boundary, which is why each element carries its own `box-sizing` reset and writes plain CSS. Slotted content is the exception: it lives in the light DOM and keeps its Tailwind classes.
 - **CSS custom properties do cross the boundary.** They are the theming channel, together with `::part()`.
+- **Anything an element paints appears only when it upgrades**, and the page moves at that moment. Measured on the built site with the element definition delayed, the cards' own surface cost 0.19 CLS. Each element answers it in the way that suits it: the card leaves the surface to the page, so it is painted with the HTML, and the menu is hidden with `ot-mobile-menu:not(:defined)` until it can behave like a menu, since its links would otherwise be stacked in the header and then jump into a dialog.
 
 ## `<ot-mobile-menu>`
 
@@ -84,7 +85,9 @@ The site sets these in `src/index.css` and switches four of them under `prefers-
 
 ## `<ot-app-card>`
 
-Card for one featured app. It owns the card surface and points out the store link that matches the visitor's platform.
+Card for one featured app. It points out the store link that matches the visitor's platform and reports link clicks.
+
+The card surface — layout, background, radius, shadow and padding — belongs to the page, not to the element. It is Tailwind on the host and on the wrappers around the slotted content, so it paints with the server-rendered HTML instead of appearing when the element upgrades. An element that painted it would move the page under a visitor on a slow connection, and would leave a visitor without JavaScript with no card at all.
 
 ### Attributes and properties
 
@@ -115,20 +118,18 @@ Card for one featured app. It owns the card surface and points out the store lin
 
 | Part    | Element                                               |
 | ------- | ----------------------------------------------------- |
-| `body`  | The padded column below the artwork.                  |
 | `badge` | The "recommended for…" badge above the store buttons. |
 
 ### CSS custom properties
 
-| Property                            | Default               | Used for                                                             |
-| ----------------------------------- | --------------------- | -------------------------------------------------------------------- |
-| `--ot-color-background`             | `#fff`                | The card surface                                                     |
-| `--ot-color-foreground`             | `hsl(222.2 84% 4.9%)` | Text colour, inherited by the slotted content                        |
-| `--ot-color-orange`                 | `#ff5722`             | Badge background                                                     |
-| `--ot-color-dark`                   | `#1a1a1a`             | Badge text — dark on the brand orange, because white on it is 3.16:1 |
-| `--ot-shadow-lg` / `--ot-shadow-xl` | Tailwind's shadows    | Card shadow, and its hover state                                     |
-| `--ot-radius-lg`                    | `0.5rem`              | Corner radius                                                        |
-| `--ot-space`                        | `0.25rem`             | Spacing unit; the body's padding is six of them                      |
+| Property                | Default               | Used for                                                             |
+| ----------------------- | --------------------- | -------------------------------------------------------------------- |
+| `--ot-color-foreground` | `hsl(222.2 84% 4.9%)` | Text colour, inherited by the slotted content                        |
+| `--ot-color-orange`     | `#ff5722`             | Badge background                                                     |
+| `--ot-color-dark`       | `#1a1a1a`             | Badge text — dark on the brand orange, because white on it is 3.16:1 |
+| `--ot-space`            | `0.25rem`             | Spacing unit; the badge's inset is six of them                       |
+
+The element sets no `display` of its own, so the page's layout for the host — `flex flex-col` on the site — applies from the first paint and nothing moves when the element upgrades.
 
 ### How the recommendation works
 
@@ -139,11 +140,20 @@ Every link stays rendered and reachable whatever the platform. The recommendatio
 ### Usage
 
 ```html
-<ot-app-card name="Blender Tube" web-link="…" google-link="…" testflight-link="…" github-repo="…">
+<ot-app-card
+  class="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden"
+  name="Blender Tube"
+  web-link="…"
+  google-link="…"
+  testflight-link="…"
+  github-repo="…"
+>
   <img slot="image" src="…" alt="Blender Tube" />
-  <h3>Blender Tube</h3>
-  <p>…</p>
-  <div slot="links" class="flex flex-col gap-2">
+  <div class="px-6 pt-6 flex grow flex-col">
+    <h3>Blender Tube</h3>
+    <p>…</p>
+  </div>
+  <div slot="links" class="px-6 pb-6 flex flex-col gap-2">
     <a href="…" class="w-fit data-[ot-recommended]:outline-2">…</a>
   </div>
 </ot-app-card>
