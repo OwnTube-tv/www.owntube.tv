@@ -390,7 +390,8 @@
             {
               "kind": "field",
               "name": "#onDialogClose",
-              "privacy": "private"
+              "privacy": "private",
+              "description": "The browser dispatches `close` in a task of its own, so it can arrive after the menu has been closed and\nreopened — news about a dialog that is open again. The dialog's own state, not the event's arrival, decides."
             },
             {
               "kind": "method",

@@ -151,8 +151,13 @@ export class OtMobileMenu extends LitElement {
     this.open = false;
   };
 
+  /**
+   * The browser dispatches `close` in a task of its own, so it can arrive after the menu has been closed and
+   * reopened — news about a dialog that is open again. The dialog's own state, not the event's arrival, decides.
+   */
   #onDialogClose = () => {
-    this.open = false;
+    const dialog = this.renderRoot.querySelector("dialog");
+    if (dialog && !dialog.open) this.open = false;
   };
 
   override updated(changed: PropertyValues<this>) {

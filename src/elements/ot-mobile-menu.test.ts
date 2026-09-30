@@ -1,5 +1,5 @@
 /// <reference types="mocha" />
-import { elementUpdated, expect, fixture, html } from "@open-wc/testing";
+import { elementUpdated, expect, fixture, html, oneEvent } from "@open-wc/testing";
 import { emulateMedia, sendKeys } from "@web/test-runner-commands";
 import { DARK_TOKENS, tokenStyle } from "./test-helpers";
 import "./ot-mobile-menu";
@@ -168,6 +168,28 @@ describe("ot-mobile-menu dismissal", () => {
     el.shadowRoot!.querySelector(".panel")!.dispatchEvent(new MouseEvent("click", { bubbles: true, composed: true }));
     await elementUpdated(el);
     expect(el.open).to.be.true;
+  });
+
+  it("survives a close and a reopen in the same turn", async () => {
+    const el = await menuFixture();
+    el.open = true;
+    await elementUpdated(el);
+
+    el.open = false;
+    await elementUpdated(el);
+    el.open = true;
+    await elementUpdated(el);
+
+    // `close` is dispatched in a task of its own, so it lands after both updates have run — news about a dialog
+    // that has since been reopened. Acting on it would shut the menu the visitor just asked for.
+    //
+    // Waited for by the event, not by a timer: the two come from different task sources, and the browser is free
+    // to run the timer first. With `setTimeout(0)` this test passed against the very bug it describes.
+    await oneEvent(dialog(el), "close");
+    await elementUpdated(el);
+
+    expect(el.open, "the reopened menu stayed open").to.be.true;
+    expect(dialog(el).open, "and so did its dialog").to.be.true;
   });
 });
 
