@@ -113,9 +113,16 @@ import { apps } from "../data/apps";
         <div class="grid md:grid-cols-2 gap-8">
           {
             apps.map((app) => (
-              <div class="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                <img src={app.imageSrc} alt={app.title} class="w-full h-48 object-cover" />
-                <div class="p-6 flex grow flex-col">
+              <ot-app-card
+                class="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                name={app.title}
+                web-link={app.webLink}
+                google-link={app.googleLink}
+                testflight-link={app.testflightLink}
+                github-repo={app.githubRepo}
+              >
+                <img slot="image" src={app.imageSrc} alt={app.title} class="w-full h-48 object-cover" />
+                <div class="px-6 pt-6 flex grow flex-col">
                   <div class="flex justify-between items-start mb-4">
                     <div class="flex flex-row relative">
                       <img
@@ -154,15 +161,27 @@ import { apps } from "../data/apps";
                       </svg>
                     </a>
                     <p class="text-gray-600">or try the beta on mobile platforms:</p>
-                    <a href={app.googleLink} target="_blank" rel="noopener noreferrer">
-                      <img width="150" src="/googleplay.png" alt="Try on Google Play" />
-                    </a>
-                    <a href={app.testflightLink} target="_blank" rel="noopener noreferrer">
-                      <img width="150" src="/testflight.png" alt="Try on TestFlight" />
-                    </a>
                   </div>
                 </div>
-              </div>
+                <div slot="links" class="px-6 pb-6 gap-2 flex-col flex">
+                  <a
+                    href={app.googleLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-fit rounded data-ot-recommended:ring-2 data-ot-recommended:ring-offset-2 data-ot-recommended:ring-owntube-orange"
+                  >
+                    <img width="150" src="/googleplay.png" alt="Try on Google Play" />
+                  </a>
+                  <a
+                    href={app.testflightLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-fit rounded data-ot-recommended:ring-2 data-ot-recommended:ring-offset-2 data-ot-recommended:ring-owntube-orange"
+                  >
+                    <img width="150" src="/testflight.png" alt="Try on TestFlight" />
+                  </a>
+                </div>
+              </ot-app-card>
             ))
           }
         </div>

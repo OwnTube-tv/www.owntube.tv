@@ -21,6 +21,18 @@ npm run dev
 - Astro 7 (static site generator)
 - TypeScript
 - Tailwind CSS 4 (the generated CSS targets Safari 16.4+, Chrome 111+ and Firefox 128+)
+- Lit — the interactive UI is built as custom elements that enhance the static HTML, see
+  [src/elements/README.md](src/elements/README.md)
+
+## Component development
+
+```sh
+npm test          # component tests in a real Chromium (Web Test Runner, @open-wc/testing, axe)
+npm run test:watch
+npm run analyze   # regenerate custom-elements.json from the elements' JSDoc
+```
+
+The first test run needs a browser: `npx playwright install chromium`.
 
 ## Contributing
 

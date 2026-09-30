@@ -1,0 +1,43 @@
+name: Component Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The custom elements are tested in a real browser: shadow DOM, slot assignment, focus across the shadow
+      # boundary and the top layer all behave differently (or not at all) in jsdom.
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Run component tests
+        run: npm test
+
+      # custom-elements.json is generated from the elements' JSDoc, so it silently goes stale when someone changes
+      # an element and forgets `npm run analyze`. Regenerating it here and failing on a diff keeps it honest.
+      - name: Check that the custom elements manifest is up to date
+        run: |
+          npm run analyze
+          git diff --exit-code custom-elements.json \
+            || { echo "::error file=custom-elements.json::Out of date — run 'npm run analyze' and commit the result."; exit 1; }
