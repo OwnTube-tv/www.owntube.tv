@@ -79,4 +79,26 @@ function isActive(activePaths: string[], currentPath: string): boolean {
       </nav>
     </ot-mobile-menu>
   </div>
+
+  <!-- Mobile nav without scripting: the drawer needs it, and ot-mobile-menu:not(:defined) hides the drawer until
+       it has it. A browser with scripting enabled never parses this into the DOM, so it cannot shift the layout. -->
+  <noscript>
+    <nav class="md:hidden flex justify-center gap-6 border-t border-gray-200 px-4 py-3">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class:list={[
+              "text-lg",
+              isActive(link.activePaths, currentPath)
+                ? "text-owntube-orange font-semibold"
+                : "text-gray-600 hover:text-owntube-orange",
+            ]}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+  </noscript>
 </header>
