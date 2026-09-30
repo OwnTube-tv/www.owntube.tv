@@ -144,9 +144,11 @@ The element sets no `display` of its own, so the page's layout for the host — 
 
 ### How the recommendation works
 
-The element owns the **state**, the page owns the **styling**. On the matching link it sets `aria-current="true"` and a `data-ot-recommended` attribute; `HomeContent.astro` styles that attribute with a Tailwind `data-[ot-recommended]:` variant. The same split as `::part()`: the component exposes a hook, the consumer decides how it looks.
+The element owns the **state**, the page owns the **styling**. On the matching link it sets `aria-current="true"` and a `data-ot-recommended` attribute; `HomeContent.astro` styles that attribute with a Tailwind `data-ot-recommended:` variant. The same split as `::part()`: the component exposes a hook, the consumer decides how it looks.
 
 Every link stays rendered and reachable whatever the platform. The recommendation adds emphasis; it never filters.
+
+Draw that emphasis with `ring-*`, not `outline-*`. The ring is a box-shadow, while the outline is what the browser draws the focus indicator with — an always-on `outline` on the recommended link overrides it, so a keyboard user gets no visible change when focus lands there. With a ring, the two stack: the orange ring marks the recommendation, the outline still marks focus.
 
 ### Usage
 
@@ -165,7 +167,7 @@ Every link stays rendered and reachable whatever the platform. The recommendatio
     <p>…</p>
   </div>
   <div slot="links" class="px-6 pb-6 flex flex-col gap-2">
-    <a href="…" class="w-fit data-[ot-recommended]:outline-2">…</a>
+    <a href="…" class="w-fit rounded data-ot-recommended:ring-2 data-ot-recommended:ring-owntube-orange">…</a>
   </div>
 </ot-app-card>
 ```
