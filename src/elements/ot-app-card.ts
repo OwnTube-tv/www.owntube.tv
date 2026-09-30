@@ -123,7 +123,9 @@ export class OtAppCard extends LitElement {
   }
 
   override render() {
-    const label = PLATFORM_LABELS[this.platform];
+    // The badge is the label on a recommendation, so it says nothing unless there is a link to recommend: the link
+    // attributes default to the empty string, and an app without a TestFlight build is a question of time.
+    const label = this.#recommendedHref ? PLATFORM_LABELS[this.platform] : "";
     return html`
       <slot name="image"></slot>
       <slot @click=${this.#onLinkClick}></slot>

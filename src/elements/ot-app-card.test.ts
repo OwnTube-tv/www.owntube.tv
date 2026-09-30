@@ -71,6 +71,22 @@ describe("ot-app-card platform recommendation", () => {
     expect(badge(card)).to.be.null;
   });
 
+  it("says nothing when the platform's store link is missing", async () => {
+    // An app with no TestFlight build yet: the badge would otherwise promise a recommendation with no link to make
+    // good on it, since every link attribute defaults to the empty string.
+    const card = await fixture<OtAppCard>(html`
+      <ot-app-card name="Test Tube" web-link=${WEB} google-link=${GOOGLE} platform="ios">
+        <h3>Test Tube</h3>
+        <div slot="links"><a href=${GOOGLE}>Google Play</a></div>
+      </ot-app-card>
+    `);
+    await elementUpdated(card);
+
+    // Compared as text and as hrefs: a failing assertion on a DOM node sends chai's inspector into the node graph.
+    expect(badge(card)?.textContent ?? null, "no badge without a link to point at").to.be.null;
+    expect(recommended(card).map((link) => link.href), "and nothing marked as recommended").to.deep.equal([]);
+  });
+
   it("keeps every link reachable, whatever the platform", async () => {
     const card = await cardFixture("ios");
     for (const link of storeLinks(card)) {
