@@ -163,7 +163,7 @@ Draw that emphasis with `ring-*`, not `outline-*`. The ring is a box-shadow, whi
   github-repo="…"
 >
   <img slot="image" src="…" alt="Blender Tube" />
-  <div class="px-6 pt-6 flex grow flex-col">
+  <div class="px-6 pt-6 pb-2 flex grow flex-col">
     <h3>Blender Tube</h3>
     <p>…</p>
   </div>
