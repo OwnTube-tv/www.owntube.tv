@@ -1,0 +1,40 @@
+name: Checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  site:
+    name: Format, types and build
+    runs-on: ubuntu-latest
+    # Nothing here should take more than a couple of minutes; fail fast instead of waiting out GitHub's six hours.
+    timeout-minutes: 10
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Type-check the project
+        run: npm run lint
+
+      # The deploy workflow only builds after a merge to main. Building here catches a broken build during review.
+      - name: Build the site
+        run: npm run build

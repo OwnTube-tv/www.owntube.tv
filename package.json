@@ -10,6 +10,7 @@
     "build:dev": "astro build",
     "lint": "astro check",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "preview": "astro preview",
     "test": "web-test-runner",
     "test:watch": "web-test-runner --watch",
