@@ -9,6 +9,8 @@ const WEB = "https://cust-app-test.owntube.tv/";
 const GOOGLE = "https://play.google.com/store/apps/details?id=com.owntubetv.test";
 const TESTFLIGHT = "https://testflight.apple.com/join/test";
 const GITHUB = "https://github.com/OwnTube-tv/cust-app-test";
+/** A 1×1 GIF: the test server does not serve the site's public/ folder, so a real path would only log a 404. */
+const PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
 /** The platform attribute overrides detection, so the tests state the device instead of faking a user agent. */
 async function cardFixture(platform?: VisitorPlatform) {
@@ -21,7 +23,7 @@ async function cardFixture(platform?: VisitorPlatform) {
       github-repo=${GITHUB}
       platform=${platform ?? "other"}
     >
-      <img slot="image" src="/googleplay.png" alt="Test Tube" />
+      <img slot="image" src=${PIXEL} alt="Test Tube" />
       <h3>Test Tube</h3>
       <a href=${GITHUB}>Source</a>
       <div slot="links">
