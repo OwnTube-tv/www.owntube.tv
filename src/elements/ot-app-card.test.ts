@@ -84,7 +84,10 @@ describe("ot-app-card platform recommendation", () => {
 
     // Compared as text and as hrefs: a failing assertion on a DOM node sends chai's inspector into the node graph.
     expect(badge(card)?.textContent ?? null, "no badge without a link to point at").to.be.null;
-    expect(recommended(card).map((link) => link.href), "and nothing marked as recommended").to.deep.equal([]);
+    expect(
+      recommended(card).map((link) => link.href),
+      "and nothing marked as recommended"
+    ).to.deep.equal([]);
   });
 
   it("keeps every link reachable, whatever the platform", async () => {
