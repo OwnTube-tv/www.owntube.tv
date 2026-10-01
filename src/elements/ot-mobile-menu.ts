@@ -34,18 +34,20 @@ let navIdCounter = 0;
  * @cssprop [--ot-space=0.25rem] - Spacing unit; the panel's padding is six of them.
  */
 export class OtMobileMenu extends LitElement {
-  /* Values mirror the Tailwind utilities this markup used to carry, read from tokens with those as fallbacks. */
+  // Comments live out here rather than inside the css`` literal, which ships to the browser verbatim.
+  //
+  // Values mirror the Tailwind utilities this markup used to carry, read from tokens with those as fallbacks.
+  //
+  // The host holds the trigger, which sits on the page's own background, so it deliberately carries no colours of
+  // its own: a token set on the host would inherit into the trigger too. The panel's colours are set on the panel,
+  // and the page themes them through ::part(dialog).
   static override styles = css`
     *,
     *::before,
     *::after {
       box-sizing: border-box;
     }
-    /*
-      The host holds the trigger, which sits on the page's own background, so it deliberately carries no colours of
-      its own: a token set on the host would inherit into the trigger too. The panel's colours are set on the panel,
-      and the page themes them through ::part(dialog).
-    */
+
     :host {
       display: inline-block;
     }

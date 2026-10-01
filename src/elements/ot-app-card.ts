@@ -57,6 +57,17 @@ export class OtAppCard extends LitElement {
     platform: { type: String, reflect: true },
   };
 
+  // Comments live out here rather than inside the css`` literal, which ships to the browser verbatim.
+  //
+  // The card surface (background, radius, shadow and padding) stays in the light DOM, on the host and on the
+  // wrappers around the slotted content. It therefore paints together with the server-rendered HTML instead of
+  // appearing when the element upgrades, which is what a visitor on a slow connection sees, and all a visitor
+  // without JavaScript ever gets. The element only adds what needs scripting.
+  //
+  // Display is part of that: the element sets none, so the page's own layout ("flex flex-col" on the site) is in
+  // force from the first paint instead of changing under the visitor when the element upgrades.
+  //
+  // The badge sits between two padded light-DOM wrappers, so it carries the same horizontal inset itself.
   static override styles = css`
     *,
     *::before,
@@ -64,22 +75,12 @@ export class OtAppCard extends LitElement {
       box-sizing: border-box;
     }
 
-    /*
-      The card surface — background, radius, shadow and padding — stays in the light DOM, on the host and on the
-      wrappers around the slotted content. It therefore paints together with the server-rendered HTML instead of
-      appearing when the element upgrades, which is what a visitor on a slow connection sees, and all a visitor
-      without JavaScript ever gets. The element only adds what needs scripting.
-
-      Display is part of that: the element sets none, so the page's own layout — "flex flex-col" on the site — is in
-      force from the first paint instead of changing under the visitor when the element upgrades.
-    */
     :host {
       color: var(--ot-color-foreground, hsl(222.2 84% 4.9%));
     }
 
     .badge {
       align-self: flex-start;
-      /* The badge sits between two padded light-DOM wrappers, so it carries the same inset itself. */
       margin: 0 calc(var(--ot-space, 0.25rem) * 6) calc(var(--ot-space, 0.25rem) * 2);
       padding: calc(var(--ot-space, 0.25rem) * 0.5) calc(var(--ot-space, 0.25rem) * 2);
       background: var(--ot-color-orange, #ff5722);
