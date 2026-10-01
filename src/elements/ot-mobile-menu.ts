@@ -105,7 +105,13 @@ export class OtMobileMenu extends LitElement {
     label: { type: String },
   };
 
+  /**
+   * Whether the menu is open. Reflected to the `open` attribute, so CSS can use `[open]`. From the `md` breakpoint
+   * up, where the site hides the menu, a request to open is refused.
+   */
   declare open: boolean;
+
+  /** Accessible name of the dialog, announced when it opens. */
   declare label: string;
 
   constructor() {

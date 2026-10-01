@@ -358,6 +358,7 @@
               "type": {
                 "text": "boolean"
               },
+              "description": "Whether the menu is open. Reflected to the `open` attribute, so CSS can use `[open]`. From the `md` breakpoint\nup, where the site hides the menu, a request to open is refused.",
               "default": "false",
               "attribute": "open",
               "reflects": true
@@ -369,6 +370,7 @@
               "type": {
                 "text": "string"
               },
+              "description": "Accessible name of the dialog, announced when it opens.",
               "default": "\"Menu\"",
               "attribute": "label"
             },
@@ -469,6 +471,7 @@
               "type": {
                 "text": "boolean"
               },
+              "description": "Whether the menu is open. Reflected to the `open` attribute, so CSS can use `[open]`. From the `md` breakpoint\nup, where the site hides the menu, a request to open is refused.",
               "default": "false",
               "fieldName": "open"
             },
@@ -477,6 +480,7 @@
               "type": {
                 "text": "string"
               },
+              "description": "Accessible name of the dialog, announced when it opens.",
               "default": "\"Menu\"",
               "fieldName": "label"
             }
