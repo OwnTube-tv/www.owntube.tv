@@ -106,6 +106,77 @@ describe("ot-app-card platform recommendation", () => {
   });
 });
 
+describe("ot-app-card platform detection", () => {
+  /**
+   * The other suites state the platform with the attribute. These leave it out, so the element reads the user agent
+   * itself, the way it does on the site. The navigator's properties are shadowed for the one fixture and restored.
+   */
+  async function detectedOn(userAgent: string, maxTouchPoints: number) {
+    Object.defineProperty(navigator, "userAgent", { value: userAgent, configurable: true });
+    Object.defineProperty(navigator, "maxTouchPoints", { value: maxTouchPoints, configurable: true });
+    try {
+      const card = await fixture<OtAppCard>(html`
+        <ot-app-card name="Test Tube" google-link=${GOOGLE} testflight-link=${TESTFLIGHT}>
+          <h3>Test Tube</h3>
+          <div slot="links"><a href=${GOOGLE}>Google Play</a><a href=${TESTFLIGHT}>TestFlight</a></div>
+        </ot-app-card>
+      `);
+      await elementUpdated(card);
+      return card;
+    } finally {
+      delete (navigator as unknown as Record<string, unknown>).userAgent;
+      delete (navigator as unknown as Record<string, unknown>).maxTouchPoints;
+    }
+  }
+
+  const devices: [string, string, number, VisitorPlatform, string[]][] = [
+    [
+      "an Android phone",
+      "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Mobile Safari/537.36",
+      5,
+      "android",
+      [GOOGLE],
+    ],
+    [
+      "an iPhone",
+      "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1",
+      5,
+      "ios",
+      [TESTFLIGHT],
+    ],
+    [
+      "an iPad, which reports itself as a Mac with touch points",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
+      5,
+      "ios",
+      [TESTFLIGHT],
+    ],
+    [
+      "a Mac",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
+      0,
+      "other",
+      [],
+    ],
+    [
+      "a Windows PC with a touch screen",
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36",
+      10,
+      "other",
+      [],
+    ],
+  ];
+
+  for (const [device, userAgent, touchPoints, platform, recommendedHrefs] of devices) {
+    it(`detects ${device} as "${platform}"`, async () => {
+      const card = await detectedOn(userAgent, touchPoints);
+      expect(card.platform).to.equal(platform);
+      expect(card.getAttribute("platform"), "reflected for the page to read").to.equal(platform);
+      expect(recommended(card).map((link) => link.href)).to.deep.equal(recommendedHrefs);
+    });
+  }
+});
+
 describe("ot-app-card link clicks", () => {
   /** Clicking an anchor would navigate the test page, so the default is suppressed for the one click. */
   async function clickAndCapture(card: OtAppCard, link: HTMLAnchorElement) {
