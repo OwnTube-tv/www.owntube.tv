@@ -142,7 +142,7 @@ The card surface — layout, background, radius, shadow and padding — belongs 
 | `--ot-radius-full`      | `9999px`              | Badge corner radius; the default makes a pill                        |
 | `--ot-space`            | `0.25rem`             | Spacing unit; the badge's inset is six of them                       |
 
-The element sets no `display` of its own, so the page's layout for the host — `flex flex-col` on the site — applies from the first paint and nothing moves when the element upgrades.
+The element sets no `display` of its own, so the page's layout for the host — `flex flex-col` on the site — applies from the first paint. The one thing that still moves when the element upgrades is the recommendation badge: it can only exist once the element has read the visitor's platform, so for iOS and Android visitors it pushes the store buttons down by its height, about 28 px, at that moment. With a card in view while the script arrives that measured 0.013 CLS, far below the 0.1 limit for a good score; on first load the cards are below the fold and nothing moves in view.
 
 ### How the recommendation works
 
