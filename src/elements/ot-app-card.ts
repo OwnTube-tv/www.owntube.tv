@@ -7,6 +7,14 @@ export type VisitorPlatform = "ios" | "android" | "other";
 /** Which destination a clicked link points at. */
 export type LinkPlatform = "web" | "ios" | "android" | "source" | "other";
 
+/** The `detail` of `ot-app-link-click`, as specified in #26. */
+export interface AppLinkClickDetail {
+  /** The app's name, from the `name` attribute. */
+  app: string;
+  /** The destination of the clicked link, not the visitor's platform. */
+  platform: LinkPlatform;
+}
+
 const PLATFORM_LABELS: Record<VisitorPlatform, string> = {
   ios: "Recommended for your iPhone or iPad",
   android: "Recommended for your Android device",
@@ -37,8 +45,8 @@ function detectPlatform(): VisitorPlatform {
  * @slot - Body of the card: icon, name, source link and descriptions.
  * @slot links - The store links, kept last in the body.
  *
- * @fires ot-app-link-click - A link in the card was clicked. `detail` carries the app `name` and the `platform` the
- *   link points at, ready for analytics.
+ * @fires ot-app-link-click - A link in the card was clicked. `detail` is an `AppLinkClickDetail`: the `app` name and
+ *   the `platform` the link points at, ready for analytics.
  *
  * @csspart badge - The "recommended for…" badge above the store links.
  *
@@ -92,7 +100,7 @@ export class OtAppCard extends LitElement {
     }
   `;
 
-  /** Name of the app, used for the link-click event and for accessible names. */
+  /** Name of the app, reported as `app` in the link-click event. */
   declare name: string;
 
   /** Link to the web version of the app. */
@@ -170,7 +178,7 @@ export class OtAppCard extends LitElement {
       new CustomEvent("ot-app-link-click", {
         bubbles: true,
         composed: true,
-        detail: { name: this.name, platform: this.#platformOf(link.href) },
+        detail: { app: this.name, platform: this.#platformOf(link.href) } satisfies AppLinkClickDetail,
       })
     );
   };
@@ -209,6 +217,6 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    "ot-app-link-click": CustomEvent<{ name: string; platform: LinkPlatform }>;
+    "ot-app-link-click": CustomEvent<AppLinkClickDetail>;
   }
 }

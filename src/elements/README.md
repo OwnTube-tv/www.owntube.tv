@@ -105,7 +105,7 @@ The card surface — layout, background, radius, shadow and padding — belongs 
 
 | Attribute         | Property         | Type                            | Default  | Description                                                                                                                                         |
 | ----------------- | ---------------- | ------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`            | `name`           | `string`                        | `""`     | Name of the app, reported in the link-click event.                                                                                                  |
+| `name`            | `name`           | `string`                        | `""`     | Name of the app, reported as `app` in the link-click event.                                                                                         |
 | `web-link`        | `webLink`        | `string`                        | `""`     | Link to the web version.                                                                                                                            |
 | `google-link`     | `googleLink`     | `string`                        | `""`     | Link to Google Play.                                                                                                                                |
 | `testflight-link` | `testflightLink` | `string`                        | `""`     | Link to TestFlight.                                                                                                                                 |
@@ -114,9 +114,9 @@ The card surface — layout, background, radius, shadow and padding — belongs 
 
 ### Events
 
-| Event               | Detail                                                                           | When                                                                                |
-| ------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `ot-app-link-click` | `{ name: string, platform: "web" \| "ios" \| "android" \| "source" \| "other" }` | A link inside the card was clicked. `platform` is the destination, not the visitor. |
+| Event               | Detail                                                                          | When                                                                                |
+| ------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `ot-app-link-click` | `{ app: string, platform: "web" \| "ios" \| "android" \| "source" \| "other" }` | A link inside the card was clicked. `platform` is the destination, not the visitor. |
 
 ### Slots
 

@@ -3,7 +3,7 @@ import { elementUpdated, expect, fixture, html } from "@open-wc/testing";
 import { emulateMedia } from "@web/test-runner-commands";
 import { DARK_TOKENS, tokenStyle } from "./test-helpers";
 import "./ot-app-card";
-import type { OtAppCard, VisitorPlatform } from "./ot-app-card";
+import type { AppLinkClickDetail, OtAppCard, VisitorPlatform } from "./ot-app-card";
 
 const WEB = "https://cust-app-test.owntube.tv/";
 const GOOGLE = "https://play.google.com/store/apps/details?id=com.owntubetv.test";
@@ -109,8 +109,8 @@ describe("ot-app-card platform recommendation", () => {
 describe("ot-app-card link clicks", () => {
   /** Clicking an anchor would navigate the test page, so the default is suppressed for the one click. */
   async function clickAndCapture(card: OtAppCard, link: HTMLAnchorElement) {
-    const events: CustomEvent<{ name: string; platform: string }>[] = [];
-    const listener = (event: Event) => events.push(event as CustomEvent<{ name: string; platform: string }>);
+    const events: CustomEvent<AppLinkClickDetail>[] = [];
+    const listener = (event: Event) => events.push(event as CustomEvent<AppLinkClickDetail>);
     document.addEventListener("ot-app-link-click", listener);
     link.addEventListener("click", (event) => event.preventDefault(), { once: true });
     link.dispatchEvent(new MouseEvent("click", { bubbles: true, composed: true, cancelable: true }));
@@ -123,7 +123,7 @@ describe("ot-app-card link clicks", () => {
     const card = await cardFixture("ios");
     const [web, google, testflight] = storeLinks(card);
 
-    expect((await clickAndCapture(card, web))[0].detail).to.deep.equal({ name: "Test Tube", platform: "web" });
+    expect((await clickAndCapture(card, web))[0].detail).to.deep.equal({ app: "Test Tube", platform: "web" });
     expect((await clickAndCapture(card, google))[0].detail.platform).to.equal("android");
     expect((await clickAndCapture(card, testflight))[0].detail.platform).to.equal("ios");
   });
