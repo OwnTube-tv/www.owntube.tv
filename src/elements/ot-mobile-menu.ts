@@ -160,14 +160,25 @@ export class OtMobileMenu extends LitElement {
     if (dialog && !dialog.open) this.open = false;
   };
 
+  /**
+   * The menu is for small screens: the site hides the element from the `md` breakpoint up, and so does its own
+   * breakpoint listener. An open dialog there would be a modal nobody can see, with the page behind it inert. So an
+   * `open` that arrives at that width, from script or written into the markup, is refused before anything renders.
+   */
+  override willUpdate(changed: PropertyValues<this>) {
+    if (changed.has("open") && this.open && this.#mql.matches) this.open = false;
+  }
+
   override updated(changed: PropertyValues<this>) {
     if (!changed.has("open")) return;
 
     this.#syncTrigger();
     this.#syncDialog();
 
-    // Lit counts the constructor's `open = false` as a change, but nothing happened for the page to hear about.
-    if (changed.get("open") !== undefined) this.#dispatchChange();
+    // Lit counts the constructor's `open = false` as a change, but nothing happened for the page to hear about. The
+    // same goes for an `open` that willUpdate refused: the value ends where it started.
+    const previous = changed.get("open");
+    if (previous !== undefined && previous !== this.open) this.#dispatchChange();
   }
 
   /** `aria-controls` targets the slotted navigation, and names it when the consumer has not: an IDREF cannot cross

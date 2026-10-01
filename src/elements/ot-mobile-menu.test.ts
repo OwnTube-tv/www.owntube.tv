@@ -1,6 +1,6 @@
 /// <reference types="mocha" />
 import { elementUpdated, expect, fixture, html, oneEvent } from "@open-wc/testing";
-import { emulateMedia, sendKeys } from "@web/test-runner-commands";
+import { emulateMedia, sendKeys, setViewport } from "@web/test-runner-commands";
 import { DARK_TOKENS, tokenStyle } from "./test-helpers";
 import "./ot-mobile-menu";
 import type { OtMobileMenu } from "./ot-mobile-menu";
@@ -31,6 +31,14 @@ const links = (el: OtMobileMenu) => [...el.querySelectorAll<HTMLAnchorElement>("
 /** Focus inside a shadow root is only visible from that root; the document sees the host element. */
 const focused = (el: OtMobileMenu) => el.shadowRoot!.activeElement ?? document.activeElement;
 
+/** The menu exists for small screens, so the suites run at a phone's width; the test runner's default is 800 px. */
+const PHONE = { width: 390, height: 844 };
+const DESKTOP = { width: 1024, height: 768 };
+
+beforeEach(async () => {
+  await setViewport(PHONE);
+});
+
 async function openMenu(el: OtMobileMenu) {
   trigger(el).focus();
   trigger(el).click();
@@ -50,6 +58,14 @@ describe("ot-mobile-menu", () => {
     el.open = true;
     await elementUpdated(el);
     expect(el.hasAttribute("open")).to.be.true;
+  });
+
+  it("opens from the attribute as well as the property", async () => {
+    const el = await menuFixture();
+    el.setAttribute("open", "");
+    await elementUpdated(el);
+    expect(el.open).to.be.true;
+    expect(dialog(el).matches(":modal")).to.be.true;
   });
 
   it("opens when the slotted trigger is clicked", async () => {
@@ -190,6 +206,73 @@ describe("ot-mobile-menu dismissal", () => {
 
     expect(el.open, "the reopened menu stayed open").to.be.true;
     expect(dialog(el).open, "and so did its dialog").to.be.true;
+  });
+});
+
+describe("ot-mobile-menu breakpoint", () => {
+  /** Records both events on the document for the duration of one test. */
+  function recordEvents() {
+    const seen: string[] = [];
+    const listener = (event: Event) => seen.push(event.type);
+    document.addEventListener("ot-menu-open", listener);
+    document.addEventListener("ot-menu-close", listener);
+    return {
+      seen,
+      stop: () => {
+        document.removeEventListener("ot-menu-open", listener);
+        document.removeEventListener("ot-menu-close", listener);
+      },
+    };
+  }
+
+  it("closes when the viewport grows past the md breakpoint", async () => {
+    const el = await menuFixture();
+    await openMenu(el);
+    const recorder = recordEvents();
+
+    // The media query reports the new width with the next rendering update, not when setViewport resolves, so the
+    // test waits for the element's own event rather than for one Lit update.
+    const closed = oneEvent(el, "ot-menu-close");
+    await setViewport(DESKTOP);
+    await closed;
+    await elementUpdated(el);
+    recorder.stop();
+
+    expect(el.open).to.be.false;
+    expect(dialog(el).open).to.be.false;
+    expect(recorder.seen).to.deep.equal(["ot-menu-close"]);
+  });
+
+  it("refuses to open from the md breakpoint up", async () => {
+    await setViewport(DESKTOP);
+    const el = await menuFixture();
+    const recorder = recordEvents();
+
+    el.open = true;
+    await elementUpdated(el);
+    el.setAttribute("open", "");
+    await elementUpdated(el);
+    recorder.stop();
+
+    // An open modal inside a hidden host would leave the whole page inert behind a dialog nobody can see.
+    expect(el.open, "the property").to.be.false;
+    expect(el.hasAttribute("open"), "the reflected attribute").to.be.false;
+    expect(dialog(el).open, "the dialog").to.be.false;
+    expect(recorder.seen, "and nothing to report").to.deep.equal([]);
+  });
+
+  it("ignores an open attribute in the markup from the md breakpoint up", async () => {
+    await setViewport(DESKTOP);
+    const el = await fixture<OtMobileMenu>(html`
+      <ot-mobile-menu open>
+        <button slot="trigger" aria-label="Open menu"></button>
+        <nav><a href="/apps/">Apps</a></nav>
+      </ot-mobile-menu>
+    `);
+    await elementUpdated(el);
+
+    expect(el.open).to.be.false;
+    expect(dialog(el).open).to.be.false;
   });
 });
 

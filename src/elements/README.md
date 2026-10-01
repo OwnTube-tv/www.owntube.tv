@@ -81,7 +81,7 @@ The site sets these in `src/index.css` and switches four of them under `prefers-
 - **No focus trap of our own.** `showModal()` makes everything outside the dialog inert, which is the requirement: verified in Chromium, Firefox and WebKit, nothing behind it takes focus, neither by tabbing past the last link nor by a script calling `focus()`. Where focus goes when you tab past the end is up to the browser — Chromium hands it to its own UI and brings it back, Firefox and WebKit differ — and reaching the address bar is a reasonable way out for a keyboard user. A hand-written trap would only take that away. The test asserts the requirement, not the mechanism, so it survives a change of implementation.
 - `aria-controls` points at the slotted navigation, and the element generates an id when the consumer has not set one: an IDREF cannot cross the shadow boundary, so it has to target light-DOM content.
 - Both `cancel` and `close` are handled, because a browser may close a modal dialog on Escape without a cancelable `cancel` event.
-- Crossing the `md` breakpoint closes the menu. An open modal inside a `display: none` host would show nothing while leaving the page inert.
+- Crossing the `md` breakpoint closes the menu, and from `md` up an `open` request is refused, whether it comes from script or from the markup. An open modal inside a `display: none` host would show nothing while leaving the page inert.
 - The panel appears and disappears without a transition, so there is nothing for `prefers-reduced-motion` to switch off.
 
 ### Usage
