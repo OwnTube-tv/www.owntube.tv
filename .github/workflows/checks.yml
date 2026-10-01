@@ -38,3 +38,13 @@ jobs:
       # The deploy workflow only builds after a merge to main. Building here catches a broken build during review.
       - name: Build the site
         run: npm run build
+
+      # The budget from #26: all client-side JavaScript together stays under 15 kB gzipped. Lit and both elements
+      # come to about 8 kB today; this keeps that from creeping up unnoticed.
+      - name: Check the client JavaScript against its size budget
+        run: |
+          shopt -s nullglob
+          files=(dist/_astro/*.js)
+          size=$(cat "${files[@]}" /dev/null | gzip -c | wc -c | tr -d ' ')
+          echo "Client JavaScript: ${#files[@]} file(s), $size bytes gzipped (budget 15000)"
+          test "$size" -le 15000 || { echo "::error::Client JavaScript is $size bytes gzipped, over the 15 kB budget from #26"; exit 1; }

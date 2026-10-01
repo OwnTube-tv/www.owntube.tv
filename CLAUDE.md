@@ -47,7 +47,7 @@
 - **JSON-LD**: Structured data defined in `index.astro` frontmatter, embedded in page head
 - **Analytics**: Umami script in `RootLayout.astro`; `data-domains="www.owntube.tv"` makes it a no-op on any other host, so `npm run dev`, `npm run preview` and locally served builds do not send pageviews to the production stats
 - **CI/CD**: GitHub Actions pipeline (`.github/workflows/gh-pages-cd.yml`) builds and deploys to GitHub Pages on push to `main`
-- **Checks**: The "Checks" workflow (`.github/workflows/checks.yml`) runs `format:check`, `lint` and `build` on pull requests and pushes to `main`, so formatting, type errors and a broken build show up in review rather than after the merge
+- **Checks**: The "Checks" workflow (`.github/workflows/checks.yml`) runs `format:check`, `lint` and `build` on pull requests and pushes to `main`, and fails if the built client JavaScript exceeds 15 kB gzipped (the budget from #26), so formatting, type errors and a broken build show up in review rather than after the merge
 
 ## Maintenance
 

@@ -34,8 +34,9 @@ npm run analyze   # regenerate custom-elements.json from the elements' JSDoc
 
 The first test run needs a browser: `npx playwright install chromium`.
 
-Pull requests run two workflows: "Checks" (`npm run format:check`, `npm run lint` and `npm run build`) and "Component
-Tests". Run `npm run format` before pushing to keep the first one green.
+Pull requests run two workflows: "Checks" (`npm run format:check`, `npm run lint`, `npm run build` and a 15 kB
+gzipped budget for the client JavaScript) and "Component Tests". Run `npm run format` before pushing to keep the first
+one green.
 
 ## Contributing
 

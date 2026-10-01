@@ -1,6 +1,6 @@
 # Custom elements
 
-The site's interactive UI is built as [Lit](https://lit.dev) custom elements, one file per element with an `ot-` prefix. `index.ts` imports them all and is loaded once from `RootLayout.astro`, so the whole site ships one module script — the same file on every page: 22 kB of JavaScript, about 8 kB over the wire once it is compressed, Lit included. Said loosely on purpose, since the exact figure depends on the compressor. That is about a fifth of the Google Play badge image sitting next to it on the same page.
+The site's interactive UI is built as [Lit](https://lit.dev) custom elements, one file per element with an `ot-` prefix. `index.ts` imports them all and is loaded once from `RootLayout.astro`, so the whole site ships one module script — the same file on every page: 22 kB of JavaScript, about 8 kB over the wire once it is compressed, Lit included. Said loosely on purpose, since the exact figure depends on the compressor; the "Checks" workflow fails the build if it passes the 15 kB budget from #26. That is about a fifth of the Google Play badge image sitting next to it on the same page.
 
 Run `npm run analyze` to regenerate [`custom-elements.json`](../../custom-elements.json), the machine-readable version of everything below.
 
