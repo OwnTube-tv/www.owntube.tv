@@ -139,6 +139,7 @@ The card surface — layout, background, radius, shadow and padding — belongs 
 | `--ot-color-foreground` | `hsl(222.2 84% 4.9%)` | Text colour, inherited by the slotted content                        |
 | `--ot-color-orange`     | `#ff5722`             | Badge background                                                     |
 | `--ot-color-dark`       | `#1a1a1a`             | Badge text — dark on the brand orange, because white on it is 3.16:1 |
+| `--ot-radius-full`      | `9999px`              | Badge corner radius; the default makes a pill                        |
 | `--ot-space`            | `0.25rem`             | Spacing unit; the badge's inset is six of them                       |
 
 The element sets no `display` of its own, so the page's layout for the host — `flex flex-col` on the site — applies from the first paint and nothing moves when the element upgrades.

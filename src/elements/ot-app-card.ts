@@ -53,6 +53,7 @@ function detectPlatform(): VisitorPlatform {
  * @cssprop [--ot-color-foreground=hsl(222.2 84% 4.9%)] - Text colour, inherited by the slotted content.
  * @cssprop [--ot-color-orange=#ff5722] - Badge background.
  * @cssprop [--ot-color-dark=#1a1a1a] - Badge text, dark on the brand orange for contrast.
+ * @cssprop [--ot-radius-full=9999px] - Badge corner radius; the default makes a pill.
  * @cssprop [--ot-space=0.25rem] - Spacing unit; the badge's inset is six of them, matching the page's padding.
  */
 export class OtAppCard extends LitElement {
@@ -93,7 +94,7 @@ export class OtAppCard extends LitElement {
       padding: calc(var(--ot-space, 0.25rem) * 0.5) calc(var(--ot-space, 0.25rem) * 2);
       background: var(--ot-color-orange, #ff5722);
       color: var(--ot-color-dark, #1a1a1a);
-      border-radius: 9999px;
+      border-radius: var(--ot-radius-full, 9999px);
       font-size: 0.75rem;
       line-height: 1rem;
       font-weight: 600;

@@ -178,8 +178,9 @@ describe("ot-app-card theming", () => {
   });
 
   it("paints the badge from the page's brand tokens", async () => {
-    const card = await themedCard({ "--ot-color-orange": "rgb(0, 0, 255)" });
+    const card = await themedCard({ "--ot-color-orange": "rgb(0, 0, 255)", "--ot-radius-full": "3px" });
     expect(getComputedStyle(badge(card)!).backgroundColor).to.equal("rgb(0, 0, 255)");
+    expect(getComputedStyle(badge(card)!).borderRadius, "radius from a token, as #26 asks").to.equal("3px");
   });
 
   it("keeps slotted content readable in a dark theme", async () => {

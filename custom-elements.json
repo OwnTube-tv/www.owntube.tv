@@ -33,6 +33,11 @@
               "default": "#1a1a1a"
             },
             {
+              "description": "Badge corner radius; the default makes a pill.",
+              "name": "--ot-radius-full",
+              "default": "9999px"
+            },
+            {
               "description": "Spacing unit; the badge's inset is six of them, matching the page's padding.",
               "name": "--ot-space",
               "default": "0.25rem"
