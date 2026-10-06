@@ -57,7 +57,6 @@ describe("ot-app-card platform recommendation", () => {
   it("points an iOS visitor at TestFlight", async () => {
     const card = await cardFixture("ios");
     expect(recommended(card).map((link) => link.href)).to.deep.equal([TESTFLIGHT]);
-    expect(recommended(card)[0].getAttribute("aria-current")).to.equal("true");
     expect(badge(card)?.textContent).to.contain("iPhone");
   });
 
@@ -105,6 +104,56 @@ describe("ot-app-card platform recommendation", () => {
     card.platform = "android";
     await elementUpdated(card);
     expect(recommended(card).map((link) => link.href)).to.deep.equal([GOOGLE]);
+    const [, google, testflight] = storeLinks(card);
+    expect(google.getAttribute("aria-label")).to.equal("Google Play, recommended for your Android device");
+    expect(testflight.hasAttribute("aria-label"), "the old recommendation is taken back").to.be.false;
+  });
+});
+
+describe("ot-app-card recommendation for screen readers", () => {
+  it("puts the recommendation in the link's own name", async () => {
+    const card = await cardFixture("ios");
+    const [web, google, testflight] = storeLinks(card);
+
+    expect(testflight.getAttribute("aria-label")).to.equal("TestFlight, recommended for your iPhone or iPad");
+    expect(google.hasAttribute("aria-label"), "the other links keep their own names").to.be.false;
+    expect(web.hasAttribute("aria-label")).to.be.false;
+    // aria-current means "the current item in a set"; VoiceOver read the link as "current".
+    for (const link of storeLinks(card)) expect(link.hasAttribute("aria-current")).to.be.false;
+    await expect(card).to.be.accessible();
+  });
+
+  it("builds the name from the image's alt text, as on the site's store buttons", async () => {
+    const card = await fixture<OtAppCard>(html`
+      <ot-app-card name="Test Tube" google-link=${GOOGLE} testflight-link=${TESTFLIGHT} platform="ios">
+        <h3>Test Tube</h3>
+        <div slot="links">
+          <a href=${GOOGLE}><img width="150" src=${PIXEL} alt="Try on Google Play" /></a>
+          <a href=${TESTFLIGHT}><img width="150" src=${PIXEL} alt="Try on TestFlight" /></a>
+        </div>
+      </ot-app-card>
+    `);
+    await elementUpdated(card);
+
+    expect(recommended(card)[0].getAttribute("aria-label")).to.equal(
+      "Try on TestFlight, recommended for your iPhone or iPad"
+    );
+  });
+
+  it("extends a name the page gave the link, and gives it back", async () => {
+    const card = await fixture<OtAppCard>(html`
+      <ot-app-card name="Test Tube" google-link=${GOOGLE} platform="android">
+        <h3>Test Tube</h3>
+        <div slot="links"><a href=${GOOGLE} aria-label="Get it on Google Play">Google Play</a></div>
+      </ot-app-card>
+    `);
+    await elementUpdated(card);
+    const [google] = storeLinks(card);
+    expect(google.getAttribute("aria-label")).to.equal("Get it on Google Play, recommended for your Android device");
+
+    card.platform = "other";
+    await elementUpdated(card);
+    expect(google.getAttribute("aria-label"), "the page's own name, unchanged").to.equal("Get it on Google Play");
   });
 });
 

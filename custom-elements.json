@@ -144,7 +144,34 @@
               "kind": "field",
               "name": "#markRecommendedLink",
               "privacy": "private",
-              "description": "Links live in the light DOM, so the element marks them up rather than styling them from the shadow root."
+              "description": "Links live in the light DOM, so the element marks them up rather than styling them from the shadow root: the page\nstyles `data-ot-recommended`, and the recommendation becomes part of the link's accessible name."
+            },
+            {
+              "kind": "field",
+              "name": "#ownLabels",
+              "privacy": "private",
+              "default": "new WeakMap<HTMLAnchorElement, string | null>()",
+              "description": "The `aria-label` each link had before the element touched it, `null` for none, so it can be put back."
+            },
+            {
+              "kind": "method",
+              "name": "#nameLink",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "link",
+                  "type": {
+                    "text": "HTMLAnchorElement"
+                  }
+                },
+                {
+                  "name": "recommendation",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "A screen reader hears the recommendation as part of the link: \"Try on TestFlight, recommended for your iPhone or\niPad\". The badge cannot say which link it means, since it sits in the shadow root and an IDREF cannot reach it\nfrom the light DOM. And `aria-current`, which #26 first suggested, means \"the current item in a set\": VoiceOver\nread the link as \"current\", which is not what a recommendation is."
             },
             {
               "kind": "field",

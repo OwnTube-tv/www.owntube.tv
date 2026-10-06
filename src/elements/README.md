@@ -146,9 +146,11 @@ The element sets no `display` of its own, so the page's layout for the host — 
 
 ### How the recommendation works
 
-The element owns the **state**, the page owns the **styling**. On the matching link it sets `aria-current="true"` and a `data-ot-recommended` attribute; `HomeContent.astro` styles that attribute with a Tailwind `data-ot-recommended:` variant. The same split as `::part()`: the component exposes a hook, the consumer decides how it looks.
+The element owns the **state**, the page owns the **styling**. On the matching link it sets a `data-ot-recommended` attribute and adds the recommendation to the link's accessible name; `HomeContent.astro` styles that attribute with a Tailwind `data-ot-recommended:` variant. The same split as `::part()`: the component exposes a hook, the consumer decides how it looks.
 
 Every link stays rendered and reachable whatever the platform. The recommendation adds emphasis; it never filters.
+
+A screen reader hears the recommendation as part of the link, for example "Try on TestFlight, recommended for your iPhone or iPad". The element builds that name from the link's text and image alt text, or from an `aria-label` the page already set, and puts the original back when the recommendation moves. It does not use `aria-current`: that attribute means "the current item in a set", and VoiceOver reads it as "current". The badge cannot do the job alone either, because it sits in the shadow root and cannot be tied to one link.
 
 Draw that emphasis with `ring-*`, not `outline-*`. The ring is a box-shadow, while the outline is what the browser draws the focus indicator with — an always-on `outline` on the recommended link overrides it, so a keyboard user gets no visible change when focus lands there. With a ring, the two stack: the orange ring marks the recommendation, the outline still marks focus.
 

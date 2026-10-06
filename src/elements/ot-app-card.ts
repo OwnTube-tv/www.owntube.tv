@@ -21,6 +21,17 @@ const PLATFORM_LABELS: Record<VisitorPlatform, string> = {
   other: "",
 };
 
+/** The name a link gets from its content: its text and its images' alt text, in document order. */
+function nameFromContent(link: HTMLElement): string {
+  const parts: string[] = [];
+  const walker = document.createTreeWalker(link, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    if (node.nodeType === Node.TEXT_NODE) parts.push(node.textContent ?? "");
+    else if (node instanceof HTMLImageElement) parts.push(node.alt);
+  }
+  return parts.join(" ").replace(/\s+/g, " ").trim();
+}
+
 /** Reads the platform from the user agent. iPadOS reports itself as a Mac, but with touch points. */
 function detectPlatform(): VisitorPlatform {
   const ua = navigator.userAgent;
@@ -157,19 +168,42 @@ export class OtAppCard extends LitElement {
     return "";
   }
 
-  /** Links live in the light DOM, so the element marks them up rather than styling them from the shadow root. */
+  /**
+   * Links live in the light DOM, so the element marks them up rather than styling them from the shadow root: the page
+   * styles `data-ot-recommended`, and the recommendation becomes part of the link's accessible name.
+   */
   #markRecommendedLink = () => {
     const recommended = this.#absolute(this.#recommendedHref);
     for (const link of this.#links()) {
       const isRecommended = recommended !== "" && link.href === recommended;
       link.toggleAttribute("data-ot-recommended", isRecommended);
-      if (isRecommended) {
-        link.setAttribute("aria-current", "true");
-      } else {
-        link.removeAttribute("aria-current");
-      }
+      this.#nameLink(link, isRecommended ? PLATFORM_LABELS[this.platform] : "");
     }
   };
+
+  /** The `aria-label` each link had before the element touched it, `null` for none, so it can be put back. */
+  #ownLabels = new WeakMap<HTMLAnchorElement, string | null>();
+
+  /**
+   * A screen reader hears the recommendation as part of the link: "Try on TestFlight, recommended for your iPhone or
+   * iPad". The badge cannot say which link it means, since it sits in the shadow root and an IDREF cannot reach it
+   * from the light DOM. And `aria-current`, which #26 first suggested, means "the current item in a set": VoiceOver
+   * read the link as "current", which is not what a recommendation is.
+   */
+  #nameLink(link: HTMLAnchorElement, recommendation: string) {
+    if (!this.#ownLabels.has(link)) this.#ownLabels.set(link, link.getAttribute("aria-label"));
+    const own = this.#ownLabels.get(link) ?? null;
+
+    if (!recommendation) {
+      if (own === null) link.removeAttribute("aria-label");
+      else link.setAttribute("aria-label", own);
+      return;
+    }
+
+    const name = own ?? nameFromContent(link);
+    const phrase = name ? `${recommendation.charAt(0).toLowerCase()}${recommendation.slice(1)}` : recommendation;
+    link.setAttribute("aria-label", name ? `${name}, ${phrase}` : phrase);
+  }
 
   #onLinkClick = (event: Event) => {
     const link = event.composedPath().find((node): node is HTMLAnchorElement => node instanceof HTMLAnchorElement);
