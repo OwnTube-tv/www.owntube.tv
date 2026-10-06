@@ -1,0 +1,50 @@
+name: Checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  site:
+    name: Format, types and build
+    runs-on: ubuntu-latest
+    # Nothing here should take more than a couple of minutes; fail fast instead of waiting out GitHub's six hours.
+    timeout-minutes: 10
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Type-check the project
+        run: npm run lint
+
+      # The deploy workflow only builds after a merge to main. Building here catches a broken build during review.
+      - name: Build the site
+        run: npm run build
+
+      # The budget from #26: all client-side JavaScript together stays under 15 kB gzipped. Lit and both elements
+      # come to about 8 kB today; this keeps that from creeping up unnoticed.
+      - name: Check the client JavaScript against its size budget
+        run: |
+          shopt -s nullglob
+          files=(dist/_astro/*.js)
+          size=$(cat "${files[@]}" /dev/null | gzip -c | wc -c | tr -d ' ')
+          echo "Client JavaScript: ${#files[@]} file(s), $size bytes gzipped (budget 15000)"
+          test "$size" -le 15000 || { echo "::error::Client JavaScript is $size bytes gzipped, over the 15 kB budget from #26"; exit 1; }
