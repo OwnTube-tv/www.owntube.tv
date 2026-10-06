@@ -7,6 +7,7 @@
 - `npm run build:dev` - Build for development
 - `npm run lint` - Run Astro type checker
 - `npm run format` - Format code with Prettier
+- `npm run format:check` - Check formatting with Prettier without writing, as CI does
 - `npm run preview` - Preview production build
 - `npm test` / `npm run test:watch` - Component tests in a real Chromium (Web Test Runner, @open-wc/testing, axe); needs `npx playwright install chromium` once
 - `npm run analyze` - Regenerate `custom-elements.json` from the elements' JSDoc
@@ -46,6 +47,7 @@
 - **JSON-LD**: Structured data defined in `index.astro` frontmatter, embedded in page head
 - **Analytics**: Umami script in `RootLayout.astro`; `data-domains="www.owntube.tv"` makes it a no-op on any other host, so `npm run dev`, `npm run preview` and locally served builds do not send pageviews to the production stats
 - **CI/CD**: GitHub Actions pipeline (`.github/workflows/gh-pages-cd.yml`) builds and deploys to GitHub Pages on push to `main`
+- **Checks**: The "Checks" workflow (`.github/workflows/checks.yml`) runs `format:check`, `lint` and `build` on pull requests and pushes to `main`, and fails if the built client JavaScript exceeds 15 kB gzipped (the budget from #26), so formatting, type errors and a broken build show up in review rather than after the merge
 
 ## Maintenance
 

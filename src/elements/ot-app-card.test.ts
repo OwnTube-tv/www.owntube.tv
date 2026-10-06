@@ -3,12 +3,14 @@ import { elementUpdated, expect, fixture, html } from "@open-wc/testing";
 import { emulateMedia } from "@web/test-runner-commands";
 import { DARK_TOKENS, tokenStyle } from "./test-helpers";
 import "./ot-app-card";
-import type { OtAppCard, VisitorPlatform } from "./ot-app-card";
+import type { AppLinkClickDetail, OtAppCard, VisitorPlatform } from "./ot-app-card";
 
 const WEB = "https://cust-app-test.owntube.tv/";
 const GOOGLE = "https://play.google.com/store/apps/details?id=com.owntubetv.test";
 const TESTFLIGHT = "https://testflight.apple.com/join/test";
 const GITHUB = "https://github.com/OwnTube-tv/cust-app-test";
+/** A 1×1 GIF: the test server does not serve the site's public/ folder, so a real path would only log a 404. */
+const PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
 /** The platform attribute overrides detection, so the tests state the device instead of faking a user agent. */
 async function cardFixture(platform?: VisitorPlatform) {
@@ -21,7 +23,7 @@ async function cardFixture(platform?: VisitorPlatform) {
       github-repo=${GITHUB}
       platform=${platform ?? "other"}
     >
-      <img slot="image" src="/googleplay.png" alt="Test Tube" />
+      <img slot="image" src=${PIXEL} alt="Test Tube" />
       <h3>Test Tube</h3>
       <a href=${GITHUB}>Source</a>
       <div slot="links">
@@ -55,7 +57,6 @@ describe("ot-app-card platform recommendation", () => {
   it("points an iOS visitor at TestFlight", async () => {
     const card = await cardFixture("ios");
     expect(recommended(card).map((link) => link.href)).to.deep.equal([TESTFLIGHT]);
-    expect(recommended(card)[0].getAttribute("aria-current")).to.equal("true");
     expect(badge(card)?.textContent).to.contain("iPhone");
   });
 
@@ -84,7 +85,10 @@ describe("ot-app-card platform recommendation", () => {
 
     // Compared as text and as hrefs: a failing assertion on a DOM node sends chai's inspector into the node graph.
     expect(badge(card)?.textContent ?? null, "no badge without a link to point at").to.be.null;
-    expect(recommended(card).map((link) => link.href), "and nothing marked as recommended").to.deep.equal([]);
+    expect(
+      recommended(card).map((link) => link.href),
+      "and nothing marked as recommended"
+    ).to.deep.equal([]);
   });
 
   it("keeps every link reachable, whatever the platform", async () => {
@@ -100,14 +104,135 @@ describe("ot-app-card platform recommendation", () => {
     card.platform = "android";
     await elementUpdated(card);
     expect(recommended(card).map((link) => link.href)).to.deep.equal([GOOGLE]);
+    const [, google, testflight] = storeLinks(card);
+    expect(google.getAttribute("aria-label")).to.equal("Google Play, recommended for your Android device");
+    expect(testflight.hasAttribute("aria-label"), "the old recommendation is taken back").to.be.false;
   });
+});
+
+describe("ot-app-card recommendation for screen readers", () => {
+  it("puts the recommendation in the link's own name", async () => {
+    const card = await cardFixture("ios");
+    const [web, google, testflight] = storeLinks(card);
+
+    expect(testflight.getAttribute("aria-label")).to.equal("TestFlight, recommended for your iPhone or iPad");
+    expect(google.hasAttribute("aria-label"), "the other links keep their own names").to.be.false;
+    expect(web.hasAttribute("aria-label")).to.be.false;
+    // aria-current means "the current item in a set"; VoiceOver read the link as "current".
+    for (const link of storeLinks(card)) expect(link.hasAttribute("aria-current")).to.be.false;
+    await expect(card).to.be.accessible();
+  });
+
+  it("builds the name from the image's alt text, as on the site's store buttons", async () => {
+    const card = await fixture<OtAppCard>(html`
+      <ot-app-card name="Test Tube" google-link=${GOOGLE} testflight-link=${TESTFLIGHT} platform="ios">
+        <h3>Test Tube</h3>
+        <div slot="links">
+          <a href=${GOOGLE}><img width="150" src=${PIXEL} alt="Try on Google Play" /></a>
+          <a href=${TESTFLIGHT}><img width="150" src=${PIXEL} alt="Try on TestFlight" /></a>
+        </div>
+      </ot-app-card>
+    `);
+    await elementUpdated(card);
+
+    expect(recommended(card)[0].getAttribute("aria-label")).to.equal(
+      "Try on TestFlight, recommended for your iPhone or iPad"
+    );
+  });
+
+  it("extends a name the page gave the link, and gives it back", async () => {
+    const card = await fixture<OtAppCard>(html`
+      <ot-app-card name="Test Tube" google-link=${GOOGLE} platform="android">
+        <h3>Test Tube</h3>
+        <div slot="links"><a href=${GOOGLE} aria-label="Get it on Google Play">Google Play</a></div>
+      </ot-app-card>
+    `);
+    await elementUpdated(card);
+    const [google] = storeLinks(card);
+    expect(google.getAttribute("aria-label")).to.equal("Get it on Google Play, recommended for your Android device");
+
+    card.platform = "other";
+    await elementUpdated(card);
+    expect(google.getAttribute("aria-label"), "the page's own name, unchanged").to.equal("Get it on Google Play");
+  });
+});
+
+describe("ot-app-card platform detection", () => {
+  /**
+   * The other suites state the platform with the attribute. These leave it out, so the element reads the user agent
+   * itself, the way it does on the site. The navigator's properties are shadowed for the one fixture and restored.
+   */
+  async function detectedOn(userAgent: string, maxTouchPoints: number) {
+    Object.defineProperty(navigator, "userAgent", { value: userAgent, configurable: true });
+    Object.defineProperty(navigator, "maxTouchPoints", { value: maxTouchPoints, configurable: true });
+    try {
+      const card = await fixture<OtAppCard>(html`
+        <ot-app-card name="Test Tube" google-link=${GOOGLE} testflight-link=${TESTFLIGHT}>
+          <h3>Test Tube</h3>
+          <div slot="links"><a href=${GOOGLE}>Google Play</a><a href=${TESTFLIGHT}>TestFlight</a></div>
+        </ot-app-card>
+      `);
+      await elementUpdated(card);
+      return card;
+    } finally {
+      delete (navigator as unknown as Record<string, unknown>).userAgent;
+      delete (navigator as unknown as Record<string, unknown>).maxTouchPoints;
+    }
+  }
+
+  const devices: [string, string, number, VisitorPlatform, string[]][] = [
+    [
+      "an Android phone",
+      "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Mobile Safari/537.36",
+      5,
+      "android",
+      [GOOGLE],
+    ],
+    [
+      "an iPhone",
+      "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1",
+      5,
+      "ios",
+      [TESTFLIGHT],
+    ],
+    [
+      "an iPad, which reports itself as a Mac with touch points",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
+      5,
+      "ios",
+      [TESTFLIGHT],
+    ],
+    [
+      "a Mac",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
+      0,
+      "other",
+      [],
+    ],
+    [
+      "a Windows PC with a touch screen",
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36",
+      10,
+      "other",
+      [],
+    ],
+  ];
+
+  for (const [device, userAgent, touchPoints, platform, recommendedHrefs] of devices) {
+    it(`detects ${device} as "${platform}"`, async () => {
+      const card = await detectedOn(userAgent, touchPoints);
+      expect(card.platform).to.equal(platform);
+      expect(card.getAttribute("platform"), "reflected for the page to read").to.equal(platform);
+      expect(recommended(card).map((link) => link.href)).to.deep.equal(recommendedHrefs);
+    });
+  }
 });
 
 describe("ot-app-card link clicks", () => {
   /** Clicking an anchor would navigate the test page, so the default is suppressed for the one click. */
   async function clickAndCapture(card: OtAppCard, link: HTMLAnchorElement) {
-    const events: CustomEvent<{ name: string; platform: string }>[] = [];
-    const listener = (event: Event) => events.push(event as CustomEvent<{ name: string; platform: string }>);
+    const events: CustomEvent<AppLinkClickDetail>[] = [];
+    const listener = (event: Event) => events.push(event as CustomEvent<AppLinkClickDetail>);
     document.addEventListener("ot-app-link-click", listener);
     link.addEventListener("click", (event) => event.preventDefault(), { once: true });
     link.dispatchEvent(new MouseEvent("click", { bubbles: true, composed: true, cancelable: true }));
@@ -120,7 +245,7 @@ describe("ot-app-card link clicks", () => {
     const card = await cardFixture("ios");
     const [web, google, testflight] = storeLinks(card);
 
-    expect((await clickAndCapture(card, web))[0].detail).to.deep.equal({ name: "Test Tube", platform: "web" });
+    expect((await clickAndCapture(card, web))[0].detail).to.deep.equal({ app: "Test Tube", platform: "web" });
     expect((await clickAndCapture(card, google))[0].detail.platform).to.equal("android");
     expect((await clickAndCapture(card, testflight))[0].detail.platform).to.equal("ios");
   });
@@ -175,8 +300,9 @@ describe("ot-app-card theming", () => {
   });
 
   it("paints the badge from the page's brand tokens", async () => {
-    const card = await themedCard({ "--ot-color-orange": "rgb(0, 0, 255)" });
+    const card = await themedCard({ "--ot-color-orange": "rgb(0, 0, 255)", "--ot-radius-full": "3px" });
     expect(getComputedStyle(badge(card)!).backgroundColor).to.equal("rgb(0, 0, 255)");
+    expect(getComputedStyle(badge(card)!).borderRadius, "radius from a token, as #26 asks").to.equal("3px");
   });
 
   it("keeps slotted content readable in a dark theme", async () => {

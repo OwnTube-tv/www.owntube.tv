@@ -33,6 +33,11 @@
               "default": "#1a1a1a"
             },
             {
+              "description": "Badge corner radius; the default makes a pill.",
+              "name": "--ot-radius-full",
+              "default": "9999px"
+            },
+            {
               "description": "Spacing unit; the badge's inset is six of them, matching the page's padding.",
               "name": "--ot-space",
               "default": "0.25rem"
@@ -66,7 +71,7 @@
               "type": {
                 "text": "string"
               },
-              "description": "Name of the app, used for the link-click event and for accessible names.",
+              "description": "Name of the app, reported as `app` in the link-click event.",
               "default": "\"\"",
               "attribute": "name"
             },
@@ -139,7 +144,34 @@
               "kind": "field",
               "name": "#markRecommendedLink",
               "privacy": "private",
-              "description": "Links live in the light DOM, so the element marks them up rather than styling them from the shadow root."
+              "description": "Links live in the light DOM, so the element marks them up rather than styling them from the shadow root: the page\nstyles `data-ot-recommended`, and the recommendation becomes part of the link's accessible name."
+            },
+            {
+              "kind": "field",
+              "name": "#ownLabels",
+              "privacy": "private",
+              "default": "new WeakMap<HTMLAnchorElement, string | null>()",
+              "description": "The `aria-label` each link had before the element touched it, `null` for none, so it can be put back."
+            },
+            {
+              "kind": "method",
+              "name": "#nameLink",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "link",
+                  "type": {
+                    "text": "HTMLAnchorElement"
+                  }
+                },
+                {
+                  "name": "recommendation",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "description": "A screen reader hears the recommendation as part of the link: \"Try on TestFlight, recommended for your iPhone or\niPad\". The badge cannot say which link it means, since it sits in the shadow root and an IDREF cannot reach it\nfrom the light DOM. And `aria-current`, which #26 first suggested, means \"the current item in a set\": VoiceOver\nread the link as \"current\", which is not what a recommendation is."
             },
             {
               "kind": "field",
@@ -196,7 +228,7 @@
           ],
           "events": [
             {
-              "description": "A link in the card was clicked. `detail` carries the app `name` and the `platform` the link points at, ready for analytics.",
+              "description": "A link in the card was clicked. `detail` is an `AppLinkClickDetail`: the `app` name and the `platform` the link points at, ready for analytics.",
               "name": "ot-app-link-click"
             }
           ],
@@ -206,7 +238,7 @@
               "type": {
                 "text": "string"
               },
-              "description": "Name of the app, used for the link-click event and for accessible names.",
+              "description": "Name of the app, reported as `app` in the link-click event.",
               "default": "\"\"",
               "fieldName": "name"
             },
@@ -353,6 +385,7 @@
               "type": {
                 "text": "boolean"
               },
+              "description": "Whether the menu is open. Reflected to the `open` attribute, so CSS can use `[open]`. From the `md` breakpoint\nup, where the site hides the menu, a request to open is refused.",
               "default": "false",
               "attribute": "open",
               "reflects": true
@@ -364,6 +397,7 @@
               "type": {
                 "text": "string"
               },
+              "description": "Accessible name of the dialog, announced when it opens.",
               "default": "\"Menu\"",
               "attribute": "label"
             },
@@ -464,6 +498,7 @@
               "type": {
                 "text": "boolean"
               },
+              "description": "Whether the menu is open. Reflected to the `open` attribute, so CSS can use `[open]`. From the `md` breakpoint\nup, where the site hides the menu, a request to open is refused.",
               "default": "false",
               "fieldName": "open"
             },
@@ -472,6 +507,7 @@
               "type": {
                 "text": "string"
               },
+              "description": "Accessible name of the dialog, announced when it opens.",
               "default": "\"Menu\"",
               "fieldName": "label"
             }

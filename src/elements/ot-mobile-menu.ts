@@ -34,18 +34,20 @@ let navIdCounter = 0;
  * @cssprop [--ot-space=0.25rem] - Spacing unit; the panel's padding is six of them.
  */
 export class OtMobileMenu extends LitElement {
-  /* Values mirror the Tailwind utilities this markup used to carry, read from tokens with those as fallbacks. */
+  // Comments live out here rather than inside the css`` literal, which ships to the browser verbatim.
+  //
+  // Values mirror the Tailwind utilities this markup used to carry, read from tokens with those as fallbacks.
+  //
+  // The host holds the trigger, which sits on the page's own background, so it deliberately carries no colours of
+  // its own: a token set on the host would inherit into the trigger too. The panel's colours are set on the panel,
+  // and the page themes them through ::part(dialog).
   static override styles = css`
     *,
     *::before,
     *::after {
       box-sizing: border-box;
     }
-    /*
-      The host holds the trigger, which sits on the page's own background, so it deliberately carries no colours of
-      its own: a token set on the host would inherit into the trigger too. The panel's colours are set on the panel,
-      and the page themes them through ::part(dialog).
-    */
+
     :host {
       display: inline-block;
     }
@@ -103,7 +105,13 @@ export class OtMobileMenu extends LitElement {
     label: { type: String },
   };
 
+  /**
+   * Whether the menu is open. Reflected to the `open` attribute, so CSS can use `[open]`. From the `md` breakpoint
+   * up, where the site hides the menu, a request to open is refused.
+   */
   declare open: boolean;
+
+  /** Accessible name of the dialog, announced when it opens. */
   declare label: string;
 
   constructor() {
@@ -160,14 +168,25 @@ export class OtMobileMenu extends LitElement {
     if (dialog && !dialog.open) this.open = false;
   };
 
+  /**
+   * The menu is for small screens: the site hides the element from the `md` breakpoint up, and so does its own
+   * breakpoint listener. An open dialog there would be a modal nobody can see, with the page behind it inert. So an
+   * `open` that arrives at that width, from script or written into the markup, is refused before anything renders.
+   */
+  override willUpdate(changed: PropertyValues<this>) {
+    if (changed.has("open") && this.open && this.#mql.matches) this.open = false;
+  }
+
   override updated(changed: PropertyValues<this>) {
     if (!changed.has("open")) return;
 
     this.#syncTrigger();
     this.#syncDialog();
 
-    // Lit counts the constructor's `open = false` as a change, but nothing happened for the page to hear about.
-    if (changed.get("open") !== undefined) this.#dispatchChange();
+    // Lit counts the constructor's `open = false` as a change, but nothing happened for the page to hear about. The
+    // same goes for an `open` that willUpdate refused: the value ends where it started.
+    const previous = changed.get("open");
+    if (previous !== undefined && previous !== this.open) this.#dispatchChange();
   }
 
   /** `aria-controls` targets the slotted navigation, and names it when the consumer has not: an IDREF cannot cross

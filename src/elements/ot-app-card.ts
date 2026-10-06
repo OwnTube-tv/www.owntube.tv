@@ -7,11 +7,30 @@ export type VisitorPlatform = "ios" | "android" | "other";
 /** Which destination a clicked link points at. */
 export type LinkPlatform = "web" | "ios" | "android" | "source" | "other";
 
+/** The `detail` of `ot-app-link-click`, as specified in #26. */
+export interface AppLinkClickDetail {
+  /** The app's name, from the `name` attribute. */
+  app: string;
+  /** The destination of the clicked link, not the visitor's platform. */
+  platform: LinkPlatform;
+}
+
 const PLATFORM_LABELS: Record<VisitorPlatform, string> = {
   ios: "Recommended for your iPhone or iPad",
   android: "Recommended for your Android device",
   other: "",
 };
+
+/** The name a link gets from its content: its text and its images' alt text, in document order. */
+function nameFromContent(link: HTMLElement): string {
+  const parts: string[] = [];
+  const walker = document.createTreeWalker(link, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    if (node.nodeType === Node.TEXT_NODE) parts.push(node.textContent ?? "");
+    else if (node instanceof HTMLImageElement) parts.push(node.alt);
+  }
+  return parts.join(" ").replace(/\s+/g, " ").trim();
+}
 
 /** Reads the platform from the user agent. iPadOS reports itself as a Mac, but with touch points. */
 function detectPlatform(): VisitorPlatform {
@@ -37,14 +56,15 @@ function detectPlatform(): VisitorPlatform {
  * @slot - Body of the card: icon, name, source link and descriptions.
  * @slot links - The store links, kept last in the body.
  *
- * @fires ot-app-link-click - A link in the card was clicked. `detail` carries the app `name` and the `platform` the
- *   link points at, ready for analytics.
+ * @fires ot-app-link-click - A link in the card was clicked. `detail` is an `AppLinkClickDetail`: the `app` name and
+ *   the `platform` the link points at, ready for analytics.
  *
  * @csspart badge - The "recommended for…" badge above the store links.
  *
  * @cssprop [--ot-color-foreground=hsl(222.2 84% 4.9%)] - Text colour, inherited by the slotted content.
  * @cssprop [--ot-color-orange=#ff5722] - Badge background.
  * @cssprop [--ot-color-dark=#1a1a1a] - Badge text, dark on the brand orange for contrast.
+ * @cssprop [--ot-radius-full=9999px] - Badge corner radius; the default makes a pill.
  * @cssprop [--ot-space=0.25rem] - Spacing unit; the badge's inset is six of them, matching the page's padding.
  */
 export class OtAppCard extends LitElement {
@@ -57,6 +77,17 @@ export class OtAppCard extends LitElement {
     platform: { type: String, reflect: true },
   };
 
+  // Comments live out here rather than inside the css`` literal, which ships to the browser verbatim.
+  //
+  // The card surface (background, radius, shadow and padding) stays in the light DOM, on the host and on the
+  // wrappers around the slotted content. It therefore paints together with the server-rendered HTML instead of
+  // appearing when the element upgrades, which is what a visitor on a slow connection sees, and all a visitor
+  // without JavaScript ever gets. The element only adds what needs scripting.
+  //
+  // Display is part of that: the element sets none, so the page's own layout ("flex flex-col" on the site) is in
+  // force from the first paint instead of changing under the visitor when the element upgrades.
+  //
+  // The badge sits between two padded light-DOM wrappers, so it carries the same horizontal inset itself.
   static override styles = css`
     *,
     *::before,
@@ -64,34 +95,24 @@ export class OtAppCard extends LitElement {
       box-sizing: border-box;
     }
 
-    /*
-      The card surface — background, radius, shadow and padding — stays in the light DOM, on the host and on the
-      wrappers around the slotted content. It therefore paints together with the server-rendered HTML instead of
-      appearing when the element upgrades, which is what a visitor on a slow connection sees, and all a visitor
-      without JavaScript ever gets. The element only adds what needs scripting.
-
-      Display is part of that: the element sets none, so the page's own layout — "flex flex-col" on the site — is in
-      force from the first paint instead of changing under the visitor when the element upgrades.
-    */
     :host {
       color: var(--ot-color-foreground, hsl(222.2 84% 4.9%));
     }
 
     .badge {
       align-self: flex-start;
-      /* The badge sits between two padded light-DOM wrappers, so it carries the same inset itself. */
       margin: 0 calc(var(--ot-space, 0.25rem) * 6) calc(var(--ot-space, 0.25rem) * 2);
       padding: calc(var(--ot-space, 0.25rem) * 0.5) calc(var(--ot-space, 0.25rem) * 2);
       background: var(--ot-color-orange, #ff5722);
       color: var(--ot-color-dark, #1a1a1a);
-      border-radius: 9999px;
+      border-radius: var(--ot-radius-full, 9999px);
       font-size: 0.75rem;
       line-height: 1rem;
       font-weight: 600;
     }
   `;
 
-  /** Name of the app, used for the link-click event and for accessible names. */
+  /** Name of the app, reported as `app` in the link-click event. */
   declare name: string;
 
   /** Link to the web version of the app. */
@@ -147,19 +168,42 @@ export class OtAppCard extends LitElement {
     return "";
   }
 
-  /** Links live in the light DOM, so the element marks them up rather than styling them from the shadow root. */
+  /**
+   * Links live in the light DOM, so the element marks them up rather than styling them from the shadow root: the page
+   * styles `data-ot-recommended`, and the recommendation becomes part of the link's accessible name.
+   */
   #markRecommendedLink = () => {
     const recommended = this.#absolute(this.#recommendedHref);
     for (const link of this.#links()) {
       const isRecommended = recommended !== "" && link.href === recommended;
       link.toggleAttribute("data-ot-recommended", isRecommended);
-      if (isRecommended) {
-        link.setAttribute("aria-current", "true");
-      } else {
-        link.removeAttribute("aria-current");
-      }
+      this.#nameLink(link, isRecommended ? PLATFORM_LABELS[this.platform] : "");
     }
   };
+
+  /** The `aria-label` each link had before the element touched it, `null` for none, so it can be put back. */
+  #ownLabels = new WeakMap<HTMLAnchorElement, string | null>();
+
+  /**
+   * A screen reader hears the recommendation as part of the link: "Try on TestFlight, recommended for your iPhone or
+   * iPad". The badge cannot say which link it means, since it sits in the shadow root and an IDREF cannot reach it
+   * from the light DOM. And `aria-current`, which #26 first suggested, means "the current item in a set": VoiceOver
+   * read the link as "current", which is not what a recommendation is.
+   */
+  #nameLink(link: HTMLAnchorElement, recommendation: string) {
+    if (!this.#ownLabels.has(link)) this.#ownLabels.set(link, link.getAttribute("aria-label"));
+    const own = this.#ownLabels.get(link) ?? null;
+
+    if (!recommendation) {
+      if (own === null) link.removeAttribute("aria-label");
+      else link.setAttribute("aria-label", own);
+      return;
+    }
+
+    const name = own ?? nameFromContent(link);
+    const phrase = name ? `${recommendation.charAt(0).toLowerCase()}${recommendation.slice(1)}` : recommendation;
+    link.setAttribute("aria-label", name ? `${name}, ${phrase}` : phrase);
+  }
 
   #onLinkClick = (event: Event) => {
     const link = event.composedPath().find((node): node is HTMLAnchorElement => node instanceof HTMLAnchorElement);
@@ -169,7 +213,7 @@ export class OtAppCard extends LitElement {
       new CustomEvent("ot-app-link-click", {
         bubbles: true,
         composed: true,
-        detail: { name: this.name, platform: this.#platformOf(link.href) },
+        detail: { app: this.name, platform: this.#platformOf(link.href) } satisfies AppLinkClickDetail,
       })
     );
   };
@@ -208,6 +252,6 @@ declare global {
   }
 
   interface HTMLElementEventMap {
-    "ot-app-link-click": CustomEvent<{ name: string; platform: LinkPlatform }>;
+    "ot-app-link-click": CustomEvent<AppLinkClickDetail>;
   }
 }

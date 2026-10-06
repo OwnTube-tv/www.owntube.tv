@@ -1,6 +1,6 @@
 # Custom elements
 
-The site's interactive UI is built as [Lit](https://lit.dev) custom elements, one file per element with an `ot-` prefix. `index.ts` imports them all and is loaded once from `RootLayout.astro`, so the whole site ships one module script — the same file on every page: 22 kB of JavaScript, about 8 kB over the wire once it is compressed, Lit included. Said loosely on purpose, since the exact figure depends on the compressor. That is about a fifth of the Google Play badge image sitting next to it on the same page.
+The site's interactive UI is built as [Lit](https://lit.dev) custom elements, one file per element with an `ot-` prefix. `index.ts` imports them all and is loaded once from `RootLayout.astro`, so the whole site ships one module script — the same file on every page: 22 kB of JavaScript, about 8 kB over the wire once it is compressed, Lit included. Said loosely on purpose, since the exact figure depends on the compressor; the "Checks" workflow fails the build if it passes the 15 kB budget from #26. That is about a fifth of the Google Play badge image sitting next to it on the same page.
 
 Run `npm run analyze` to regenerate [`custom-elements.json`](../../custom-elements.json), the machine-readable version of everything below.
 
@@ -81,7 +81,7 @@ The site sets these in `src/index.css` and switches four of them under `prefers-
 - **No focus trap of our own.** `showModal()` makes everything outside the dialog inert, which is the requirement: verified in Chromium, Firefox and WebKit, nothing behind it takes focus, neither by tabbing past the last link nor by a script calling `focus()`. Where focus goes when you tab past the end is up to the browser — Chromium hands it to its own UI and brings it back, Firefox and WebKit differ — and reaching the address bar is a reasonable way out for a keyboard user. A hand-written trap would only take that away. The test asserts the requirement, not the mechanism, so it survives a change of implementation.
 - `aria-controls` points at the slotted navigation, and the element generates an id when the consumer has not set one: an IDREF cannot cross the shadow boundary, so it has to target light-DOM content.
 - Both `cancel` and `close` are handled, because a browser may close a modal dialog on Escape without a cancelable `cancel` event.
-- Crossing the `md` breakpoint closes the menu. An open modal inside a `display: none` host would show nothing while leaving the page inert.
+- Crossing the `md` breakpoint closes the menu, and from `md` up an `open` request is refused, whether it comes from script or from the markup. An open modal inside a `display: none` host would show nothing while leaving the page inert.
 - The panel appears and disappears without a transition, so there is nothing for `prefers-reduced-motion` to switch off.
 
 ### Usage
@@ -105,7 +105,7 @@ The card surface — layout, background, radius, shadow and padding — belongs 
 
 | Attribute         | Property         | Type                            | Default  | Description                                                                                                                                         |
 | ----------------- | ---------------- | ------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`            | `name`           | `string`                        | `""`     | Name of the app, reported in the link-click event.                                                                                                  |
+| `name`            | `name`           | `string`                        | `""`     | Name of the app, reported as `app` in the link-click event.                                                                                         |
 | `web-link`        | `webLink`        | `string`                        | `""`     | Link to the web version.                                                                                                                            |
 | `google-link`     | `googleLink`     | `string`                        | `""`     | Link to Google Play.                                                                                                                                |
 | `testflight-link` | `testflightLink` | `string`                        | `""`     | Link to TestFlight.                                                                                                                                 |
@@ -114,9 +114,9 @@ The card surface — layout, background, radius, shadow and padding — belongs 
 
 ### Events
 
-| Event               | Detail                                                                           | When                                                                                |
-| ------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `ot-app-link-click` | `{ name: string, platform: "web" \| "ios" \| "android" \| "source" \| "other" }` | A link inside the card was clicked. `platform` is the destination, not the visitor. |
+| Event               | Detail                                                                          | When                                                                                |
+| ------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `ot-app-link-click` | `{ app: string, platform: "web" \| "ios" \| "android" \| "source" \| "other" }` | A link inside the card was clicked. `platform` is the destination, not the visitor. |
 
 ### Slots
 
@@ -139,15 +139,18 @@ The card surface — layout, background, radius, shadow and padding — belongs 
 | `--ot-color-foreground` | `hsl(222.2 84% 4.9%)` | Text colour, inherited by the slotted content                        |
 | `--ot-color-orange`     | `#ff5722`             | Badge background                                                     |
 | `--ot-color-dark`       | `#1a1a1a`             | Badge text — dark on the brand orange, because white on it is 3.16:1 |
+| `--ot-radius-full`      | `9999px`              | Badge corner radius; the default makes a pill                        |
 | `--ot-space`            | `0.25rem`             | Spacing unit; the badge's inset is six of them                       |
 
-The element sets no `display` of its own, so the page's layout for the host — `flex flex-col` on the site — applies from the first paint and nothing moves when the element upgrades.
+The element sets no `display` of its own, so the page's layout for the host — `flex flex-col` on the site — applies from the first paint. The one thing that still moves when the element upgrades is the recommendation badge: it can only exist once the element has read the visitor's platform, so for iOS and Android visitors it pushes the store buttons down by its height, about 28 px, at that moment. With a card in view while the script arrives that measured 0.013 CLS, far below the 0.1 limit for a good score; on first load the cards are below the fold and nothing moves in view.
 
 ### How the recommendation works
 
-The element owns the **state**, the page owns the **styling**. On the matching link it sets `aria-current="true"` and a `data-ot-recommended` attribute; `HomeContent.astro` styles that attribute with a Tailwind `data-ot-recommended:` variant. The same split as `::part()`: the component exposes a hook, the consumer decides how it looks.
+The element owns the **state**, the page owns the **styling**. On the matching link it sets a `data-ot-recommended` attribute and adds the recommendation to the link's accessible name; `HomeContent.astro` styles that attribute with a Tailwind `data-ot-recommended:` variant. The same split as `::part()`: the component exposes a hook, the consumer decides how it looks.
 
 Every link stays rendered and reachable whatever the platform. The recommendation adds emphasis; it never filters.
+
+A screen reader hears the recommendation as part of the link, for example "Try on TestFlight, recommended for your iPhone or iPad". The element builds that name from the link's text and image alt text, or from an `aria-label` the page already set, and puts the original back when the recommendation moves. It does not use `aria-current`: that attribute means "the current item in a set", and VoiceOver reads it as "current". The badge cannot do the job alone either, because it sits in the shadow root and cannot be tied to one link.
 
 Draw that emphasis with `ring-*`, not `outline-*`. The ring is a box-shadow, while the outline is what the browser draws the focus indicator with — an always-on `outline` on the recommended link overrides it, so a keyboard user gets no visible change when focus lands there. With a ring, the two stack: the orange ring marks the recommendation, the outline still marks focus.
 
@@ -163,7 +166,7 @@ Draw that emphasis with `ring-*`, not `outline-*`. The ring is a box-shadow, whi
   github-repo="…"
 >
   <img slot="image" src="…" alt="Blender Tube" />
-  <div class="px-6 pt-6 flex grow flex-col">
+  <div class="px-6 pt-6 pb-2 flex grow flex-col">
     <h3>Blender Tube</h3>
     <p>…</p>
   </div>

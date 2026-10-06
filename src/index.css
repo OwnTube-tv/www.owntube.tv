@@ -46,6 +46,7 @@
 
   /* Radii */
   --ot-radius-lg: var(--radius);
+  --ot-radius-full: 9999px;
 }
 
 /*

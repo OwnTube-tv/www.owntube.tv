@@ -19,8 +19,7 @@ export const roles: Role[] = [
   },
   {
     title: "Infrastructure Architect",
-    description:
-      "Design and implementation of scalable infrastructure for video delivery and containerized workloads.",
+    description: "Design and implementation of scalable infrastructure for video delivery and containerized workloads.",
   },
   {
     title: "DevSecOps",
