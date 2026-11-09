@@ -13,12 +13,12 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.3.3"
+    "@tailwindcss/vite": "^4.3.5",
+    "astro": "^7.4.7"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.10",
-    "prettier": "^3.9.7",
+    "@astrojs/check": "^0.9.12",
+    "prettier": "^3.9.10",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3"
   }
